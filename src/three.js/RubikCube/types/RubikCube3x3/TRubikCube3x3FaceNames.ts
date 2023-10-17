@@ -1,4 +1,4 @@
-export type TRubikCubeCommonFaceNames =
+export type TRubikCube3x3FaceNames =
   | 'TopFace'
   | 'DownFace'
   | 'FrontFace'
