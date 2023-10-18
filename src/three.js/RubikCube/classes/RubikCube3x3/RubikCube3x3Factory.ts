@@ -14,6 +14,8 @@ import { RubikCube3x3RotationHelper } from './RubikCube3x3RotationHelper';
 import { RubikCube3x3Piece } from './RubikCube3x3Piece';
 import type { IRubikCubeMaterials } from '../../interfaces/IRubikCubeMaterials';
 import { RubikCube3x3Materials } from './RubikCube3x3Materials';
+import type { IRubikCubeRayCastingData } from '../../interfaces/IRubikCubeRayCastingData';
+import { RubikCube3x3RayCastingData } from './RubikCube3x3RayCastingData';
 
 export class RubikCube3x3Factory
   implements
@@ -123,5 +125,12 @@ export class RubikCube3x3Factory
     const rotationData = this.createRubikCubeRotationData();
     const cubeData = this.createRubikCubeData();
     return new RubikCube3x3RotationHelper(rotationData, cubeData);
+  }
+
+  public createRubikCubeRayCastingData(): IRubikCubeRayCastingData<
+    TRubikCube3x3FaceNames,
+    TRubikCube3x3RotationTypes
+  > {
+    return new RubikCube3x3RayCastingData();
   }
 }
