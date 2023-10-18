@@ -8,34 +8,27 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { ref, onMounted } from 'vue';
-import { RubikCube3x3Creator } from '@/three.js/RubikCube/classes/RubikCube3x3/RubikCube3x3Creator';
-import { RubikCube3x3Data } from '@/three.js/RubikCube/classes/RubikCube3x3/RubikCube3x3Data';
+import { RubikCube3x3Factory } from '@/three.js/RubikCube/classes/RubikCube3x3/RubikCube3x3Factory';
+import type { IRubikCubeRotationHelper } from '@/three.js/RubikCube/interfaces/IRubikCubeRotationHelper';
+import type { TRubikCube3x3FaceNames } from '@/three.js/RubikCube/types/RubikCube3x3/TRubikCube3x3FaceNames';
+import type { TRubikCube3x3RotationTypes } from '@/three.js/RubikCube/types/RubikCube3x3/TRubikCube3x3RotationTypes';
+import type { IRubikCube } from '@/three.js/RubikCube/interfaces/IRubikCube';
 
-// const gui = new GUI();
-// const rotateParams: { faceType: TCubeFaceNames; rotateType: TRotationType } = {
-//   faceType: 'TopFace',
-//   rotateType: 'Clockwise',
-// };
-const rubikCubeMaterials = {
-  Cover: new THREE.MeshBasicMaterial({ color: 0x2b2b2b }),
-  TopFace: new THREE.MeshBasicMaterial({ color: 0xff0000 }),
-  DownFace: new THREE.MeshBasicMaterial({ color: 0xffa500 }),
-  LeftFace: new THREE.MeshBasicMaterial({ color: 0xffff00 }),
-  RightFace: new THREE.MeshBasicMaterial({ color: 0xffffff }),
-  FrontFace: new THREE.MeshBasicMaterial({ color: 0x0000ff }),
-  BackFace: new THREE.MeshBasicMaterial({ color: 0x00ff00 }),
+const gui = new GUI();
+const rotateParams: { faceType: TRubikCube3x3FaceNames; rotateType: TRubikCube3x3RotationTypes } = {
+  faceType: 'TopFace',
+  rotateType: 'Clockwise',
 };
 
-// gui.add(rotateParams, 'faceType', [
-//   'TopFace',
-//   'DownFace',
-//   'LeftFace',
-//   'RightFace',
-//   'FrontFace',
-//   'BackFace',
-// ]);
-// gui.add(rotateParams, 'rotateType', ['Clockwise', 'CounterClockwise', 'DoubleTurn']);
-// gui.addColor(rubikCubeMaterials['FrontFace'], 'color');
+gui.add(rotateParams, 'faceType', [
+  'TopFace',
+  'DownFace',
+  'LeftFace',
+  'RightFace',
+  'FrontFace',
+  'BackFace',
+]);
+gui.add(rotateParams, 'rotateType', ['Clockwise', 'CounterClockwise', 'DoubleTurn']);
 
 const canvas = ref<HTMLCanvasElement | null>(null);
 const screenSizes = ref({
@@ -44,22 +37,26 @@ const screenSizes = ref({
 });
 const gltfLoader = new GLTFLoader();
 
+let cube: IRubikCube<TRubikCube3x3FaceNames, 'Cover'> | null = null;
+let rotationHelper: IRubikCubeRotationHelper<
+  TRubikCube3x3FaceNames,
+  'Cover',
+  TRubikCube3x3RotationTypes
+> | null = null;
+const scene = new THREE.Scene();
+
 onMounted(() => {
   if (!canvas.value) {
     return;
   }
 
-  const scene = new THREE.Scene();
-
   gltfLoader.load('RubikCubePiece.glb', (data) => {
-    const cubeCreator = new RubikCube3x3Creator(
-      data.scene,
-      rubikCubeMaterials,
-      new THREE.MeshBasicMaterial({ color: 0x000000 }),
-      new RubikCube3x3Data(),
-    );
+    const cubeFactory = new RubikCube3x3Factory(data.scene);
 
-    cubeCreator.addRubikCubeToScene(scene);
+    cube = cubeFactory.createRubikCube();
+    scene.add(...cube.pieces.map((piece) => piece.entirePiece));
+
+    rotationHelper = cubeFactory.createRubikCubeRotationHelper();
   });
 
   const axesHelper = new THREE.AxesHelper(4);
@@ -112,12 +109,14 @@ onMounted(() => {
   tick();
 });
 
-// const guiFunc = {
-//   rotate: () => {
-//     console.log('rotate!');
-//   },
-// };
-// gui.add(guiFunc, 'rotate');
+const guiFunc = {
+  rotate: () => {
+    if (rotationHelper && cube) {
+      rotationHelper.rotateCube(scene, cube, rotateParams.faceType, rotateParams.rotateType);
+    }
+  },
+};
+gui.add(guiFunc, 'rotate');
 </script>
 
 <style scoped lang="scss">
