@@ -3,11 +3,11 @@ import gsap from 'gsap';
 import type { IRubikCube } from '../../interfaces/IRubikCube';
 import type { IRubikCubeRotationData } from '../../interfaces/IRubikCubeRotationData';
 import type { IRubikCubeRotationHelper } from '../../interfaces/IRubikCubeRotationHelper';
-import type { TRubikCube3x3FaceNames } from '../../types/RubikCube3x3/TRubikCube3x3FaceNames';
 import type { TRubikCube3x3PieceCoverName } from '../../types/RubikCube3x3/TRubikCube3x3PieceCoverName';
 import type { TRubikCube3x3RotationTypes } from '../../types/RubikCube3x3/TRubikCube3x3RotationTypes';
 import type { IRubikCubePiece } from '../../interfaces/IRubikCubePiece';
 import type { IRubikCubeData } from '../../interfaces/IRubikCubeData';
+import type { TRubikCube3x3FaceNames } from '../../types/RubikCube3x3/TRubikCube3x3FaceNames';
 
 export class RubikCube3x3RotationHelper
   implements

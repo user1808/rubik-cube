@@ -6,10 +6,8 @@ import type { TRubikCube3x3PieceCoverName } from '../../types/RubikCube3x3/TRubi
 export class RubikCube3x3Materials
   implements IRubikCubeMaterials<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>
 {
-  private readonly _faceMaterials: Record<
-    TRubikCube3x3FaceNames | TRubikCube3x3PieceCoverName,
-    THREE.MeshBasicMaterial
-  > = {
+  private readonly unusedMaterial: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial();
+  private readonly _faceMaterials: typeof this.faceMaterials = {
     Cover: new THREE.MeshBasicMaterial({ color: 0x2b2b2b }),
     TopFace: new THREE.MeshBasicMaterial({ color: 0xff0000 }),
     DownFace: new THREE.MeshBasicMaterial({ color: 0xffa500 }),
@@ -17,10 +15,14 @@ export class RubikCube3x3Materials
     RightFace: new THREE.MeshBasicMaterial({ color: 0xffffff }),
     FrontFace: new THREE.MeshBasicMaterial({ color: 0x0000ff }),
     BackFace: new THREE.MeshBasicMaterial({ color: 0x00ff00 }),
+    SliceXFace: this.unusedMaterial,
+    SliceYFace: this.unusedMaterial,
+    SliceZFace: this.unusedMaterial,
   };
-  private readonly _invisiblePartsMaterial: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-    color: 0x000000,
-  });
+  private readonly _invisiblePartsMaterial: typeof this.invisiblePartsMaterial =
+    new THREE.MeshBasicMaterial({
+      color: 0x000000,
+    });
 
   get faceMaterials(): Record<
     TRubikCube3x3FaceNames | TRubikCube3x3PieceCoverName,

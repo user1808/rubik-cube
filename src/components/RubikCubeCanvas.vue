@@ -36,6 +36,9 @@ gui.add(rotateParams, 'faceType', [
   'RightFace',
   'FrontFace',
   'BackFace',
+  'SliceXFace',
+  'SliceYFace',
+  'SliceZFace',
 ]);
 gui.add(rotateParams, 'rotateType', ['Clockwise', 'CounterClockwise', 'DoubleTurn']);
 
@@ -96,7 +99,7 @@ const camera = new THREE.PerspectiveCamera(
   75,
   screenSizes.value.width / screenSizes.value.height,
   0.1,
-  100,
+  15,
 );
 camera.position.z = 6;
 scene.add(camera);
@@ -120,6 +123,9 @@ onMounted(() => {
   scene.add(axesHelper);
 
   const controls = new OrbitControls(camera, canvas.value);
+  controls.enablePan = false;
+  controls.minDistance = 2 * Math.SQRT2;
+  controls.maxDistance = 10;
   controls.enableDamping = true;
 
   gui.add(controls, 'enabled');
@@ -146,11 +152,9 @@ onMounted(() => {
   });
 
   const tick = () => {
-    // console.log(mouse);
     raycaster.setFromCamera(mouse, camera);
 
     if (cube && rotationHelper && rayCasingData && isRayCastingEnable && !controls.enabled) {
-      console.log(mouse);
       const intersects = raycaster.intersectObjects(cube.pieces.map((piece) => piece.entirePiece));
       if (intersects[0]) {
         if (rayCastedPieces.size < 3) {
@@ -188,7 +192,6 @@ onMounted(() => {
           },
         );
         if (rotationType) {
-          console.log(`Obróć ${rotationType.faceToRotate} w kierunku ${rotationType.rotationType}`);
           rotationHelper.rotateCube(
             scene,
             cube,

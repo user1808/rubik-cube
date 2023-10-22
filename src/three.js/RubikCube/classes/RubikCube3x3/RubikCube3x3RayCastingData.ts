@@ -13,6 +13,9 @@ export class RubikCube3x3RayCastingData
     BackFace: (intersection: THREE.Intersection) => this.isFaceBack(intersection),
     RightFace: (intersection: THREE.Intersection) => this.isFaceRight(intersection),
     LeftFace: (intersection: THREE.Intersection) => this.isFaceLeft(intersection),
+    SliceXFace: () => false,
+    SliceYFace: () => false,
+    SliceZFace: () => false,
   };
 
   private readonly _selectedPiecesRotationType: typeof this.selectedPiecesRotationType = {
@@ -22,6 +25,9 @@ export class RubikCube3x3RayCastingData
     BackFace: this.createRotationTypes('BackFace'),
     RightFace: this.createRotationTypes('RightFace'),
     LeftFace: this.createRotationTypes('LeftFace'),
+    SliceXFace: [],
+    SliceYFace: [],
+    SliceZFace: [],
   };
 
   public get faceSelectionConditions(): Record<
@@ -85,56 +91,121 @@ export class RubikCube3x3RayCastingData
   }
 
   private createRotationTypes(
-    face: TRubikCube3x3FaceNames,
+    face: Exclude<TRubikCube3x3FaceNames, 'SliceXFace' | 'SliceYFace' | 'SliceZFace'>,
   ): (typeof this.selectedPiecesRotationType)[TRubikCube3x3FaceNames] {
-    const rotationPatterns: Record<TRubikCube3x3FaceNames, TRubikCube3x3FaceNames[]> = {
-      TopFace: ['BackFace', 'LeftFace', 'RightFace', 'FrontFace'],
-      DownFace: ['FrontFace', 'LeftFace', 'RightFace', 'BackFace'],
-      FrontFace: ['TopFace', 'LeftFace', 'RightFace', 'DownFace'],
-      BackFace: ['TopFace', 'RightFace', 'LeftFace', 'DownFace'],
-      RightFace: ['TopFace', 'FrontFace', 'BackFace', 'DownFace'],
-      LeftFace: ['TopFace', 'BackFace', 'FrontFace', 'DownFace'],
+    const rotationPatterns: Record<
+      Exclude<TRubikCube3x3FaceNames, 'SliceXFace' | 'SliceYFace' | 'SliceZFace'>,
+      { face: TRubikCube3x3FaceNames; altRotation?: boolean }[]
+    > = {
+      TopFace: [
+        { face: 'BackFace' },
+        { face: 'LeftFace' },
+        { face: 'RightFace' },
+        { face: 'FrontFace' },
+        { face: 'SliceXFace' },
+        { face: 'SliceZFace', altRotation: true },
+      ],
+      DownFace: [
+        { face: 'FrontFace' },
+        { face: 'LeftFace' },
+        { face: 'RightFace' },
+        { face: 'BackFace' },
+        { face: 'SliceXFace' },
+        { face: 'SliceZFace' },
+      ],
+      FrontFace: [
+        { face: 'TopFace' },
+        { face: 'LeftFace' },
+        { face: 'RightFace' },
+        { face: 'DownFace' },
+        { face: 'SliceXFace' },
+        { face: 'SliceYFace' },
+      ],
+      BackFace: [
+        { face: 'TopFace' },
+        { face: 'RightFace' },
+        { face: 'LeftFace' },
+        { face: 'DownFace' },
+        { face: 'SliceXFace', altRotation: true },
+        { face: 'SliceYFace' },
+      ],
+      RightFace: [
+        { face: 'TopFace' },
+        { face: 'FrontFace' },
+        { face: 'BackFace' },
+        { face: 'DownFace' },
+        { face: 'SliceZFace', altRotation: true },
+        { face: 'SliceYFace' },
+      ],
+      LeftFace: [
+        { face: 'TopFace' },
+        { face: 'BackFace' },
+        { face: 'FrontFace' },
+        { face: 'DownFace' },
+        { face: 'SliceZFace' },
+        { face: 'SliceYFace' },
+      ],
     };
     return [
       {
         faceSelectedPiecesIdxs: [2, 1, 0],
-        rotationType: 'Clockwise',
-        faceToRotate: rotationPatterns[face][0],
+        rotationType: rotationPatterns[face][0].altRotation ? 'CounterClockwise' : 'Clockwise',
+        faceToRotate: rotationPatterns[face][0].face,
       },
       {
         faceSelectedPiecesIdxs: [0, 1, 2],
-        rotationType: 'CounterClockwise',
-        faceToRotate: rotationPatterns[face][0],
+        rotationType: rotationPatterns[face][0].altRotation ? 'Clockwise' : 'CounterClockwise',
+        faceToRotate: rotationPatterns[face][0].face,
       },
       {
         faceSelectedPiecesIdxs: [0, 3, 6],
-        rotationType: 'Clockwise',
-        faceToRotate: rotationPatterns[face][1],
+        rotationType: rotationPatterns[face][1].altRotation ? 'CounterClockwise' : 'Clockwise',
+        faceToRotate: rotationPatterns[face][1].face,
       },
       {
         faceSelectedPiecesIdxs: [6, 3, 0],
-        rotationType: 'CounterClockwise',
-        faceToRotate: rotationPatterns[face][1],
+        rotationType: rotationPatterns[face][1].altRotation ? 'Clockwise' : 'CounterClockwise',
+        faceToRotate: rotationPatterns[face][1].face,
       },
       {
         faceSelectedPiecesIdxs: [8, 5, 2],
-        rotationType: 'Clockwise',
-        faceToRotate: rotationPatterns[face][2],
+        rotationType: rotationPatterns[face][2].altRotation ? 'CounterClockwise' : 'Clockwise',
+        faceToRotate: rotationPatterns[face][2].face,
       },
       {
         faceSelectedPiecesIdxs: [2, 5, 8],
-        rotationType: 'CounterClockwise',
-        faceToRotate: rotationPatterns[face][2],
+        rotationType: rotationPatterns[face][2].altRotation ? 'Clockwise' : 'CounterClockwise',
+        faceToRotate: rotationPatterns[face][2].face,
       },
       {
         faceSelectedPiecesIdxs: [6, 7, 8],
-        rotationType: 'Clockwise',
-        faceToRotate: rotationPatterns[face][3],
+        rotationType: rotationPatterns[face][3].altRotation ? 'CounterClockwise' : 'Clockwise',
+        faceToRotate: rotationPatterns[face][3].face,
       },
       {
         faceSelectedPiecesIdxs: [8, 7, 6],
-        rotationType: 'CounterClockwise',
-        faceToRotate: rotationPatterns[face][3],
+        rotationType: rotationPatterns[face][3].altRotation ? 'Clockwise' : 'CounterClockwise',
+        faceToRotate: rotationPatterns[face][3].face,
+      },
+      {
+        faceSelectedPiecesIdxs: [7, 4, 1],
+        rotationType: rotationPatterns[face][4].altRotation ? 'CounterClockwise' : 'Clockwise',
+        faceToRotate: rotationPatterns[face][4].face,
+      },
+      {
+        faceSelectedPiecesIdxs: [1, 4, 7],
+        rotationType: rotationPatterns[face][4].altRotation ? 'Clockwise' : 'CounterClockwise',
+        faceToRotate: rotationPatterns[face][4].face,
+      },
+      {
+        faceSelectedPiecesIdxs: [3, 4, 5],
+        rotationType: rotationPatterns[face][5].altRotation ? 'Clockwise' : 'CounterClockwise',
+        faceToRotate: rotationPatterns[face][5].face,
+      },
+      {
+        faceSelectedPiecesIdxs: [5, 4, 3],
+        rotationType: rotationPatterns[face][5].altRotation ? 'CounterClockwise' : 'Clockwise',
+        faceToRotate: rotationPatterns[face][5].face,
       },
     ];
   }
