@@ -2,6 +2,7 @@ import type { IRubikCube } from './IRubikCube';
 import type { IRubikCubeData } from './IRubikCubeData';
 import type { IRubikCubeMaterials } from './IRubikCubeMaterials';
 import type { IRubikCubeRayCastingData } from './IRubikCubeRayCastingData';
+import type { IRubikCubeRayCastingHelper } from './IRubikCubeRayCastingHelper';
 import type { IRubikCubeRotationData } from './IRubikCubeRotationData';
 import type { IRubikCubeRotationHelper } from './IRubikCubeRotationHelper';
 
@@ -20,4 +21,5 @@ export interface IRubikCubeFactory<
     RotationTypes
   >;
   createRubikCubeRayCastingData(): IRubikCubeRayCastingData<FaceNames, RotationTypes>;
+  createRubikCubeRayCastingHelper(): IRubikCubeRayCastingHelper;
 }

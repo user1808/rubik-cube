@@ -16,6 +16,9 @@ import type { IRubikCubeMaterials } from '../../interfaces/IRubikCubeMaterials';
 import { RubikCube3x3Materials } from './RubikCube3x3Materials';
 import type { IRubikCubeRayCastingData } from '../../interfaces/IRubikCubeRayCastingData';
 import { RubikCube3x3RayCastingData } from './RubikCube3x3RayCastingData';
+import type { IRubikCubeRayCastingHelper } from '../../interfaces/IRubikCubeRayCastingHelper';
+import { RubikCube3x3ObjectsRepo } from './RubikCube3x3ObjectsRepo';
+import { RubikCube3x3RayCastingHelper } from './RubikCube3x3RayCastingHelper';
 
 export class RubikCube3x3Factory
   implements
@@ -25,20 +28,31 @@ export class RubikCube3x3Factory
       TRubikCube3x3RotationTypes
     >
 {
+  private readonly objectsRepo: RubikCube3x3ObjectsRepo = new RubikCube3x3ObjectsRepo();
+
   constructor(private readonly originalPiece: THREE.Group) {}
 
   public createRubikCubeMaterials(): IRubikCubeMaterials<
     TRubikCube3x3FaceNames,
     TRubikCube3x3PieceCoverName
   > {
-    return new RubikCube3x3Materials();
+    if (!this.objectsRepo.rubikCube3x3Objects['materials']) {
+      this.objectsRepo.rubikCube3x3Objects['materials'] = new RubikCube3x3Materials();
+    }
+    return this.objectsRepo.rubikCube3x3Objects['materials'];
   }
 
   public createRubikCubeData(): IRubikCubeData<TRubikCube3x3FaceNames> {
-    return new RubikCube3x3Data();
+    if (!this.objectsRepo.rubikCube3x3Objects['data']) {
+      this.objectsRepo.rubikCube3x3Objects['data'] = new RubikCube3x3Data();
+    }
+    return this.objectsRepo.rubikCube3x3Objects['data'];
   }
 
   public createRubikCube(): IRubikCube<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName> {
+    if (this.objectsRepo.rubikCube3x3Objects['cube']) {
+      return this.objectsRepo.rubikCube3x3Objects['cube'];
+    }
     const materials = this.createRubikCubeMaterials();
     const faces: Map<
       TRubikCube3x3FaceNames,
@@ -81,7 +95,8 @@ export class RubikCube3x3Factory
       );
     }
 
-    return new RubikCube3x3(faces, pieces);
+    this.objectsRepo.rubikCube3x3Objects['cube'] = new RubikCube3x3(faces, pieces);
+    return this.objectsRepo.rubikCube3x3Objects['cube'];
   }
 
   private getNamesVisiblePieceFaces(
@@ -114,7 +129,10 @@ export class RubikCube3x3Factory
     TRubikCube3x3FaceNames,
     TRubikCube3x3RotationTypes
   > {
-    return new RubikCube3x3RotationData();
+    if (!this.objectsRepo.rubikCube3x3Objects['rotationData']) {
+      this.objectsRepo.rubikCube3x3Objects['rotationData'] = new RubikCube3x3RotationData();
+    }
+    return this.objectsRepo.rubikCube3x3Objects['rotationData'];
   }
 
   public createRubikCubeRotationHelper(): IRubikCubeRotationHelper<
@@ -122,15 +140,40 @@ export class RubikCube3x3Factory
     TRubikCube3x3PieceCoverName,
     TRubikCube3x3RotationTypes
   > {
-    const rotationData = this.createRubikCubeRotationData();
-    const cubeData = this.createRubikCubeData();
-    return new RubikCube3x3RotationHelper(rotationData, cubeData);
+    if (!this.objectsRepo.rubikCube3x3Objects['rotationHelper']) {
+      const rotationData = this.createRubikCubeRotationData();
+      const cubeData = this.createRubikCubeData();
+      this.objectsRepo.rubikCube3x3Objects['rotationHelper'] = new RubikCube3x3RotationHelper(
+        rotationData,
+        cubeData,
+      );
+    }
+
+    return this.objectsRepo.rubikCube3x3Objects['rotationHelper'];
   }
 
   public createRubikCubeRayCastingData(): IRubikCubeRayCastingData<
     TRubikCube3x3FaceNames,
     TRubikCube3x3RotationTypes
   > {
-    return new RubikCube3x3RayCastingData();
+    if (!this.objectsRepo.rubikCube3x3Objects['rayCastingData']) {
+      this.objectsRepo.rubikCube3x3Objects['rayCastingData'] = new RubikCube3x3RayCastingData();
+    }
+    return this.objectsRepo.rubikCube3x3Objects['rayCastingData'];
+  }
+
+  public createRubikCubeRayCastingHelper(): IRubikCubeRayCastingHelper<
+    TRubikCube3x3FaceNames,
+    TRubikCube3x3RotationTypes
+  > {
+    const rayCastingData = this.createRubikCubeRayCastingData();
+    const cube = this.createRubikCube();
+    if (!this.objectsRepo.rubikCube3x3Objects['rayCastingHelper']) {
+      this.objectsRepo.rubikCube3x3Objects['rayCastingHelper'] = new RubikCube3x3RayCastingHelper(
+        rayCastingData,
+        cube,
+      );
+    }
+    return this.objectsRepo.rubikCube3x3Objects['rayCastingHelper'];
   }
 }
