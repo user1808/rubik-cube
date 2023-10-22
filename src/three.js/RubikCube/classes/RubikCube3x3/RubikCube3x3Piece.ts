@@ -18,6 +18,7 @@ export class RubikCube3x3Piece
     for (const [, pieces] of _faces) {
       this._entirePiece.add(pieces);
     }
+    this._entirePiece.userData.id = _id;
   }
 
   get faces(): Map<

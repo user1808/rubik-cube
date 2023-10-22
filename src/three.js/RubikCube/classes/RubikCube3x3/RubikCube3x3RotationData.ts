@@ -7,20 +7,19 @@ import type { TRubikCubeFaceRotationData } from '../../types/common/TRubikCubeFa
 export class RubikCube3x3RotationData
   implements IRubikCubeRotationData<TRubikCube3x3FaceNames, TRubikCube3x3RotationTypes>
 {
-  private readonly _facesRotationAxes: Record<TRubikCube3x3FaceNames, TRubikCubeFaceRotationAxis> =
-    {
-      TopFace: { axis: 'y', turn: 1 },
-      DownFace: { axis: 'y', turn: -1 },
-      LeftFace: { axis: 'x', turn: -1 },
-      RightFace: { axis: 'x', turn: 1 },
-      FrontFace: { axis: 'z', turn: 1 },
-      BackFace: { axis: 'z', turn: -1 },
-    };
+  private readonly _facesRotationAxes: typeof this.facesRotationAxes = {
+    TopFace: { axis: 'y', turn: 1 },
+    DownFace: { axis: 'y', turn: -1 },
+    LeftFace: { axis: 'x', turn: -1 },
+    RightFace: { axis: 'x', turn: 1 },
+    FrontFace: { axis: 'z', turn: 1 },
+    BackFace: { axis: 'z', turn: -1 },
+    SliceXFace: { axis: 'x', turn: 1 },
+    SliceYFace: { axis: 'y', turn: 1 },
+    SliceZFace: { axis: 'z', turn: 1 },
+  };
 
-  private readonly _rotationBasicData: Record<
-    TRubikCube3x3RotationTypes,
-    TRubikCubeFaceRotationData
-  > = {
+  private readonly _rotationBasicData: typeof this.rotationsBasicData = {
     CounterClockwise: {
       angle: 0.5 * Math.PI,
       swapPiecesIdxs: [2, 5, 8, 1, 4, 7, 0, 3, 6],

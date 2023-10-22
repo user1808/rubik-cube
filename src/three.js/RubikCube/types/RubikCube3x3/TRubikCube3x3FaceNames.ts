@@ -4,4 +4,7 @@ export type TRubikCube3x3FaceNames =
   | 'FrontFace'
   | 'BackFace'
   | 'RightFace'
-  | 'LeftFace';
+  | 'LeftFace'
+  | 'SliceXFace'
+  | 'SliceYFace'
+  | 'SliceZFace';
