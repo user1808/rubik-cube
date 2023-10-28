@@ -6,20 +6,22 @@ import type { IRubikCubeRayCastingHelper } from './IRubikCubeRayCastingHelper';
 import type { IRubikCubeRotationData } from './IRubikCubeRotationData';
 import type { IRubikCubeRotationHelper } from './IRubikCubeRotationHelper';
 
-export interface IRubikCubeFactory<
+export abstract class IRubikCubeFactory<
   FaceNames extends string,
   PieceCoverFaceName extends string,
   RotationTypes extends string,
 > {
-  createRubikCubeMaterials(): IRubikCubeMaterials<FaceNames, PieceCoverFaceName>;
-  createRubikCubeData(): IRubikCubeData<FaceNames>;
-  createRubikCube(): IRubikCube<FaceNames, PieceCoverFaceName>;
-  createRubikCubeRotationData(): IRubikCubeRotationData<FaceNames, RotationTypes>;
-  createRubikCubeRotationHelper(): IRubikCubeRotationHelper<
+  constructor(protected readonly originalPiece: THREE.Group) {}
+
+  abstract createRubikCubeMaterials(): IRubikCubeMaterials<FaceNames, PieceCoverFaceName>;
+  abstract createRubikCubeData(): IRubikCubeData<FaceNames>;
+  abstract createRubikCube(): IRubikCube<FaceNames, PieceCoverFaceName>;
+  abstract createRubikCubeRotationData(): IRubikCubeRotationData<FaceNames, RotationTypes>;
+  abstract createRubikCubeRotationHelper(): IRubikCubeRotationHelper<
     FaceNames,
     PieceCoverFaceName,
     RotationTypes
   >;
-  createRubikCubeRayCastingData(): IRubikCubeRayCastingData<FaceNames, RotationTypes>;
-  createRubikCubeRayCastingHelper(): IRubikCubeRayCastingHelper;
+  abstract createRubikCubeRayCastingData(): IRubikCubeRayCastingData<FaceNames, RotationTypes>;
+  abstract createRubikCubeRayCastingHelper(): IRubikCubeRayCastingHelper<FaceNames, RotationTypes>;
 }
