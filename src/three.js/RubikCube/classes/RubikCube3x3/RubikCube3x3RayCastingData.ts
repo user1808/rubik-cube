@@ -6,13 +6,31 @@ import type { TRubikCube3x3RotationTypes } from '../../types/RubikCube3x3/TRubik
 export class RubikCube3x3RayCastingData
   implements IRubikCubeRayCastingData<TRubikCube3x3FaceNames, TRubikCube3x3RotationTypes>
 {
+  private readonly _facesNormalVectors: Record<TRubikCube3x3FaceNames, THREE.Vector3> = {
+    TopFace: new THREE.Vector3(0, 1, 0),
+    DownFace: new THREE.Vector3(0, -1, 0),
+    FrontFace: new THREE.Vector3(0, 0, 1),
+    BackFace: new THREE.Vector3(0, 0, -1),
+    RightFace: new THREE.Vector3(1, 0, 0),
+    LeftFace: new THREE.Vector3(-1, 0, 0),
+    SliceXFace: new THREE.Vector3(),
+    SliceYFace: new THREE.Vector3(),
+    SliceZFace: new THREE.Vector3(),
+  };
+
   private readonly _faceSelectionConditions: typeof this.faceSelectionConditions = {
-    TopFace: (intersection: THREE.Intersection) => this.isFaceUp(intersection),
-    DownFace: (intersection: THREE.Intersection) => this.isFaceDown(intersection),
-    FrontFace: (intersection: THREE.Intersection) => this.isFaceFront(intersection),
-    BackFace: (intersection: THREE.Intersection) => this.isFaceBack(intersection),
-    RightFace: (intersection: THREE.Intersection) => this.isFaceRight(intersection),
-    LeftFace: (intersection: THREE.Intersection) => this.isFaceLeft(intersection),
+    TopFace: (intersection: THREE.Intersection) =>
+      this.isChoosenFaceIntersected(intersection, 'TopFace'),
+    DownFace: (intersection: THREE.Intersection) =>
+      this.isChoosenFaceIntersected(intersection, 'DownFace'),
+    FrontFace: (intersection: THREE.Intersection) =>
+      this.isChoosenFaceIntersected(intersection, 'FrontFace'),
+    BackFace: (intersection: THREE.Intersection) =>
+      this.isChoosenFaceIntersected(intersection, 'BackFace'),
+    RightFace: (intersection: THREE.Intersection) =>
+      this.isChoosenFaceIntersected(intersection, 'RightFace'),
+    LeftFace: (intersection: THREE.Intersection) =>
+      this.isChoosenFaceIntersected(intersection, 'LeftFace'),
     SliceXFace: () => false,
     SliceYFace: () => false,
     SliceZFace: () => false,
@@ -62,32 +80,18 @@ export class RubikCube3x3RayCastingData
 
     normal.set(intersectionNormal.x, intersectionNormal.y, intersectionNormal.z);
     normal.applyQuaternion(entirePiece.quaternion);
+    normal.round();
 
     return normal;
   }
 
-  private isFaceUp(intersection: THREE.Intersection): boolean {
-    return this.calculatedPieceFaceNormal(intersection).y > 0.95;
-  }
-
-  private isFaceDown(intersection: THREE.Intersection): boolean {
-    return this.calculatedPieceFaceNormal(intersection).y < -0.95;
-  }
-
-  private isFaceFront(intersection: THREE.Intersection): boolean {
-    return this.calculatedPieceFaceNormal(intersection).z > 0.95;
-  }
-
-  private isFaceBack(intersection: THREE.Intersection): boolean {
-    return this.calculatedPieceFaceNormal(intersection).z < -0.95;
-  }
-
-  private isFaceRight(intersection: THREE.Intersection): boolean {
-    return this.calculatedPieceFaceNormal(intersection).x > 0.95;
-  }
-
-  private isFaceLeft(intersection: THREE.Intersection): boolean {
-    return this.calculatedPieceFaceNormal(intersection).x < 0.95;
+  private isChoosenFaceIntersected(
+    intersection: THREE.Intersection,
+    choosenFace: TRubikCube3x3FaceNames,
+  ) {
+    return this.calculatedPieceFaceNormal(intersection).equals(
+      this._facesNormalVectors[choosenFace],
+    );
   }
 
   private createRotationTypes(
