@@ -24,13 +24,13 @@ export class RubikCube3x3Materials
       color: 0x000000,
     });
 
-  get faceMaterials(): Record<
+  public get faceMaterials(): Record<
     TRubikCube3x3FaceNames | TRubikCube3x3PieceCoverName,
     THREE.MeshBasicMaterial
   > {
     return this._faceMaterials;
   }
-  get invisiblePartsMaterial(): THREE.MeshBasicMaterial {
+  public get invisiblePartsMaterial(): THREE.MeshBasicMaterial {
     return this._invisiblePartsMaterial;
   }
 }

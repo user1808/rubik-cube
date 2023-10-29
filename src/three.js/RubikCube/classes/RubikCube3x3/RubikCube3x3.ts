@@ -1,25 +1,18 @@
 import type { IRubikCube } from '../../interfaces/IRubikCube';
 import type { IRubikCubePiece } from '../../interfaces/IRubikCubePiece';
 import type { TRubikCube3x3FaceNames } from '../../types/RubikCube3x3/TRubikCube3x3FaceNames';
-import type { TRubikCube3x3PieceCoverName } from '../../types/RubikCube3x3/TRubikCube3x3PieceCoverName';
 
-export class RubikCube3x3
-  implements IRubikCube<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>
-{
+export class RubikCube3x3 implements IRubikCube<TRubikCube3x3FaceNames> {
   constructor(
-    private readonly _faces: Map<
-      TRubikCube3x3FaceNames,
-      Array<IRubikCubePiece<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>>
-    >,
-    private readonly _pieces: Array<
-      IRubikCubePiece<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>
-    >,
+    private readonly _faces: Map<TRubikCube3x3FaceNames, Array<IRubikCubePiece>>,
+    private readonly _pieces: Array<IRubikCubePiece>,
   ) {}
 
-  get faces() {
+  public get faces(): Map<TRubikCube3x3FaceNames, Array<IRubikCubePiece>> {
     return this._faces;
   }
-  get pieces() {
+
+  public get pieces(): Array<IRubikCubePiece> {
     return this._pieces;
   }
 }

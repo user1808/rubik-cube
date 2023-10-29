@@ -30,10 +30,8 @@ export class RubikCubeApp<
   private readonly screenSizeTracker: ScreenSizeTracker;
   private readonly mouseTouchTracker: MouseTouchTracker;
 
-  private cube: Nullable<IRubikCube<FaceNames, PieceCoverFaceName>> = null;
-  private rotationHelper: Nullable<
-    IRubikCubeRotationHelper<FaceNames, PieceCoverFaceName, RotationTypes>
-  > = null;
+  private cube: Nullable<IRubikCube<FaceNames>> = null;
+  private rotationHelper: Nullable<IRubikCubeRotationHelper<FaceNames, RotationTypes>> = null;
   private rayCastingHelper: Nullable<IRubikCubeRayCastingHelper<FaceNames, RotationTypes>> = null;
 
   constructor(canvas: HTMLCanvasElement) {
@@ -84,7 +82,7 @@ export class RubikCubeApp<
         const intersects = this.raycaster.intersectObjects(
           this.cube.pieces.map((piece) => piece.entirePiece),
         );
-        const rotationData = this.rayCastingHelper.checkIntersecton(intersects[0]);
+        const rotationData = this.rayCastingHelper.checkIntersecton(this.cube, intersects[0]);
         if (rotationData) {
           this.rotationHelper.rotateCube(
             this.scene,

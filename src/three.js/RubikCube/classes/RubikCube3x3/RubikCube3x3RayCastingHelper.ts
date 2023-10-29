@@ -4,7 +4,6 @@ import type { TRubikCube3x3FaceNames } from '../../types/RubikCube3x3/TRubikCube
 import type { TRubikCube3x3RotationTypes } from '../../types/RubikCube3x3/TRubikCube3x3RotationTypes';
 import type { IRubikCubeRayCastingData } from '../../interfaces/IRubikCubeRayCastingData';
 import type { IRubikCube } from '../../interfaces/IRubikCube';
-import type { TRubikCube3x3PieceCoverName } from '../../types/RubikCube3x3/TRubikCube3x3PieceCoverName';
 
 type TPieceWithId = THREE.Object3D & {
   userData: { id: number };
@@ -14,7 +13,7 @@ export class RubikCube3x3RayCastingHelper
   implements IRubikCubeRayCastingHelper<TRubikCube3x3FaceNames, TRubikCube3x3RotationTypes>
 {
   private isRayCastingEnable: boolean = false;
-  private rayCastedFace: TRubikCube3x3FaceNames | null = null;
+  private rayCastedFace: Nullable<TRubikCube3x3FaceNames> = null;
   private rayCastedPiecesIds: Set<number> = new Set();
 
   constructor(
@@ -22,7 +21,6 @@ export class RubikCube3x3RayCastingHelper
       TRubikCube3x3FaceNames,
       TRubikCube3x3RotationTypes
     >,
-    private readonly cube: IRubikCube<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>,
   ) {
     window.addEventListener('mousedown', () => {
       this.isRayCastingEnable = true;
@@ -42,10 +40,13 @@ export class RubikCube3x3RayCastingHelper
     });
   }
 
-  public checkIntersecton(intersection: THREE.Intersection | undefined): {
+  public checkIntersecton(
+    cube: IRubikCube<TRubikCube3x3FaceNames>,
+    intersection: THREE.Intersection | undefined,
+  ): Nullable<{
     face: TRubikCube3x3FaceNames;
     rotation: TRubikCube3x3RotationTypes;
-  } | null {
+  }> {
     if (!this.isRayCastingEnable || !intersection) {
       return null;
     }
@@ -54,10 +55,10 @@ export class RubikCube3x3RayCastingHelper
       return null;
     }
     this.setWhatIsRaycasted(intersection, piece);
-    return this.getRotationData();
+    return this.getRotationData(cube);
   }
 
-  private isPieceHaveId(piece: THREE.Object3D | null): piece is TPieceWithId {
+  private isPieceHaveId(piece: Nullable<THREE.Object3D>): piece is TPieceWithId {
     return !!piece && typeof piece.userData.id === 'number';
   }
 
@@ -75,17 +76,19 @@ export class RubikCube3x3RayCastingHelper
     }
   }
 
-  private getRotationData(): ReturnType<typeof this.checkIntersecton> {
+  private getRotationData(
+    cube: IRubikCube<TRubikCube3x3FaceNames>,
+  ): ReturnType<typeof this.checkIntersecton> {
     if (!this.rayCastedFace || this.rayCastedPiecesIds.size !== 3) {
       return null;
     }
-    const selectedFacePieces = this.cube.faces.get(this.rayCastedFace);
+    const selectedFacePieces = cube.faces.get(this.rayCastedFace);
     if (!selectedFacePieces) {
       return null;
     }
     const selectedFacePiecesIds = selectedFacePieces.map((piece) => piece.id);
 
-    const rotationType = this.rayCastingData.selectedPiecesRotationType[this.rayCastedFace].find(
+    const rotationType = this.rayCastingData.selectedFaceRotationTypes[this.rayCastedFace].find(
       ({ faceSelectedPiecesIdxs }) => {
         const cubePiecesIds = faceSelectedPiecesIdxs.map(
           (facePieceId) => selectedFacePiecesIds[facePieceId],
