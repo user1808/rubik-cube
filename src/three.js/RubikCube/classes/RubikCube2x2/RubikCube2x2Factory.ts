@@ -6,12 +6,16 @@ import type { IRubikCubeRayCastingHelper } from '../../interfaces/IRubikCubeRayC
 import type { IRubikCubeRotationData } from '../../interfaces/IRubikCubeRotationData';
 import type { IRubikCubeRotationHelper } from '../../interfaces/IRubikCubeRotationHelper';
 import { IRubikCubeFactory } from '../../interfaces/IRubikCubeFactory';
+import type { IRubikCubeCreator } from '../../interfaces/IRubikCubeCreator';
 
 export class RubikCube2x2Factory extends IRubikCubeFactory<'', '', ''> {
   createRubikCubeMaterials(): IRubikCubeMaterials<'', ''> {
     throw new Error('Method not implemented.');
   }
   createRubikCubeData(): IRubikCubeData<''> {
+    throw new Error('Method not implemented.');
+  }
+  createRubikCubeCreator(): IRubikCubeCreator<'', ''> {
     throw new Error('Method not implemented.');
   }
   createRubikCube(): IRubikCube<''> {
