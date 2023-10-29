@@ -1,12 +1,12 @@
 import type { IRubikCube } from '../../interfaces/IRubikCube';
 import type { IRubikCubeData } from '../../interfaces/IRubikCubeData';
-import type { IRubikCubeFactory } from '../../interfaces/IRubikCubeFactory';
 import type { IRubikCubePiece } from '../../interfaces/IRubikCubePiece';
 import type { IRubikCubeRotationData } from '../../interfaces/IRubikCubeRotationData';
 import type { IRubikCubeRotationHelper } from '../../interfaces/IRubikCubeRotationHelper';
 import type { TRubikCube3x3FaceNames } from '../../types/RubikCube3x3/TRubikCube3x3FaceNames';
 import type { TRubikCube3x3PieceCoverName } from '../../types/RubikCube3x3/TRubikCube3x3PieceCoverName';
 import type { TRubikCube3x3RotationTypes } from '../../types/RubikCube3x3/TRubikCube3x3RotationTypes';
+import { IRubikCubeFactory } from '../../interfaces/IRubikCubeFactory';
 import { RubikCube3x3 } from './RubikCube3x3';
 import { RubikCube3x3Data } from './RubikCube3x3Data';
 import { RubikCube3x3RotationData } from './RubikCube3x3RotationData';
@@ -20,17 +20,12 @@ import type { IRubikCubeRayCastingHelper } from '../../interfaces/IRubikCubeRayC
 import { RubikCube3x3ObjectsRepo } from './RubikCube3x3ObjectsRepo';
 import { RubikCube3x3RayCastingHelper } from './RubikCube3x3RayCastingHelper';
 
-export class RubikCube3x3Factory
-  implements
-    IRubikCubeFactory<
-      TRubikCube3x3FaceNames,
-      TRubikCube3x3PieceCoverName,
-      TRubikCube3x3RotationTypes
-    >
-{
+export class RubikCube3x3Factory extends IRubikCubeFactory<
+  TRubikCube3x3FaceNames,
+  TRubikCube3x3PieceCoverName,
+  TRubikCube3x3RotationTypes
+> {
   private readonly objectsRepo: RubikCube3x3ObjectsRepo = new RubikCube3x3ObjectsRepo();
-
-  constructor(private readonly originalPiece: THREE.Group) {}
 
   public createRubikCubeMaterials(): IRubikCubeMaterials<
     TRubikCube3x3FaceNames,

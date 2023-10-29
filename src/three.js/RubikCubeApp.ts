@@ -6,14 +6,16 @@ import {
   CustomOrbitControls,
 } from './Common/Custom';
 import { ScreenSizeRepo, ScreenSizeTracker, MouseTouchTracker } from './Common';
-import { RubikCube3x3Factory } from './RubikCube/classes/RubikCube3x3/RubikCube3x3Factory';
 import type { IRubikCube } from './RubikCube/interfaces/IRubikCube';
 import type { IRubikCubeRayCastingHelper } from './RubikCube/interfaces/IRubikCubeRayCastingHelper';
 import type { IRubikCubeRotationHelper } from './RubikCube/interfaces/IRubikCubeRotationHelper';
-import type { TRubikCube3x3FaceNames } from './RubikCube/types/RubikCube3x3/TRubikCube3x3FaceNames';
-import type { TRubikCube3x3RotationTypes } from './RubikCube/types/RubikCube3x3/TRubikCube3x3RotationTypes';
+import type { IRubikCubeFactory } from './RubikCube/interfaces/IRubikCubeFactory';
 
-export class RubikCubeApp {
+export class RubikCubeApp<
+  FaceNames extends string,
+  PieceCoverFaceName extends string,
+  RotationTypes extends string,
+> {
   private readonly gui: CustomDebugGUI = new CustomDebugGUI();
 
   private readonly scene: THREE.Scene = new THREE.Scene();
@@ -28,16 +30,11 @@ export class RubikCubeApp {
   private readonly screenSizeTracker: ScreenSizeTracker;
   private readonly mouseTouchTracker: MouseTouchTracker;
 
-  private cube: IRubikCube<TRubikCube3x3FaceNames, 'Cover'> | null = null;
-  private rotationHelper: IRubikCubeRotationHelper<
-    TRubikCube3x3FaceNames,
-    'Cover',
-    TRubikCube3x3RotationTypes
-  > | null = null;
-  private rayCastingHelper: IRubikCubeRayCastingHelper<
-    TRubikCube3x3FaceNames,
-    TRubikCube3x3RotationTypes
-  > | null = null;
+  private cube: Nullable<IRubikCube<FaceNames, PieceCoverFaceName>> = null;
+  private rotationHelper: Nullable<
+    IRubikCubeRotationHelper<FaceNames, PieceCoverFaceName, RotationTypes>
+  > = null;
+  private rayCastingHelper: Nullable<IRubikCubeRayCastingHelper<FaceNames, RotationTypes>> = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.camera = new CustomPersepctiveCamera(this.screenSizeRepo);
@@ -48,9 +45,9 @@ export class RubikCubeApp {
     this.mouseTouchTracker = new MouseTouchTracker(this.screenSizeRepo);
   }
 
-  public start(loadedPiece: THREE.Group) {
+  public start(cubeFactory: IRubikCubeFactory<FaceNames, PieceCoverFaceName, RotationTypes>) {
     this.setUpDebugGUI();
-    this.setUpCubeAndHelpers(loadedPiece);
+    this.setUpCubeAndHelpers(cubeFactory);
     this.setUpScene();
     this.setUpTick();
   }
@@ -59,9 +56,9 @@ export class RubikCubeApp {
     this.gui.add(this.controls, 'enabled');
   }
 
-  private setUpCubeAndHelpers(loadedPiece: THREE.Group): void {
-    const cubeFactory = new RubikCube3x3Factory(loadedPiece);
-
+  private setUpCubeAndHelpers(
+    cubeFactory: IRubikCubeFactory<FaceNames, PieceCoverFaceName, RotationTypes>,
+  ): void {
     this.cube = cubeFactory.createRubikCube();
     this.rotationHelper = cubeFactory.createRubikCubeRotationHelper();
     this.rayCastingHelper = cubeFactory.createRubikCubeRayCastingHelper();
