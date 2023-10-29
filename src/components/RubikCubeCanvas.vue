@@ -9,7 +9,7 @@ import { CustomGLTFLoader } from '@/three.js/Common/Custom';
 import { RubikCube3x3Factory } from '@/three.js/RubikCube/classes/RubikCube3x3/RubikCube3x3Factory';
 import { RubikCube2x2Factory } from '@/three.js/RubikCube/classes/RubikCube2x2/RubikCube2x2Factory';
 
-const canvas = ref<HTMLCanvasElement | null>(null);
+const canvas = ref<Nullable<HTMLCanvasElement>>(null);
 const rubikCubeApp = ref<Nullable<RubikCubeApp<string, string, string>>>(null);
 
 const gltfLoader: CustomGLTFLoader = new CustomGLTFLoader();

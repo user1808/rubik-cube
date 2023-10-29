@@ -3,19 +3,13 @@ import gsap from 'gsap';
 import type { IRubikCube } from '../../interfaces/IRubikCube';
 import type { IRubikCubeRotationData } from '../../interfaces/IRubikCubeRotationData';
 import type { IRubikCubeRotationHelper } from '../../interfaces/IRubikCubeRotationHelper';
-import type { TRubikCube3x3PieceCoverName } from '../../types/RubikCube3x3/TRubikCube3x3PieceCoverName';
 import type { TRubikCube3x3RotationTypes } from '../../types/RubikCube3x3/TRubikCube3x3RotationTypes';
 import type { IRubikCubePiece } from '../../interfaces/IRubikCubePiece';
 import type { IRubikCubeData } from '../../interfaces/IRubikCubeData';
 import type { TRubikCube3x3FaceNames } from '../../types/RubikCube3x3/TRubikCube3x3FaceNames';
 
 export class RubikCube3x3RotationHelper
-  implements
-    IRubikCubeRotationHelper<
-      TRubikCube3x3FaceNames,
-      TRubikCube3x3PieceCoverName,
-      TRubikCube3x3RotationTypes
-    >
+  implements IRubikCubeRotationHelper<TRubikCube3x3FaceNames, TRubikCube3x3RotationTypes>
 {
   private isRotationAllowed: boolean = true;
 
@@ -29,7 +23,7 @@ export class RubikCube3x3RotationHelper
 
   rotateCube(
     scene: THREE.Scene,
-    cube: IRubikCube<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>,
+    cube: IRubikCube<TRubikCube3x3FaceNames>,
     face: TRubikCube3x3FaceNames,
     rotationType: TRubikCube3x3RotationTypes,
   ): void {
@@ -50,7 +44,7 @@ export class RubikCube3x3RotationHelper
 
   private createGroupToPerformRotation(
     scene: THREE.Scene,
-    rotatedFace: Array<IRubikCubePiece<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>>,
+    rotatedFace: Array<IRubikCubePiece>,
   ): THREE.Group {
     const rotationGroup = new THREE.Group();
     scene.add(rotationGroup);
@@ -60,7 +54,7 @@ export class RubikCube3x3RotationHelper
 
   private performRotation(
     scene: THREE.Scene,
-    cube: IRubikCube<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>,
+    cube: IRubikCube<TRubikCube3x3FaceNames>,
     group: THREE.Group,
     rotatedFaceType: TRubikCube3x3FaceNames,
     rotationType: TRubikCube3x3RotationTypes,
@@ -85,6 +79,7 @@ export class RubikCube3x3RotationHelper
         const position = new THREE.Vector3();
         const quaternion = new THREE.Quaternion();
         piece.getWorldPosition(position);
+        position.round();
         piece.position.set(position.x, position.y, position.z);
         group.getWorldQuaternion(quaternion);
         piece.applyQuaternion(quaternion);
@@ -95,7 +90,7 @@ export class RubikCube3x3RotationHelper
   }
 
   private updateCubeFaces(
-    cube: IRubikCube<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>,
+    cube: IRubikCube<TRubikCube3x3FaceNames>,
     rotatedFaceType: TRubikCube3x3FaceNames,
     rotationType: TRubikCube3x3RotationTypes,
   ) {

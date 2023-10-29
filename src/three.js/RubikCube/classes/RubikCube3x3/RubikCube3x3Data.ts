@@ -45,10 +45,10 @@ export class RubikCube3x3Data implements IRubikCubeData<TRubikCube3x3FaceNames> 
     SliceZFace: [3, 4, 5, 12, 13, 14, 21, 22, 23],
   };
 
-  get cubePiecesBasicData(): Array<TRubikCubePieceBasicData> {
+  public get cubePiecesBasicData(): Array<TRubikCubePieceBasicData> {
     return this._cubePiecesBasicData;
   }
-  get cubeFacePiecesIdxs(): Record<TRubikCube3x3FaceNames, number[]> {
+  public get cubeFacePiecesIdxs(): Record<TRubikCube3x3FaceNames, Array<number>> {
     return this._cubeFacePiecesIdxs;
   }
 }

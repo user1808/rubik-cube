@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import type { IRubikCubeRayCastingData } from '../../interfaces/IRubikCubeRayCastingData';
 import type { TRubikCube3x3FaceNames } from '../../types/RubikCube3x3/TRubikCube3x3FaceNames';
 import type { TRubikCube3x3RotationTypes } from '../../types/RubikCube3x3/TRubikCube3x3RotationTypes';
+import type { TRubikCubeSelectedFaceRotationType } from '../../types/common/TRubikCubeSelectedFaceRotationType';
 
 export class RubikCube3x3RayCastingData
   implements IRubikCubeRayCastingData<TRubikCube3x3FaceNames, TRubikCube3x3RotationTypes>
@@ -36,7 +37,7 @@ export class RubikCube3x3RayCastingData
     SliceZFace: () => false,
   };
 
-  private readonly _selectedPiecesRotationType: typeof this.selectedPiecesRotationType = {
+  private readonly _selectedPiecesRotationType: typeof this.selectedFaceRotationTypes = {
     FrontFace: this.createRotationTypes('FrontFace'),
     DownFace: this.createRotationTypes('DownFace'),
     TopFace: this.createRotationTypes('TopFace'),
@@ -55,13 +56,9 @@ export class RubikCube3x3RayCastingData
     return this._faceSelectionConditions;
   }
 
-  public get selectedPiecesRotationType(): Record<
+  public get selectedFaceRotationTypes(): Record<
     TRubikCube3x3FaceNames,
-    {
-      faceSelectedPiecesIdxs: number[];
-      faceToRotate: TRubikCube3x3FaceNames;
-      rotationType: TRubikCube3x3RotationTypes;
-    }[]
+    Array<TRubikCubeSelectedFaceRotationType<TRubikCube3x3FaceNames, TRubikCube3x3RotationTypes>>
   > {
     return this._selectedPiecesRotationType;
   }
@@ -96,7 +93,7 @@ export class RubikCube3x3RayCastingData
 
   private createRotationTypes(
     face: Exclude<TRubikCube3x3FaceNames, 'SliceXFace' | 'SliceYFace' | 'SliceZFace'>,
-  ): (typeof this.selectedPiecesRotationType)[TRubikCube3x3FaceNames] {
+  ): (typeof this.selectedFaceRotationTypes)[TRubikCube3x3FaceNames] {
     const rotationPatterns: Record<
       Exclude<TRubikCube3x3FaceNames, 'SliceXFace' | 'SliceYFace' | 'SliceZFace'>,
       { face: TRubikCube3x3FaceNames; altRotation?: boolean }[]

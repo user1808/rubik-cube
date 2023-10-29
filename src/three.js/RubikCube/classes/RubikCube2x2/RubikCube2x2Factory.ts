@@ -14,13 +14,13 @@ export class RubikCube2x2Factory extends IRubikCubeFactory<'', '', ''> {
   createRubikCubeData(): IRubikCubeData<''> {
     throw new Error('Method not implemented.');
   }
-  createRubikCube(): IRubikCube<'', ''> {
+  createRubikCube(): IRubikCube<''> {
     throw new Error('Method not implemented.');
   }
   createRubikCubeRotationData(): IRubikCubeRotationData<'', ''> {
     throw new Error('Method not implemented.');
   }
-  createRubikCubeRotationHelper(): IRubikCubeRotationHelper<'', '', ''> {
+  createRubikCubeRotationHelper(): IRubikCubeRotationHelper<'', ''> {
     throw new Error('Method not implemented.');
   }
   createRubikCubeRayCastingData(): IRubikCubeRayCastingData<'', ''> {

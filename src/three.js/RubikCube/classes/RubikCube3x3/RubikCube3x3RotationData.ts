@@ -37,10 +37,10 @@ export class RubikCube3x3RotationData
     },
   };
 
-  get facesRotationAxes(): Record<TRubikCube3x3FaceNames, TRubikCubeFaceRotationAxis> {
+  public get facesRotationAxes(): Record<TRubikCube3x3FaceNames, TRubikCubeFaceRotationAxis> {
     return this._facesRotationAxes;
   }
-  get rotationsBasicData(): Record<TRubikCube3x3RotationTypes, TRubikCubeFaceRotationData> {
+  public get rotationsBasicData(): Record<TRubikCube3x3RotationTypes, TRubikCubeFaceRotationData> {
     return this._rotationBasicData;
   }
 }
