@@ -86,7 +86,7 @@ export class RubikCube3x3RayCastingHelper
     if (!selectedFacePieces) {
       return null;
     }
-    const selectedFacePiecesIds = selectedFacePieces.map((piece) => piece.id);
+    const selectedFacePiecesIds = selectedFacePieces.map((facePiece) => facePiece.piece.id);
 
     const rotationType = this.rayCastingData.selectedFaceRotationTypes[this.rayCastedFace].find(
       ({ faceSelectedPiecesIdxs }) => {
