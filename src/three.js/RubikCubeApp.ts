@@ -71,7 +71,6 @@ export class RubikCubeApp<
   }
 
   private setUpTick(): void {
-    console.log(this.cube);
     const tick = () => {
       if (!this.cube || !this.rayCastingHelper || !this.rotationHelper) {
         return;
@@ -91,7 +90,6 @@ export class RubikCubeApp<
             rotationData.face,
             rotationData.rotation,
           );
-          console.log(rotationData, this.cube);
         }
       }
 
