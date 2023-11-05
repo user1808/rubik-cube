@@ -1,12 +1,19 @@
-import type { TRubikCubeFaceAffectedByRotationData } from '../types/common/TRubikCubeFaceAffectedByRotationData';
-import type { TRubikCubeFaceRotationAxis } from '../types/common/TRubikCubeFaceRotationAxis';
-import type { TRubikCubeFaceRotationData } from '../types/common/TRubikCubeFaceRotationData';
+export type TRubikCubeFaceRotationData = {
+  angle: number;
+  durationInSeconds: number;
+  rotatedFaceNewPiecesIdxs: Array<number>;
+};
 
-export interface IRubikCubeRotationData<FaceNames extends string, RotationTypes extends string> {
-  get facesRotationAxes(): Record<FaceNames, TRubikCubeFaceRotationAxis>;
+export type TRubikCubeFaceRotationAxis = {
+  axis: 'x' | 'y' | 'z';
+  turn: 1 | -1;
+};
+
+export interface IRubikCubeRotationData<
+  RealFacesNames extends string,
+  PseudoFacesNames extends string | never,
+  RotationTypes extends string,
+> {
+  get facesRotationAxes(): Record<RealFacesNames | PseudoFacesNames, TRubikCubeFaceRotationAxis>;
   get rotationsBasicData(): Record<RotationTypes, TRubikCubeFaceRotationData>;
-  get facesAffectedByRotationData(): Record<
-    FaceNames,
-    Record<RotationTypes, Array<TRubikCubeFaceAffectedByRotationData<FaceNames>>>
-  >;
 }

@@ -1,11 +1,11 @@
 import * as THREE from 'three';
-import type { IRubikCubePiece } from '../../interfaces/IRubikCubePiece';
+import type { TRubikCubePieceId } from '../../interfaces/IRubikCubeData';
 
-export class RubikCube3x3Piece implements IRubikCubePiece {
+export class RubikCubePiece {
   private readonly _entirePiece: THREE.Group = new THREE.Group();
 
   constructor(
-    private readonly _id: number,
+    private readonly _id: TRubikCubePieceId,
     pieceFaces: Array<THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>>,
   ) {
     this._entirePiece.add(...pieceFaces);
@@ -16,7 +16,7 @@ export class RubikCube3x3Piece implements IRubikCubePiece {
     return this._entirePiece;
   }
 
-  get id(): number {
+  get id(): TRubikCubePieceId {
     return this._id;
   }
 }

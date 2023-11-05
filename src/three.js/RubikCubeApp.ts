@@ -6,15 +6,14 @@ import {
   CustomOrbitControls,
 } from './Common/Custom';
 import { ScreenSizeRepo, ScreenSizeTracker, MouseTouchTracker } from './Common';
-import type { IRubikCube } from './RubikCube/interfaces/IRubikCube';
-import type { IRubikCubeRayCastingHelper } from './RubikCube/interfaces/IRubikCubeRayCastingHelper';
-import type { IRubikCubeRotationHelper } from './RubikCube/interfaces/IRubikCubeRotationHelper';
-import type { IRubikCubeFactory } from './RubikCube/interfaces/IRubikCubeFactory';
+import type { RubikCube } from './RubikCube/classes/RubikCube/RubikCube';
+import type { AbstractRubikCubeFactory } from './RubikCube/classes/AbstractRubikCube/AbstractRubikCubeFactory';
 
 export class RubikCubeApp<
-  FaceNames extends string,
-  PieceCoverFaceName extends string,
-  RotationTypes extends string,
+  RealFacesNames extends string = string,
+  PseudoFacesNames extends string | never = string | never,
+  PieceCoverFacesNames extends string = string,
+  RotationTypes extends string = string,
 > {
   private readonly gui: CustomDebugGUI = new CustomDebugGUI();
 
@@ -30,9 +29,7 @@ export class RubikCubeApp<
   private readonly screenSizeTracker: ScreenSizeTracker;
   private readonly mouseTouchTracker: MouseTouchTracker;
 
-  private cube: Nullable<IRubikCube<FaceNames>> = null;
-  private rotationHelper: Nullable<IRubikCubeRotationHelper<FaceNames, RotationTypes>> = null;
-  private rayCastingHelper: Nullable<IRubikCubeRayCastingHelper<FaceNames, RotationTypes>> = null;
+  private cube: Nullable<RubikCube<RealFacesNames, PseudoFacesNames, RotationTypes>> = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.camera = new CustomPersepctiveCamera(this.screenSizeRepo);
@@ -43,23 +40,63 @@ export class RubikCubeApp<
     this.mouseTouchTracker = new MouseTouchTracker(this.screenSizeRepo);
   }
 
-  public start(cubeFactory: IRubikCubeFactory<FaceNames, PieceCoverFaceName, RotationTypes>) {
-    this.setUpDebugGUI();
-    this.setUpCubeAndHelpers(cubeFactory);
+  public start(
+    loadedPiece: THREE.Group,
+    cubeFactory: AbstractRubikCubeFactory<
+      RealFacesNames,
+      PseudoFacesNames,
+      PieceCoverFacesNames,
+      RotationTypes
+    >,
+  ) {
+    this.setUpCube(loadedPiece, cubeFactory);
+    this.setUpDebugGUI(
+      cubeFactory._realFacesNamesArray,
+      cubeFactory._pseudoFacesNamesArray,
+      cubeFactory._rotationTypesArray,
+    );
     this.setUpScene();
     this.setUpTick();
   }
 
-  private setUpDebugGUI(): void {
-    this.gui.add(this.controls, 'enabled');
+  private setUpCube(
+    loadedPiece: THREE.Group,
+    cubeFactory: AbstractRubikCubeFactory<
+      RealFacesNames,
+      PseudoFacesNames,
+      PieceCoverFacesNames,
+      RotationTypes
+    >,
+  ): void {
+    this.cube = cubeFactory.createRubikCube(loadedPiece, this.scene);
   }
 
-  private setUpCubeAndHelpers(
-    cubeFactory: IRubikCubeFactory<FaceNames, PieceCoverFaceName, RotationTypes>,
+  private setUpDebugGUI(
+    realFacesNames: Readonly<Array<RealFacesNames>>,
+    pseudoFacesNames: Readonly<Array<PseudoFacesNames>>,
+    rotationTypes: Readonly<Array<RotationTypes>>,
   ): void {
-    this.cube = cubeFactory.createRubikCube();
-    this.rotationHelper = cubeFactory.createRubikCubeRotationHelper();
-    this.rayCastingHelper = cubeFactory.createRubikCubeRayCastingHelper();
+    const rotationGUIFolder = this.gui.addFolder('Rotation Cube Face');
+    rotationGUIFolder.add(this.controls, 'enabled').name('Controls Enabled');
+    const rotationData: { face: RealFacesNames | PseudoFacesNames; rotationType: RotationTypes } = {
+      face: realFacesNames[0],
+      rotationType: rotationTypes[0],
+    };
+    const rotationFunction = {
+      rotateCubeFace: () => {
+        this.cube?.rotateCubeFace(rotationData.face, rotationData.rotationType);
+      },
+    };
+    rotationGUIFolder
+      .add(rotationData, 'face', [...realFacesNames, ...pseudoFacesNames])
+      .name('Face To Rotate');
+    rotationGUIFolder.add(rotationData, 'rotationType', rotationTypes).name('Rotation Type');
+    rotationGUIFolder.add(rotationFunction, 'rotateCubeFace').name('Rotate Cube Face');
+    if (this.cube) {
+      const cubeOnSceneGUIFolder = this.gui.addFolder('Cube On Scene');
+      cubeOnSceneGUIFolder.add(this.cube, 'addToScene').name('Add Cube To Scene');
+      cubeOnSceneGUIFolder.add(this.cube, 'removeFromScene').name('Remove Cube From Scene');
+    }
   }
 
   private setUpScene(): void {
@@ -67,31 +104,17 @@ export class RubikCubeApp<
       throw new Error('Cube was not loaded correctly!');
     }
     this.scene.add(this.camera);
-    this.scene.add(...this.cube.pieces.map((piece) => piece.entirePiece));
+    this.cube.addToScene();
   }
 
   private setUpTick(): void {
     const tick = () => {
-      if (!this.cube || !this.rayCastingHelper || !this.rotationHelper) {
+      if (!this.cube) {
+        window.requestAnimationFrame(tick);
         return;
       }
 
       this.raycaster.setFromCamera(this.mouseTouchTracker.pointerPosition, this.camera);
-
-      if (!this.controls.enabled) {
-        const intersects = this.raycaster.intersectObjects(
-          this.cube.pieces.map((piece) => piece.entirePiece),
-        );
-        const rotationData = this.rayCastingHelper.checkIntersecton(this.cube, intersects[0]);
-        if (rotationData) {
-          this.rotationHelper.rotateCube(
-            this.scene,
-            this.cube,
-            rotationData.face,
-            rotationData.rotation,
-          );
-        }
-      }
 
       this.controls.update();
 
