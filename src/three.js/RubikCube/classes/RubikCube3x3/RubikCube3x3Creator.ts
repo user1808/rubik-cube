@@ -8,6 +8,7 @@ import type { TRubikCube3x3FaceNames } from '../../types/RubikCube3x3/TRubikCube
 import type { TRubikCube3x3PieceCoverName } from '../../types/RubikCube3x3/TRubikCube3x3PieceCoverName';
 import { RubikCube3x3 } from './RubikCube3x3';
 import { RubikCube3x3Piece } from './RubikCube3x3Piece';
+import type { TRubikCubeFacePiece } from '../../types/common/TRubikCubeFacePiece';
 
 export class RubikCube3x3Creator
   implements IRubikCubeCreator<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>
@@ -17,7 +18,7 @@ export class RubikCube3x3Creator
     materials: IRubikCubeMaterials<TRubikCube3x3FaceNames, TRubikCube3x3PieceCoverName>,
     cubeData: IRubikCubeData<TRubikCube3x3FaceNames>,
   ): IRubikCube<TRubikCube3x3FaceNames> {
-    const faces: Map<TRubikCube3x3FaceNames, Array<IRubikCubePiece>> = new Map();
+    const faces: Map<TRubikCube3x3FaceNames, Array<TRubikCubeFacePiece>> = new Map();
     const pieces: Array<IRubikCubePiece> = [];
 
     for (const { id, position } of cubeData.cubePiecesBasicData) {
@@ -34,7 +35,7 @@ export class RubikCube3x3Creator
         .map((face) => {
           const faceName = face.name as TRubikCube3x3FaceNames | TRubikCube3x3PieceCoverName;
           face.material = visibleFacesNames.includes(faceName)
-            ? materials.faceMaterials[faceName]
+            ? materials.faceMaterials[faceName].material
             : materials.invisiblePartsMaterial;
           return face as THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
         });
@@ -47,7 +48,12 @@ export class RubikCube3x3Creator
       const key = faceName as TRubikCube3x3FaceNames;
       faces.set(
         key,
-        cubeData.cubeFacePiecesIdxs[key].map((idx) => pieces[idx]),
+        cubeData.cubeFacePiecesIdxs[key].map((idx) => {
+          return {
+            piece: pieces[idx],
+            value: materials.faceMaterials[key].value,
+          };
+        }),
       );
     }
 
