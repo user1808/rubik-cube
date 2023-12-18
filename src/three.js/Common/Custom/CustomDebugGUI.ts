@@ -10,4 +10,8 @@ export class CustomDebugGUI extends GUI {
   ): Controller {
     return super.add(object, property, $1, max, step);
   }
+
+  addFolder(title: string): CustomDebugGUI {
+    return super.addFolder(title);
+  }
 }

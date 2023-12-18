@@ -3,16 +3,16 @@ import type {
   TRubikCubeFaceRotationAxis,
   TRubikCubeFaceRotationData,
 } from '../../interfaces/IRubikCubeRotationData';
-import type { TRubikCube3x3PseudoFacesNames } from '../../types/RubikCube3x3/TRubikCube3x3PseudoFacesNames';
-import type { TRubikCube3x3RealFacesNames } from '../../types/RubikCube3x3/TRubikCube3x3RealFacesNames';
-import type { TRubikCube3x3RotationTypes } from '../../types/RubikCube3x3/TRubikCube3x3RotationTypes';
+import type { TRubikCube2x2PseudoFacesNames } from '../../types/RubikCube2x2/TRubikCube2x2PseudoFacesNames';
+import type { TRubikCube2x2RealFacesNames } from '../../types/RubikCube2x2/TRubikCube2x2RealFacesNames';
+import type { TRubikCube2x2RotationTypes } from '../../types/RubikCube2x2/TRubikCube2x2RotationTypes';
 
-export class RubikCube3x3RotationData
+export class RubikCube2x2RotationData
   implements
     IRubikCubeRotationData<
-      TRubikCube3x3RealFacesNames,
-      TRubikCube3x3PseudoFacesNames,
-      TRubikCube3x3RotationTypes
+      TRubikCube2x2RealFacesNames,
+      TRubikCube2x2PseudoFacesNames,
+      TRubikCube2x2RotationTypes
     >
 {
   private readonly _facesRotationAxes: typeof this.facesRotationAxes = {
@@ -22,37 +22,33 @@ export class RubikCube3x3RotationData
     RightFace: { axis: 'x', turn: 1 },
     FrontFace: { axis: 'z', turn: 1 },
     BackFace: { axis: 'z', turn: -1 },
-    SliceXFace: { axis: 'x', turn: 1 },
-    SliceYFace: { axis: 'y', turn: 1 },
-    SliceZFace: { axis: 'z', turn: 1 },
   };
 
   private readonly _rotationBasicData: typeof this.rotationsBasicData = {
     CounterClockwise: {
       angle: 0.5 * Math.PI,
-      rotatedFaceNewPiecesIdxs: [2, 5, 8, 1, 4, 7, 0, 3, 6],
+      rotatedFaceNewPiecesIdxs: [1, 3, 0, 2],
       durationInSeconds: 1,
     },
     Clockwise: {
       angle: -0.5 * Math.PI,
-      rotatedFaceNewPiecesIdxs: [6, 3, 0, 7, 4, 1, 8, 5, 2],
+      rotatedFaceNewPiecesIdxs: [2, 0, 3, 1],
       durationInSeconds: 1,
     },
     DoubleTurn: {
       angle: Math.PI,
-      rotatedFaceNewPiecesIdxs: [8, 7, 6, 5, 4, 3, 2, 1, 0],
+      rotatedFaceNewPiecesIdxs: [3, 2, 1, 0],
       durationInSeconds: 2,
     },
   };
 
   public get facesRotationAxes(): Record<
-    TRubikCube3x3RealFacesNames | TRubikCube3x3PseudoFacesNames,
+    TRubikCube2x2RealFacesNames | TRubikCube2x2PseudoFacesNames,
     TRubikCubeFaceRotationAxis
   > {
     return this._facesRotationAxes;
   }
-
-  public get rotationsBasicData(): Record<TRubikCube3x3RotationTypes, TRubikCubeFaceRotationData> {
+  public get rotationsBasicData(): Record<TRubikCube2x2RotationTypes, TRubikCubeFaceRotationData> {
     return this._rotationBasicData;
   }
 }
