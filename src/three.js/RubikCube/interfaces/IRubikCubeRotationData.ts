@@ -1,19 +1,20 @@
-export type TRubikCubeFaceRotationData = {
+import * as THREE from 'three';
+
+type TRubikCubeFaceRotationSteps = {
   angle: number;
+  ease?: string;
+};
+type TRubikCubeFaceSpecificRotationData = {
+  rotationSteps: Array<TRubikCubeFaceRotationSteps>;
   durationInSeconds: number;
   rotatedFaceNewPiecesIdxs: Array<number>;
+  precisionOfUpdatedPiecePosition: number;
+};
+export type TRubikCubeFaceRotationData<RotationTypes extends string> = {
+  rotationAxis: THREE.Vector3;
+  rotationData: Record<RotationTypes, TRubikCubeFaceSpecificRotationData>;
 };
 
-export type TRubikCubeFaceRotationAxis = {
-  axis: 'x' | 'y' | 'z';
-  turn: 1 | -1;
-};
-
-export interface IRubikCubeRotationData<
-  RealFacesNames extends string,
-  PseudoFacesNames extends string | never,
-  RotationTypes extends string,
-> {
-  get facesRotationAxes(): Record<RealFacesNames | PseudoFacesNames, TRubikCubeFaceRotationAxis>;
-  get rotationsBasicData(): Record<RotationTypes, TRubikCubeFaceRotationData>;
+export interface IRubikCubeRotationData<FacesNames extends string, RotationTypes extends string> {
+  get rotationData(): Record<FacesNames, TRubikCubeFaceRotationData<RotationTypes>>;
 }

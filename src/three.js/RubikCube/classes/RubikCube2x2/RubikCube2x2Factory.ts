@@ -22,12 +22,14 @@ export class RubikCube2x2Factory extends AbstractRubikCubeFactory<
   > {
     return new RubikCube2x2Materials();
   }
-  public createRubikCubeData(): IRubikCubeData<TRubikCube2x2RealFacesNames, never> {
+  public createRubikCubeData(): IRubikCubeData<
+    TRubikCube2x2RealFacesNames,
+    TRubikCube2x2PseudoFacesNames
+  > {
     return new RubikCube2x2Data();
   }
   public createRubikCubeRotationData(): IRubikCubeRotationData<
-    TRubikCube2x2RealFacesNames,
-    TRubikCube2x2PseudoFacesNames,
+    TRubikCube2x2RealFacesNames | TRubikCube2x2PseudoFacesNames,
     TRubikCube2x2RotationTypes
   > {
     return new RubikCube2x2RotationData();

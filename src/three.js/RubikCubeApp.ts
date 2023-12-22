@@ -29,7 +29,7 @@ export class RubikCubeApp<
   private readonly screenSizeTracker: ScreenSizeTracker;
   private readonly mouseTouchTracker: MouseTouchTracker;
 
-  private cube: Nullable<RubikCube<RealFacesNames, PseudoFacesNames, RotationTypes>> = null;
+  private cube: Nullable<RubikCube<RealFacesNames | PseudoFacesNames, RotationTypes>> = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.camera = new CustomPersepctiveCamera(this.screenSizeRepo);
@@ -50,11 +50,7 @@ export class RubikCubeApp<
     >,
   ) {
     this.setUpCube(loadedPiece, cubeFactory);
-    this.setUpDebugGUI(
-      cubeFactory._realFacesNamesArray,
-      cubeFactory._pseudoFacesNamesArray,
-      cubeFactory._rotationTypesArray,
-    );
+    this.setUpDebugGUI(cubeFactory.allFacesNamesArray, cubeFactory.rotationTypesArray);
     this.setUpScene();
     this.setUpTick();
   }
@@ -72,24 +68,23 @@ export class RubikCubeApp<
   }
 
   private setUpDebugGUI(
-    realFacesNames: Readonly<Array<RealFacesNames>>,
-    pseudoFacesNames: Readonly<Array<PseudoFacesNames>>,
+    allFacesNames: Readonly<Array<RealFacesNames | PseudoFacesNames>>,
     rotationTypes: Readonly<Array<RotationTypes>>,
   ): void {
     const rotationGUIFolder = this.gui.addFolder('Rotation Cube Face');
     rotationGUIFolder.add(this.controls, 'enabled').name('Controls Enabled');
     const rotationData: { face: RealFacesNames | PseudoFacesNames; rotationType: RotationTypes } = {
-      face: realFacesNames[0],
+      face: allFacesNames[0],
       rotationType: rotationTypes[0],
     };
     const rotationFunction = {
       rotateCubeFace: () => {
-        this.cube?.rotateCubeFace(rotationData.face, rotationData.rotationType);
+        this.cube?.rotateCubeFace(rotationData.face, rotationData.rotationType, () => {
+          console.log(this.cube?.facesValues);
+        });
       },
     };
-    rotationGUIFolder
-      .add(rotationData, 'face', [...realFacesNames, ...pseudoFacesNames])
-      .name('Face To Rotate');
+    rotationGUIFolder.add(rotationData, 'face', allFacesNames).name('Face To Rotate');
     rotationGUIFolder.add(rotationData, 'rotationType', rotationTypes).name('Rotation Type');
     rotationGUIFolder.add(rotationFunction, 'rotateCubeFace').name('Rotate Cube Face');
     if (this.cube) {

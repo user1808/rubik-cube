@@ -1,66 +1,60 @@
 import * as THREE from 'three';
-import type {
-  TRubikCubePseudoFaces,
-  TRubikCubeRealFaces,
-} from '../../types/common/RubikCubeFaces.types';
-import type { RubikCubePiece } from './RubikCubePiece';
-import type { RubikCubeRotationHelper } from './RubikCubeRotationHelper';
+import type { RubikCubePiece } from './RubikCubePiece/RubikCubePiece';
+import type { RubikCubeFace } from './RubikCubeFace';
 
-export class RubikCube<
-  RealFacesNames extends string,
-  PseudoFacesNames extends string | never,
-  RotationTypes extends string,
-> {
+type TIsRotationPendingFlag = boolean;
+type TIsCubeOnSceneFlag = boolean;
+export type TRubikCubeFaces<FacesNames extends string, RotationTypes extends string> = {
+  [FaceName in FacesNames]: RubikCubeFace<FaceName, RotationTypes>;
+};
+
+export class RubikCube<FacesNames extends string, RotationTypes extends string> {
+  private _isRotationPending: TIsRotationPendingFlag = false;
+  private _isCubeOnScene: TIsCubeOnSceneFlag = false;
+
   constructor(
     private readonly _scene: THREE.Scene,
-    private readonly _realFaces: TRubikCubeRealFaces<RealFacesNames>,
-    private readonly _pseudoFaces: TRubikCubePseudoFaces<PseudoFacesNames>,
+    private readonly _faces: TRubikCubeFaces<FacesNames, RotationTypes>,
     private readonly _pieces: Array<RubikCubePiece>,
-    private readonly _rotationHelper: RubikCubeRotationHelper<
-      RealFacesNames,
-      PseudoFacesNames,
-      RotationTypes
-    >,
   ) {}
 
-  get realFaces(): TRubikCubeRealFaces<RealFacesNames> {
-    return this._realFaces;
+  public get faces(): TRubikCubeFaces<FacesNames, RotationTypes> {
+    return this._faces;
   }
 
-  get pseudoFaces(): TRubikCubePseudoFaces<PseudoFacesNames> {
-    return this._pseudoFaces;
-  }
-
-  get pieces(): Array<RubikCubePiece> {
-    return this._pieces;
+  public get facesValues(): Record<FacesNames, Array<number>> {
+    return Object.fromEntries(
+      Object.entries<(typeof this._faces)[keyof typeof this._faces]>(this._faces).map(
+        ([key, face]) => [key, face.values],
+      ),
+    ) as Record<keyof typeof this._faces, Array<number>>;
   }
 
   public rotateCubeFace(
-    face: RealFacesNames | PseudoFacesNames,
+    face: FacesNames,
     rotationType: RotationTypes,
+    onComplete?: VoidCallback,
   ): void {
-    this._rotationHelper.rotateCubeFace(this._scene, this, face, rotationType);
+    if (this._isRotationPending || !this._isCubeOnScene) return;
+
+    this._isRotationPending = true;
+    this._faces[face].rotate(rotationType, () => {
+      Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) =>
+        face.updateFaceValues(),
+      );
+      this._isRotationPending = false;
+      onComplete?.();
+    });
   }
 
   public addToScene(): void {
-    this._scene.add(...this.pieces.map((piece) => piece.entirePiece));
+    this._pieces.forEach((piece) => piece.addToScene(this._scene));
+    this._isCubeOnScene = true;
   }
 
   public removeFromScene(): void {
-    this._pieces
-      .map((piece) => piece.entirePiece)
-      .forEach((entirePiece) => {
-        entirePiece.traverse((child) => {
-          if (
-            child instanceof THREE.Mesh &&
-            child.geometry instanceof THREE.BufferGeometry &&
-            child.material instanceof THREE.MeshBasicMaterial
-          ) {
-            child.geometry.dispose();
-            child.material.dispose();
-          }
-        });
-        this._scene.remove(entirePiece);
-      });
+    if (this._isRotationPending) return;
+    this._pieces.forEach((piece) => piece.removeFromScene(this._scene));
+    this._isCubeOnScene = false;
   }
 }

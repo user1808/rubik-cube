@@ -29,8 +29,7 @@ export class RubikCube3x3Factory extends AbstractRubikCubeFactory<
     return new RubikCube3x3Data();
   }
   public createRubikCubeRotationData(): IRubikCubeRotationData<
-    TRubikCube3x3RealFacesNames,
-    TRubikCube3x3PseudoFacesNames,
+    TRubikCube3x3RealFacesNames | TRubikCube3x3PseudoFacesNames,
     TRubikCube3x3RotationTypes
   > {
     return new RubikCube3x3RotationData();

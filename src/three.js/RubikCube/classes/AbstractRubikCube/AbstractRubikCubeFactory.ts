@@ -3,7 +3,6 @@ import type { IRubikCubeData } from '../../interfaces/IRubikCubeData';
 import type { IRubikCubeMaterials } from '../../interfaces/IRubikCubeMaterials';
 import type { RubikCube } from '../RubikCube/RubikCube';
 import type { IRubikCubeRotationData } from '../../interfaces/IRubikCubeRotationData';
-import { RubikCubeRotationHelper } from '../RubikCube/RubikCubeRotationHelper';
 
 export abstract class AbstractRubikCubeFactory<
   RealFacesNames extends string = string,
@@ -12,16 +11,14 @@ export abstract class AbstractRubikCubeFactory<
   RotationTypes extends string = string,
 > {
   constructor(
-    public readonly _realFacesNamesArray: Readonly<Array<RealFacesNames>>,
-    public readonly _pseudoFacesNamesArray: Readonly<Array<PseudoFacesNames>>,
-    public readonly _rotationTypesArray: Readonly<Array<RotationTypes>>,
+    public readonly allFacesNamesArray: Readonly<Array<RealFacesNames | PseudoFacesNames>>,
+    public readonly rotationTypesArray: Readonly<Array<RotationTypes>>,
   ) {}
 
   abstract createRubikCubeMaterials(): IRubikCubeMaterials<RealFacesNames, PieceCoverFacesNames>;
   abstract createRubikCubeData(): IRubikCubeData<RealFacesNames, PseudoFacesNames>;
   abstract createRubikCubeRotationData(): IRubikCubeRotationData<
-    RealFacesNames,
-    PseudoFacesNames,
+    RealFacesNames | PseudoFacesNames,
     RotationTypes
   >;
 
@@ -31,31 +28,18 @@ export abstract class AbstractRubikCubeFactory<
     PieceCoverFacesNames,
     RotationTypes
   > {
-    return new RubikCubeBuilder(this._realFacesNamesArray, this._pseudoFacesNamesArray);
+    return new RubikCubeBuilder(this.allFacesNamesArray);
   }
-  public createRubikCubeRotationHelper(): RubikCubeRotationHelper<
-    RealFacesNames,
-    PseudoFacesNames,
-    RotationTypes
-  > {
-    const rotationData = this.createRubikCubeRotationData();
-    return new RubikCubeRotationHelper(rotationData);
-  }
+
   public createRubikCube(
     originalPiece: THREE.Group,
     scene: THREE.Scene,
-  ): RubikCube<RealFacesNames, PseudoFacesNames, RotationTypes> {
+  ): RubikCube<RealFacesNames | PseudoFacesNames, RotationTypes> {
     const rubikCubeBuilder = this.createRubikCubeBuilder();
     const materials = this.createRubikCubeMaterials();
     const cubeData = this.createRubikCubeData();
-    const rotationHelper = this.createRubikCubeRotationHelper();
+    const rotationData = this.createRubikCubeRotationData();
 
-    return rubikCubeBuilder.buildRubikCube(
-      originalPiece,
-      materials,
-      cubeData,
-      rotationHelper,
-      scene,
-    );
+    return rubikCubeBuilder.buildRubikCube(scene, originalPiece, materials, cubeData, rotationData);
   }
 }

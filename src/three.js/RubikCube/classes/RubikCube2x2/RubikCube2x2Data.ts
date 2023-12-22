@@ -1,16 +1,13 @@
 import * as THREE from 'three';
-import type {
-  IRubikCubeData,
-  TRubikCubePieceBasicData,
-  TRubikCubePieceId,
-} from '../../interfaces/IRubikCubeData';
+import type { IRubikCubeData, TRubikCubePieceIdx } from '../../interfaces/IRubikCubeData';
 import type { TRubikCube2x2PseudoFacesNames } from '../../types/RubikCube2x2/TRubikCube2x2PseudoFacesNames';
 import type { TRubikCube2x2RealFacesNames } from '../../types/RubikCube2x2/TRubikCube2x2RealFacesNames';
+import type { TRubikCubePieceBasicData } from '../RubikCube/RubikCubePiece/RubikCubePiece';
 
 export class RubikCube2x2Data
   implements IRubikCubeData<TRubikCube2x2RealFacesNames, TRubikCube2x2PseudoFacesNames>
 {
-  private readonly _cubeAllPiecesBasicData: typeof this.cubeAllPiecesBasicData = [
+  private readonly _cubeAllPiecesBasicData: typeof this.basicDataOfAllCubePieces = [
     { id: 0, position: new THREE.Vector3(-0.5, 0.5, -0.5) },
     { id: 1, position: new THREE.Vector3(0.5, 0.5, -0.5) },
     { id: 2, position: new THREE.Vector3(-0.5, 0.5, 0.5) },
@@ -21,7 +18,7 @@ export class RubikCube2x2Data
     { id: 7, position: new THREE.Vector3(0.5, -0.5, 0.5) },
   ];
 
-  private readonly _cubeRealFacesPiecesIds: typeof this.cubeRealFacesPiecesIds = {
+  private readonly _cubeAllFacesPiecesInitIds: typeof this.initPiecesIdxsOfAllFaces = {
     TopFace: [0, 1, 2, 3],
     DownFace: [6, 7, 4, 5],
     FrontFace: [2, 3, 6, 7],
@@ -30,7 +27,7 @@ export class RubikCube2x2Data
     LeftFace: [0, 2, 4, 6],
   };
 
-  private readonly _cubeRealFacesNormalsVectors: typeof this.cubeRealFacesNormalVectors = {
+  private readonly _cubeVisiblePiecesFacesInitNormals: typeof this.initNormalsOfRealFaces = {
     TopFace: new THREE.Vector3(0, 1, 0),
     DownFace: new THREE.Vector3(0, -1, 0),
     FrontFace: new THREE.Vector3(0, 0, 1),
@@ -39,22 +36,18 @@ export class RubikCube2x2Data
     LeftFace: new THREE.Vector3(-1, 0, 0),
   };
 
-  public get cubeAllPiecesBasicData(): Array<TRubikCubePieceBasicData> {
+  public get basicDataOfAllCubePieces(): Array<TRubikCubePieceBasicData> {
     return this._cubeAllPiecesBasicData;
   }
 
-  public get cubeRealFacesPiecesIds(): Record<
-    TRubikCube2x2RealFacesNames,
-    Array<TRubikCubePieceId>
+  public get initPiecesIdxsOfAllFaces(): Record<
+    TRubikCube2x2RealFacesNames | TRubikCube2x2PseudoFacesNames,
+    Array<TRubikCubePieceIdx>
   > {
-    return this._cubeRealFacesPiecesIds;
+    return this._cubeAllFacesPiecesInitIds;
   }
 
-  public get cubePseudoFacesPiecesIds(): Record<never, Array<TRubikCubePieceId>> {
-    return {};
-  }
-
-  public get cubeRealFacesNormalVectors(): Record<TRubikCube2x2RealFacesNames, THREE.Vector3> {
-    return this._cubeRealFacesNormalsVectors;
+  public get initNormalsOfRealFaces(): Record<TRubikCube2x2RealFacesNames, THREE.Vector3> {
+    return this._cubeVisiblePiecesFacesInitNormals;
   }
 }
