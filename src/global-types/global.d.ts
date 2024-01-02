@@ -16,4 +16,6 @@ declare global {
   };
 
   type ExcludeNever<T> = Exclude<T, never>;
+
+  type VoidCallback = () => void;
 }

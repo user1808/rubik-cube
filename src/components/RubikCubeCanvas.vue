@@ -22,13 +22,11 @@ const rubikCubeApp = ref<Nullable<RubikCubeApp>>(null);
 const gltfLoader: CustomGLTFLoader = new CustomGLTFLoader();
 const factories: Array<AbstractRubikCubeFactory> = [
   new RubikCube3x3Factory(
-    RubikCube3x3RealFacesNames,
-    RubikCube3x3PseudoFacesNames,
+    [...RubikCube3x3RealFacesNames, ...RubikCube3x3PseudoFacesNames],
     RubikCube2x2RotationTypes,
   ),
   new RubikCube2x2Factory(
-    RubikCube2x2RealFacesNames,
-    RubikCube2x2PseudoFacesNames,
+    [...RubikCube2x2RealFacesNames, ...RubikCube2x2PseudoFacesNames],
     RubikCube3x3RotationTypes,
   ),
 ];
