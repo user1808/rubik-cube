@@ -5,15 +5,18 @@ export type TRubikCubePieceBasicData = Pick<THREE.Object3D, 'id' | 'position'>;
 export type TRubikCubePieceId = number;
 export type TRubikCubePieceOtherFace = THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
 
-export class RubikCubePiece {
-  private readonly _pieceGroup: THREE.Group = new THREE.Group();
-
+export class RubikCubePiece extends THREE.Group {
   constructor(
     private readonly _pieceId: TRubikCubePieceId,
     private readonly _visibleFaces: Array<RubikCubePieceVisibleFace>,
-    private readonly _otherFaces: Array<TRubikCubePieceOtherFace>,
+    _otherFaces: Array<TRubikCubePieceOtherFace>,
   ) {
-    this._pieceGroup.add(...[..._visibleFaces, ..._otherFaces]);
+    super();
+    this.add(...[..._visibleFaces, ..._otherFaces]);
+  }
+
+  public get pieceId(): TRubikCubePieceId {
+    return this._pieceId;
   }
 
   public get visibleFaces(): Array<RubikCubePieceVisibleFace> {
@@ -21,7 +24,7 @@ export class RubikCubePiece {
   }
 
   public setPosition(position: THREE.Vector3): void {
-    this._pieceGroup.position.set(
+    this.position.set(
       Number(position.x.toFixed(2)),
       Number(position.y.toFixed(2)),
       Number(position.z.toFixed(2)),
@@ -32,16 +35,8 @@ export class RubikCubePiece {
     this._visibleFaces.forEach((face) => face.updateNormal(quaternion));
   }
 
-  public addToFace(groupFace: THREE.Group): void {
-    groupFace.add(this._pieceGroup);
-  }
-
-  public addToScene(scene: THREE.Scene): void {
-    scene.add(this._pieceGroup);
-  }
-
   public removeFromScene(scene: THREE.Scene): void {
-    this._pieceGroup.traverse((child) => {
+    this.traverse((child) => {
       if (
         child instanceof THREE.Mesh &&
         child.geometry instanceof THREE.BufferGeometry &&
@@ -51,6 +46,6 @@ export class RubikCubePiece {
         child.material.dispose();
       }
     });
-    scene.remove(this._pieceGroup);
+    scene.remove(this);
   }
 }

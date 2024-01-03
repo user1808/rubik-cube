@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { RubikCubePiece } from './RubikCubePiece/RubikCubePiece';
 import type { TRubikCubeFaceRotationData } from '../../interfaces/IRubikCubeRotationData';
+import type { RubikCubePieceWrapper } from './RubikCubePiece/RubikCubePieceWrapper';
 
 export class RubikCubeFace<FaceName extends string, RotationTypes extends string> {
   private readonly _groupWithDefaultData = new THREE.Group();
@@ -12,7 +12,7 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
   constructor(
     private readonly _scene: THREE.Scene,
     private readonly _name: FaceName,
-    private readonly _pieces: Array<RubikCubePiece>,
+    private readonly _piecesWrappers: Array<RubikCubePieceWrapper>,
     private readonly _rotationData: TRubikCubeFaceRotationData<RotationTypes>,
     private readonly _faceNormal?: THREE.Vector3,
   ) {
@@ -25,7 +25,7 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
 
   public updateFaceValues() {
     if (!this._faceNormal) return;
-    this._piecesValues = this._pieces.map((piece) => {
+    this._piecesValues = this._piecesWrappers.map(({ piece }) => {
       const foundFace = piece.visibleFaces.find(
         (visibleFace) => this._faceNormal && visibleFace.normal.equals(this._faceNormal),
       );
@@ -45,7 +45,7 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
   private fillGroupWithFacePieces(scene: THREE.Scene): void {
     this._groupWithFacePieces = new THREE.Group().copy(this._groupWithDefaultData);
     scene.add(this._groupWithFacePieces);
-    this._pieces.forEach((piece) => piece.addToFace(this._groupWithFacePieces));
+    this._piecesWrappers.forEach(({ piece }) => this._groupWithFacePieces.add(piece));
   }
 
   private createRotationTimeline(
@@ -112,15 +112,15 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
   }
 
   private updatePiecesRotation(quaternion: THREE.Quaternion): void {
-    this._pieces.forEach((piece) => piece.rotate(quaternion));
+    this._piecesWrappers.forEach(({ piece }) => piece.rotate(quaternion));
   }
 
   private swapPieces(newPiecesIdxs: Array<number>): void {
-    const piecesClones: Array<RubikCubePiece> = this._pieces.map((piece) =>
+    const piecesClones: Array<RubikCubePieceWrapper> = this._piecesWrappers.map((piece) =>
       Object.assign({}, piece),
     );
-    for (let i = 0; i < this._pieces.length; i++) {
-      Object.assign(this._pieces[i], piecesClones[newPiecesIdxs[i]]);
+    for (let i = 0; i < this._piecesWrappers.length; i++) {
+      Object.assign(this._piecesWrappers[i], piecesClones[newPiecesIdxs[i]]);
     }
   }
 

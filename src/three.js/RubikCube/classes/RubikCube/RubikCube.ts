@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import type { RubikCubePiece } from './RubikCubePiece/RubikCubePiece';
 import type { RubikCubeFace } from './RubikCubeFace';
+import type { RubikCubePieceWrapper } from './RubikCubePiece/RubikCubePieceWrapper';
 
 type TIsRotationPendingFlag = boolean;
 type TIsCubeOnSceneFlag = boolean;
@@ -15,7 +15,7 @@ export class RubikCube<FacesNames extends string, RotationTypes extends string> 
   constructor(
     private readonly _scene: THREE.Scene,
     private readonly _faces: TRubikCubeFaces<FacesNames, RotationTypes>,
-    private readonly _pieces: Array<RubikCubePiece>,
+    private readonly _piecesWrappers: Array<RubikCubePieceWrapper>,
   ) {}
 
   public get faces(): TRubikCubeFaces<FacesNames, RotationTypes> {
@@ -48,13 +48,13 @@ export class RubikCube<FacesNames extends string, RotationTypes extends string> 
   }
 
   public addToScene(): void {
-    this._pieces.forEach((piece) => piece.addToScene(this._scene));
+    this._piecesWrappers.forEach((wrapper) => this._scene.add(wrapper.piece));
     this._isCubeOnScene = true;
   }
 
   public removeFromScene(): void {
     if (this._isRotationPending) return;
-    this._pieces.forEach((piece) => piece.removeFromScene(this._scene));
+    this._piecesWrappers.forEach((wrapper) => wrapper.piece.removeFromScene(this._scene));
     this._isCubeOnScene = false;
   }
 }
