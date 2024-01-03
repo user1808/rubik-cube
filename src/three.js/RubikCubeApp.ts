@@ -6,7 +6,7 @@ import {
   CustomOrbitControls,
 } from './Common/Custom';
 import { ScreenSizeRepo, ScreenSizeTracker, MouseTouchTracker } from './Common';
-import type { RubikCube } from './RubikCube/classes/RubikCube/RubikCube';
+import type { RubikCube } from './RubikCube/classes/RubikCube/RubikCubeStructure/RubikCube';
 import type { AbstractRubikCubeFactory } from './RubikCube/classes/AbstractRubikCube/AbstractRubikCubeFactory';
 
 export class RubikCubeApp<

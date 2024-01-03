@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { IRubikCubeData, TRubikCubePieceIdx } from '../../interfaces/IRubikCubeData';
 import type { TRubikCube3x3RealFacesNames } from '../../types/RubikCube3x3/TRubikCube3x3RealFacesNames';
 import type { TRubikCube3x3PseudoFacesNames } from '../../types/RubikCube3x3/TRubikCube3x3PseudoFacesNames';
-import type { TRubikCubePieceBasicData } from '../RubikCube/RubikCubePiece/RubikCubePiece';
+import type { TRubikCubePieceBasicData } from '../RubikCube/RubikCubeStructure/RubikCubePiece/RubikCubePiece';
 
 export class RubikCube3x3Data
   implements IRubikCubeData<TRubikCube3x3RealFacesNames, TRubikCube3x3PseudoFacesNames>

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import type { TRubikCubeFaceRotationData } from '../../interfaces/IRubikCubeRotationData';
+import type { TRubikCubeFaceRotationData } from '../../../interfaces/IRubikCubeRotationData';
 import type { RubikCubePieceWrapper } from './RubikCubePiece/RubikCubePieceWrapper';
 import type { RubikCubePiece } from './RubikCubePiece/RubikCubePiece';
 
