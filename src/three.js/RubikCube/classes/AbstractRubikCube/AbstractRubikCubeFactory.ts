@@ -1,7 +1,7 @@
-import { RubikCubeBuilder } from '../RubikCube/RubikCubeBuilder';
+import { RubikCubeBuilder } from '../RubikCube/RubikCubeHelpers/RubikCubeBuilder';
 import type { IRubikCubeData } from '../../interfaces/IRubikCubeData';
 import type { IRubikCubeMaterials } from '../../interfaces/IRubikCubeMaterials';
-import type { RubikCube } from '../RubikCube/RubikCube';
+import type { RubikCube } from '../RubikCube/RubikCubeStructure/RubikCube';
 import type { IRubikCubeRotationData } from '../../interfaces/IRubikCubeRotationData';
 
 export abstract class AbstractRubikCubeFactory<

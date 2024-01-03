@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { RubikCubePieceVisibleFaceMaterial } from '../classes/RubikCube/RubikCubePiece/RubikCubePieceVisibleFaceMaterial';
+import type { RubikCubePieceVisibleFaceMaterial } from '../classes/RubikCube/RubikCubeStructure/RubikCubePiece/RubikCubePieceVisibleFaceMaterial';
 
 export interface IRubikCubeMaterials<
   RealFacesNames extends string,

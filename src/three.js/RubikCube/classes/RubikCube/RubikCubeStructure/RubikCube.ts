@@ -25,36 +25,34 @@ export class RubikCube<FacesNames extends string, RotationTypes extends string> 
   public get facesValues(): Record<FacesNames, Array<number>> {
     return Object.fromEntries(
       Object.entries<(typeof this._faces)[keyof typeof this._faces]>(this._faces).map(
-        ([key, face]) => [key, face.values],
+        ([key, face]) => [key, face.faceValues],
       ),
     ) as Record<keyof typeof this._faces, Array<number>>;
   }
 
-  public rotateCubeFace(
-    face: FacesNames,
-    rotationType: RotationTypes,
-    onComplete?: VoidCallback,
-  ): void {
+  public async rotateCubeFace(face: FacesNames, rotationType: RotationTypes): Promise<void> {
     if (this._isRotationPending || !this._isCubeOnScene) return;
 
     this._isRotationPending = true;
-    this._faces[face].rotate(rotationType, () => {
-      Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) =>
-        face.updateFaceValues(),
-      );
-      this._isRotationPending = false;
-      onComplete?.();
+    await this._faces[face].rotate(rotationType);
+    this.updateFacesValues();
+    this._isRotationPending = false;
+  }
+
+  public updateFacesValues(): void {
+    Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) => {
+      face.updateFaceValues();
     });
   }
 
   public addToScene(): void {
-    this._piecesWrappers.forEach((wrapper) => this._scene.add(wrapper.piece));
+    this._piecesWrappers.forEach(({ piece }) => this._scene.add(piece));
     this._isCubeOnScene = true;
   }
 
   public removeFromScene(): void {
     if (this._isRotationPending) return;
-    this._piecesWrappers.forEach((wrapper) => wrapper.piece.removeFromScene(this._scene));
+    this._piecesWrappers.forEach(({ piece }) => piece.removeFromScene(this._scene));
     this._isCubeOnScene = false;
   }
 }

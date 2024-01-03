@@ -1,19 +1,19 @@
 import * as THREE from 'three';
-import type { IRubikCubeData } from '../../interfaces/IRubikCubeData';
-import type { IRubikCubeMaterials } from '../../interfaces/IRubikCubeMaterials';
+import type { IRubikCubeData } from '../../../interfaces/IRubikCubeData';
+import type { IRubikCubeMaterials } from '../../../interfaces/IRubikCubeMaterials';
 import {
   RubikCubePiece,
   type TRubikCubePieceId,
   type TRubikCubePieceOtherFace,
-} from './RubikCubePiece/RubikCubePiece';
-import { RubikCube, type TRubikCubeFaces } from './RubikCube';
-import { RubikCubePieceVisibleFace } from './RubikCubePiece/RubikCubePieceVisibleFace';
-import { RubikCubeFace } from './RubikCubeFace';
+} from '../RubikCubeStructure/RubikCubePiece/RubikCubePiece';
+import { RubikCube, type TRubikCubeFaces } from '../RubikCubeStructure/RubikCube';
+import { RubikCubePieceVisibleFace } from '../RubikCubeStructure/RubikCubePiece/RubikCubePieceVisibleFace';
+import { RubikCubeFace } from '../RubikCubeStructure/RubikCubeFace';
 import type {
   IRubikCubeRotationData,
   TRubikCubeFaceRotationData,
-} from '../../interfaces/IRubikCubeRotationData';
-import { RubikCubePieceWrapper } from './RubikCubePiece/RubikCubePieceWrapper';
+} from '../../../interfaces/IRubikCubeRotationData';
+import { RubikCubePieceWrapper } from '../RubikCubeStructure/RubikCubePiece/RubikCubePieceWrapper';
 
 export class RubikCubeBuilder<
   RealFacesNames extends string,
