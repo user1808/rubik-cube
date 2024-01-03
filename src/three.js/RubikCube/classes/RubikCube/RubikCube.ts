@@ -35,20 +35,24 @@ export class RubikCube<FacesNames extends string, RotationTypes extends string> 
 
     this._isRotationPending = true;
     await this._faces[face].rotate(rotationType);
-    Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) => {
-      face.updateFaceValues();
-    });
+    this.updateFacesValues();
     this._isRotationPending = false;
   }
 
+  public updateFacesValues(): void {
+    Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) => {
+      face.updateFaceValues();
+    });
+  }
+
   public addToScene(): void {
-    this._piecesWrappers.forEach((wrapper) => this._scene.add(wrapper.piece));
+    this._piecesWrappers.forEach(({ piece }) => this._scene.add(piece));
     this._isCubeOnScene = true;
   }
 
   public removeFromScene(): void {
     if (this._isRotationPending) return;
-    this._piecesWrappers.forEach((wrapper) => wrapper.piece.removeFromScene(this._scene));
+    this._piecesWrappers.forEach(({ piece }) => piece.removeFromScene(this._scene));
     this._isCubeOnScene = false;
   }
 }
