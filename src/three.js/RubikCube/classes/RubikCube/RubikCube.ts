@@ -30,21 +30,15 @@ export class RubikCube<FacesNames extends string, RotationTypes extends string> 
     ) as Record<keyof typeof this._faces, Array<number>>;
   }
 
-  public rotateCubeFace(
-    face: FacesNames,
-    rotationType: RotationTypes,
-    onComplete?: VoidCallback,
-  ): void {
+  public async rotateCubeFace(face: FacesNames, rotationType: RotationTypes): Promise<void> {
     if (this._isRotationPending || !this._isCubeOnScene) return;
 
     this._isRotationPending = true;
-    this._faces[face].rotate(rotationType, () => {
-      Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) => {
-        face.updateFaceValues();
-      });
-      this._isRotationPending = false;
-      onComplete?.();
+    await this._faces[face].rotate(rotationType);
+    Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) => {
+      face.updateFaceValues();
     });
+    this._isRotationPending = false;
   }
 
   public addToScene(): void {

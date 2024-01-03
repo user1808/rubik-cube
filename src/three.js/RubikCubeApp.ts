@@ -78,10 +78,9 @@ export class RubikCubeApp<
       rotationType: rotationTypes[0],
     };
     const rotationFunction = {
-      rotateCubeFace: () => {
-        this.cube?.rotateCubeFace(rotationData.face, rotationData.rotationType, () => {
-          console.log(this.cube?.facesValues);
-        });
+      rotateCubeFace: async () => {
+        await this.cube?.rotateCubeFace(rotationData.face, rotationData.rotationType);
+        console.log(this.cube?.facesValues);
       },
     };
     rotationGUIFolder.add(rotationData, 'face', allFacesNames).name('Face To Rotate');

@@ -37,10 +37,14 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
     });
   }
 
-  public rotate(rotationType: RotationTypes, onComplete?: VoidCallback): void {
-    this.fillGroupWithFacePieces(this._scene);
-    const timeline: GSAPTimeline = this.createRotationTimeline(rotationType, onComplete);
-    this.setRotationTimelineSteps(timeline, rotationType);
+  public async rotate(rotationType: RotationTypes): Promise<void> {
+    return new Promise((resolve) => {
+      this.fillGroupWithFacePieces(this._scene);
+      const timeline: GSAPTimeline = this.createRotationTimeline(rotationType, () => {
+        resolve();
+      });
+      this.setRotationTimelineSteps(timeline, rotationType);
+    });
   }
 
   private fillGroupWithFacePieces(scene: THREE.Scene): void {
@@ -51,7 +55,7 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
 
   private createRotationTimeline(
     rotationType: RotationTypes,
-    onComplete?: VoidCallback,
+    onComplete: VoidCallback,
   ): GSAPTimeline {
     const { rotationSteps, durationInSeconds, rotatedFaceNewPiecesIdxs } =
       this._rotationData.rotationData[rotationType];
@@ -69,7 +73,7 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
         this.updatePiecesRotation(quaternion);
         this.swapPieces(rotatedFaceNewPiecesIdxs);
         this.emptyGroupWithFacePieces(this._scene);
-        onComplete?.();
+        onComplete();
       },
     });
     return timeline;
