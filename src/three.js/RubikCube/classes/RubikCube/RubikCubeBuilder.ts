@@ -13,6 +13,7 @@ import type {
   IRubikCubeRotationData,
   TRubikCubeFaceRotationData,
 } from '../../interfaces/IRubikCubeRotationData';
+import { RubikCubePieceWrapper } from './RubikCubePiece/RubikCubePieceWrapper';
 
 export class RubikCubeBuilder<
   RealFacesNames extends string,
@@ -41,8 +42,8 @@ export class RubikCubeBuilder<
     loadedPiece: THREE.Group,
     materials: IRubikCubeMaterials<RealFacesNames, PieceCoverFacesNames>,
     cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
-  ): Array<RubikCubePiece> {
-    const createdPieces: Array<RubikCubePiece> = [];
+  ): Array<RubikCubePieceWrapper> {
+    const createdPieces: Array<RubikCubePieceWrapper> = [];
 
     for (const { id, position } of cubeData.basicDataOfAllCubePieces) {
       const loadedPieceFaces: Array<THREE.Mesh> = loadedPiece.children.filter(
@@ -52,7 +53,7 @@ export class RubikCubeBuilder<
       const newPiece: RubikCubePiece = this.createPiece(id, loadedPieceFaces, materials, cubeData);
 
       newPiece.setPosition(position);
-      createdPieces.push(newPiece);
+      createdPieces.push(new RubikCubePieceWrapper(newPiece));
     }
 
     return createdPieces;
@@ -127,7 +128,7 @@ export class RubikCubeBuilder<
 
   private createAllFaces(
     scene: THREE.Scene,
-    allPieces: Array<RubikCubePiece>,
+    allPieces: Array<RubikCubePieceWrapper>,
     cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
     rotationData: IRubikCubeRotationData<RealFacesNames | PseudoFacesNames, RotationTypes>,
   ): TRubikCubeFaces<RealFacesNames | PseudoFacesNames, RotationTypes> {
@@ -151,7 +152,7 @@ export class RubikCubeBuilder<
   private createFace(
     scene: THREE.Scene,
     faceName: RealFacesNames | PseudoFacesNames,
-    allPieces: Array<RubikCubePiece>,
+    allPieces: Array<RubikCubePieceWrapper>,
     cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
     faceRotationData: TRubikCubeFaceRotationData<RotationTypes>,
   ): RubikCubeFace<RealFacesNames | PseudoFacesNames, RotationTypes> {
