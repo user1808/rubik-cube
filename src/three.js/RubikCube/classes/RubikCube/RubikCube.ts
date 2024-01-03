@@ -25,7 +25,7 @@ export class RubikCube<FacesNames extends string, RotationTypes extends string> 
   public get facesValues(): Record<FacesNames, Array<number>> {
     return Object.fromEntries(
       Object.entries<(typeof this._faces)[keyof typeof this._faces]>(this._faces).map(
-        ([key, face]) => [key, face.values],
+        ([key, face]) => [key, face.faceValues],
       ),
     ) as Record<keyof typeof this._faces, Array<number>>;
   }

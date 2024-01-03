@@ -8,7 +8,7 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
   private readonly _groupWithDefaultData = new THREE.Group();
   private _groupWithFacePieces = new THREE.Group();
 
-  private _piecesValues: Array<number> = [];
+  private _faceValues: Array<number> = [];
 
   constructor(
     private readonly _scene: THREE.Scene,
@@ -20,13 +20,13 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
     this.updateFaceValues();
   }
 
-  public get values(): Array<number> {
-    return this._piecesValues;
+  public get faceValues(): Array<number> {
+    return this._faceValues;
   }
 
   public updateFaceValues() {
     if (!this._faceNormal) return;
-    this._piecesValues = this._piecesWrappers.map(({ piece }) => {
+    this._faceValues = this._piecesWrappers.map(({ piece }) => {
       const foundFace = piece.visibleFaces.find(
         (visibleFace) => this._faceNormal && visibleFace.normal.equals(this._faceNormal),
       );
