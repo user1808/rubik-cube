@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import type { TRubikCubeFaceRotationData } from '../../interfaces/IRubikCubeRotationData';
 import type { RubikCubePieceWrapper } from './RubikCubePiece/RubikCubePieceWrapper';
+import type { RubikCubePiece } from './RubikCubePiece/RubikCubePiece';
 
 export class RubikCubeFace<FaceName extends string, RotationTypes extends string> {
   private readonly _groupWithDefaultData = new THREE.Group();
@@ -116,12 +117,12 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
   }
 
   private swapPieces(newPiecesIdxs: Array<number>): void {
-    const piecesClones: Array<RubikCubePieceWrapper> = this._piecesWrappers.map((piece) =>
-      Object.assign({}, piece),
+    const piecesInNewOrder: Array<RubikCubePiece> = newPiecesIdxs.map(
+      (index) => this._piecesWrappers[index].piece,
     );
-    for (let i = 0; i < this._piecesWrappers.length; i++) {
-      Object.assign(this._piecesWrappers[i], piecesClones[newPiecesIdxs[i]]);
-    }
+    this._piecesWrappers.forEach((wrapper, index) => {
+      wrapper.piece = piecesInNewOrder[index];
+    });
   }
 
   private setNextRotation(rotationToSet: THREE.Euler, angle: number): void {

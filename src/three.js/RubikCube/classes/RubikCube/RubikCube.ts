@@ -39,9 +39,9 @@ export class RubikCube<FacesNames extends string, RotationTypes extends string> 
 
     this._isRotationPending = true;
     this._faces[face].rotate(rotationType, () => {
-      Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) =>
-        face.updateFaceValues(),
-      );
+      Object.values<(typeof this._faces)[keyof typeof this._faces]>(this._faces).forEach((face) => {
+        face.updateFaceValues();
+      });
       this._isRotationPending = false;
       onComplete?.();
     });
