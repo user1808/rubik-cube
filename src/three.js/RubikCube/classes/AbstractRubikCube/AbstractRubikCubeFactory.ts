@@ -1,4 +1,4 @@
-import { RubikCubeBuilder } from '../RubikCube/RubikCubeBuilder';
+import { RubikCubeBuilder } from '../RubikCube/RubikCubeHelpers/RubikCubeBuilder';
 import type { IRubikCubeData } from '../../interfaces/IRubikCubeData';
 import type { IRubikCubeMaterials } from '../../interfaces/IRubikCubeMaterials';
 import type { RubikCube } from '../RubikCube/RubikCubeStructure/RubikCube';
