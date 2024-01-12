@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { TRubikCubePieceBasicData } from '../classes/RubikCube/RubikCubePiece/RubikCubePiece';
+import type { TRubikCubePieceBasicData } from '../classes/RubikCube/RubikCubeStructure/RubikCubePiece/RubikCubePiece';
 
 export type TRubikCubePieceIdx = number;
 

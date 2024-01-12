@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import type { TRubikCubeFaceRotationData } from '../../interfaces/IRubikCubeRotationData';
+import type { TRubikCubeFaceRotationData } from '../../../interfaces/IRubikCubeRotationData';
 import type { RubikCubePieceWrapper } from './RubikCubePiece/RubikCubePieceWrapper';
+import type { RubikCubePiece } from './RubikCubePiece/RubikCubePiece';
 
 export class RubikCubeFace<FaceName extends string, RotationTypes extends string> {
   private readonly _groupWithDefaultData = new THREE.Group();
   private _groupWithFacePieces = new THREE.Group();
 
-  private _piecesValues: Array<number> = [];
+  private _faceValues: Array<number> = [];
 
   constructor(
     private readonly _scene: THREE.Scene,
@@ -19,13 +20,13 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
     this.updateFaceValues();
   }
 
-  public get values(): Array<number> {
-    return this._piecesValues;
+  public get faceValues(): Array<number> {
+    return this._faceValues;
   }
 
   public updateFaceValues() {
     if (!this._faceNormal) return;
-    this._piecesValues = this._piecesWrappers.map(({ piece }) => {
+    this._faceValues = this._piecesWrappers.map(({ piece }) => {
       const foundFace = piece.visibleFaces.find(
         (visibleFace) => this._faceNormal && visibleFace.normal.equals(this._faceNormal),
       );
@@ -36,10 +37,14 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
     });
   }
 
-  public rotate(rotationType: RotationTypes, onComplete?: VoidCallback): void {
-    this.fillGroupWithFacePieces(this._scene);
-    const timeline: GSAPTimeline = this.createRotationTimeline(rotationType, onComplete);
-    this.setRotationTimelineSteps(timeline, rotationType);
+  public async rotate(rotationType: RotationTypes): Promise<void> {
+    return new Promise((resolve) => {
+      this.fillGroupWithFacePieces(this._scene);
+      const timeline: GSAPTimeline = this.createRotationTimeline(rotationType, () => {
+        resolve();
+      });
+      this.setRotationTimelineSteps(timeline, rotationType);
+    });
   }
 
   private fillGroupWithFacePieces(scene: THREE.Scene): void {
@@ -50,7 +55,7 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
 
   private createRotationTimeline(
     rotationType: RotationTypes,
-    onComplete?: VoidCallback,
+    onComplete: VoidCallback,
   ): GSAPTimeline {
     const { rotationSteps, durationInSeconds, rotatedFaceNewPiecesIdxs } =
       this._rotationData.rotationData[rotationType];
@@ -68,7 +73,7 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
         this.updatePiecesRotation(quaternion);
         this.swapPieces(rotatedFaceNewPiecesIdxs);
         this.emptyGroupWithFacePieces(this._scene);
-        onComplete?.();
+        onComplete();
       },
     });
     return timeline;
@@ -116,12 +121,12 @@ export class RubikCubeFace<FaceName extends string, RotationTypes extends string
   }
 
   private swapPieces(newPiecesIdxs: Array<number>): void {
-    const piecesClones: Array<RubikCubePieceWrapper> = this._piecesWrappers.map((piece) =>
-      Object.assign({}, piece),
+    const piecesInNewOrder: Array<RubikCubePiece> = newPiecesIdxs.map(
+      (index) => this._piecesWrappers[index].piece,
     );
-    for (let i = 0; i < this._piecesWrappers.length; i++) {
-      Object.assign(this._piecesWrappers[i], piecesClones[newPiecesIdxs[i]]);
-    }
+    this._piecesWrappers.forEach((wrapper, index) => {
+      wrapper.piece = piecesInNewOrder[index];
+    });
   }
 
   private setNextRotation(rotationToSet: THREE.Euler, angle: number): void {

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { IRubikCubeMaterials } from '../../interfaces/IRubikCubeMaterials';
 import type { TRubikCube2x2PieceCoversNames } from '../../types/RubikCube2x2/TRubikCube2x2PieceCoversNames';
 import type { TRubikCube2x2RealFacesNames } from '../../types/RubikCube2x2/TRubikCube2x2RealFacesNames';
-import { RubikCubePieceVisibleFaceMaterial } from '../RubikCube/RubikCubePiece/RubikCubePieceVisibleFaceMaterial';
+import { RubikCubePieceVisibleFaceMaterial } from '../RubikCube/RubikCubeStructure/RubikCubePiece/RubikCubePieceVisibleFaceMaterial';
 
 export class RubikCube2x2Materials
   implements IRubikCubeMaterials<TRubikCube2x2RealFacesNames, TRubikCube2x2PieceCoversNames>

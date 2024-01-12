@@ -6,7 +6,7 @@ import {
   CustomOrbitControls,
 } from './Common/Custom';
 import { ScreenSizeRepo, ScreenSizeTracker, MouseTouchTracker } from './Common';
-import type { RubikCube } from './RubikCube/classes/RubikCube/RubikCube';
+import type { RubikCube } from './RubikCube/classes/RubikCube/RubikCubeStructure/RubikCube';
 import type { AbstractRubikCubeFactory } from './RubikCube/classes/AbstractRubikCube/AbstractRubikCubeFactory';
 
 export class RubikCubeApp<
@@ -78,10 +78,9 @@ export class RubikCubeApp<
       rotationType: rotationTypes[0],
     };
     const rotationFunction = {
-      rotateCubeFace: () => {
-        this.cube?.rotateCubeFace(rotationData.face, rotationData.rotationType, () => {
-          console.log(this.cube?.facesValues);
-        });
+      rotateCubeFace: async () => {
+        await this.cube?.rotateCubeFace(rotationData.face, rotationData.rotationType);
+        console.log(this.cube?.facesValues);
       },
     };
     rotationGUIFolder.add(rotationData, 'face', allFacesNames).name('Face To Rotate');
