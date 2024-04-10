@@ -1,34 +1,38 @@
 import * as THREE from 'three';
-import type { IRubikCubeMaterials } from '../../interfaces/IRubikCubeMaterials';
+import type { IRubikCubePieceMaterials } from '../../interfaces/IRubikCubePiecesMaterials';
 import type { TRubikCube2x2PieceCoversNames } from '../../types/RubikCube2x2/TRubikCube2x2PieceCoversNames';
 import type { TRubikCube2x2RealFacesNames } from '../../types/RubikCube2x2/TRubikCube2x2RealFacesNames';
-import { RubikCubePieceVisibleFaceMaterial } from '../RubikCube/RubikCubeStructure/RubikCubePiece/RubikCubePieceVisibleFaceMaterial';
 
 export class RubikCube2x2Materials
-  implements IRubikCubeMaterials<TRubikCube2x2RealFacesNames, TRubikCube2x2PieceCoversNames>
+  implements IRubikCubePieceMaterials<TRubikCube2x2RealFacesNames, TRubikCube2x2PieceCoversNames>
 {
   private readonly _realFacesMaterials: typeof this.pieceVisibleFacesMaterials = {
-    TopFace: new RubikCubePieceVisibleFaceMaterial({ color: 0xff0000, faceValue: 0 }),
-    DownFace: new RubikCubePieceVisibleFaceMaterial({ color: 0xffa500, faceValue: 1 }),
-    LeftFace: new RubikCubePieceVisibleFaceMaterial({ color: 0xffff00, faceValue: 2 }),
-    RightFace: new RubikCubePieceVisibleFaceMaterial({ color: 0xffffff, faceValue: 3 }),
-    FrontFace: new RubikCubePieceVisibleFaceMaterial({ color: 0x0000ff, faceValue: 4 }),
-    BackFace: new RubikCubePieceVisibleFaceMaterial({ color: 0x00ff00, faceValue: 5 }),
+    TopFace: new THREE.MeshBasicMaterial({ color: 0xff0000 }),
+    DownFace: new THREE.MeshBasicMaterial({ color: 0xffa500 }),
+    LeftFace: new THREE.MeshBasicMaterial({ color: 0xffff00 }),
+    RightFace: new THREE.MeshBasicMaterial({ color: 0xffffff }),
+    FrontFace: new THREE.MeshBasicMaterial({ color: 0x0000ff }),
+    BackFace: new THREE.MeshBasicMaterial({ color: 0x00ff00 }),
   };
+  private readonly _edgeFacesMaterials: typeof this.pieceEdgeFacesMaterials = {
+    Cover: new THREE.MeshBasicMaterial({ color: 0x2b2b2b }),
+  };
+  private readonly _hiddenFacesMaterials: typeof this.pieceHiddenFacesMaterial =
+    new THREE.MeshBasicMaterial({ color: 0x000000 });
 
   public get pieceVisibleFacesMaterials(): Record<
     TRubikCube2x2RealFacesNames,
-    RubikCubePieceVisibleFaceMaterial
+    THREE.MeshBasicMaterial
   > {
     return this._realFacesMaterials;
   }
-  public get pieceCoverFacesMaterials(): Record<
+  public get pieceEdgeFacesMaterials(): Record<
     TRubikCube2x2PieceCoversNames,
     THREE.MeshBasicMaterial
   > {
-    return { Cover: new THREE.MeshBasicMaterial({ color: 0x2b2b2b }) };
+    return this._edgeFacesMaterials;
   }
-  public get pieceInvisibleFacesMaterial(): THREE.MeshBasicMaterial {
-    return new THREE.MeshBasicMaterial({ color: 0x000000 });
+  public get pieceHiddenFacesMaterial(): THREE.MeshBasicMaterial {
+    return this._hiddenFacesMaterials;
   }
 }

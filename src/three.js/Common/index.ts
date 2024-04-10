@@ -1,5 +1,5 @@
 import { MouseTouchTracker } from './MouseTouchTracker';
-import { ScreenSizeRepo } from './ScreenSizeRepo';
+import { ScreenSize } from './ScreenSize';
 import { ScreenSizeTracker } from './ScreenSizeTracker';
 
-export { MouseTouchTracker, ScreenSizeRepo, ScreenSizeTracker };
+export { MouseTouchTracker, ScreenSize, ScreenSizeTracker };

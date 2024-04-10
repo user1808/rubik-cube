@@ -6,30 +6,14 @@
 import { ref, onMounted } from 'vue';
 import { RubikCubeApp } from '@/three.js/RubikCubeApp';
 import { CustomGLTFLoader } from '@/three.js/Common/Custom';
-import { RubikCube3x3Factory } from '@/three.js/RubikCube/classes/RubikCube3x3/RubikCube3x3Factory';
-import { RubikCube3x3PseudoFacesNames } from '@/three.js/RubikCube/types/RubikCube3x3/TRubikCube3x3PseudoFacesNames';
-import { RubikCube3x3RealFacesNames } from '@/three.js/RubikCube/types/RubikCube3x3/TRubikCube3x3RealFacesNames';
-import type { AbstractRubikCubeFactory } from '@/three.js/RubikCube/classes/AbstractRubikCube/AbstractRubikCubeFactory';
+import type { RubikCubeFactory } from '@/three.js/RubikCube/classes/RubikCube/RubikCubeHelpers/RubikCubeFactory';
 import { RubikCube2x2Factory } from '@/three.js/RubikCube/classes/RubikCube2x2/RubikCube2x2Factory';
-import { RubikCube2x2RealFacesNames } from '@/three.js/RubikCube/types/RubikCube2x2/TRubikCube2x2RealFacesNames';
-import { RubikCube2x2PseudoFacesNames } from '@/three.js/RubikCube/types/RubikCube2x2/TRubikCube2x2PseudoFacesNames';
-import { RubikCube2x2RotationTypes } from '@/three.js/RubikCube/types/RubikCube2x2/TRubikCube2x2RotationTypes';
-import { RubikCube3x3RotationTypes } from '@/three.js/RubikCube/types/RubikCube3x3/TRubikCube3x3RotationTypes';
 
 const canvas = ref<Nullable<HTMLCanvasElement>>(null);
 const rubikCubeApp = ref<Nullable<RubikCubeApp>>(null);
 
 const gltfLoader: CustomGLTFLoader = new CustomGLTFLoader();
-const factories: Array<AbstractRubikCubeFactory> = [
-  new RubikCube3x3Factory(
-    [...RubikCube3x3RealFacesNames, ...RubikCube3x3PseudoFacesNames],
-    RubikCube2x2RotationTypes,
-  ),
-  new RubikCube2x2Factory(
-    [...RubikCube2x2RealFacesNames, ...RubikCube2x2PseudoFacesNames],
-    RubikCube3x3RotationTypes,
-  ),
-];
+const factories: Array<RubikCubeFactory> = [new RubikCube2x2Factory()];
 
 onMounted(() => {
   if (!canvas.value) {
@@ -38,6 +22,7 @@ onMounted(() => {
   const app = new RubikCubeApp(canvas.value);
   rubikCubeApp.value = app;
   gltfLoader.load('RubikCubePiece.glb', (data) => {
+    console.log(data.scene);
     app.start(data.scene, factories[0]);
   });
 });

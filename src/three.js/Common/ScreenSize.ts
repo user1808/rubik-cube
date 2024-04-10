@@ -1,4 +1,4 @@
-export class ScreenSizeRepo {
+export class ScreenSize {
   private _height: number = window.innerHeight;
   private _width: number = window.innerWidth;
 
