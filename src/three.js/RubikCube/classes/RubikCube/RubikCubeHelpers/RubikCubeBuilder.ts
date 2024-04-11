@@ -1,51 +1,34 @@
 import * as THREE from 'three';
 import type { IRubikCubeData } from '../../../interfaces/IRubikCubeData';
-import type { IRubikCubeMaterials } from '../../../interfaces/IRubikCubeMaterials';
-import {
-  RubikCubePiece,
-  type TRubikCubePieceId,
-  type TRubikCubePieceOtherFace,
-} from '../RubikCubeStructure/RubikCubePiece/RubikCubePiece';
-import { RubikCube, type TRubikCubeFaces } from '../RubikCubeStructure/RubikCube';
-import { RubikCubePieceVisibleFace } from '../RubikCubeStructure/RubikCubePiece/RubikCubePieceVisibleFace';
-import { RubikCubeFace } from '../RubikCubeStructure/RubikCubeFace';
-import type {
-  IRubikCubeRotationData,
-  TRubikCubeFaceRotationData,
-} from '../../../interfaces/IRubikCubeRotationData';
-import { RubikCubePieceWrapper } from '../RubikCubeStructure/RubikCubePiece/RubikCubePieceWrapper';
+import type { IRubikCubePieceMaterials } from '../../../interfaces/IRubikCubePiecesMaterials';
+import { RubikCubePiece, type TRubikCubePieceId } from '../RubikCubeStructure/RubikCubePiece';
+import { RubikCube } from '../RubikCubeStructure/RubikCube';
 
 export class RubikCubeBuilder<
-  RealFacesNames extends string,
-  PseudoFacesNames extends string | never,
-  PieceCoverFacesNames extends string,
+  CubeRealFacesNames extends string,
+  CubePseudoFacesNames extends string | never,
+  PieceEdgeFacesNames extends string,
   RotationTypes extends string,
 > {
-  constructor(
-    private readonly _allFacesNamesArray: Readonly<Array<RealFacesNames | PseudoFacesNames>>,
-  ) {}
-
   public buildRubikCube(
     scene: THREE.Scene,
     loadedPiece: THREE.Group,
-    materials: IRubikCubeMaterials<RealFacesNames, PieceCoverFacesNames>,
-    cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
-    rotationData: IRubikCubeRotationData<RealFacesNames | PseudoFacesNames, RotationTypes>,
-  ): RubikCube<RealFacesNames | PseudoFacesNames, RotationTypes> {
+    materials: IRubikCubePieceMaterials<CubeRealFacesNames, PieceEdgeFacesNames>,
+    cubeData: IRubikCubeData<CubeRealFacesNames | CubePseudoFacesNames>,
+  ): RubikCube<CubeRealFacesNames | CubePseudoFacesNames, RotationTypes> {
     const allPieces = this.createAllPieces(loadedPiece, materials, cubeData);
-    const allFaces = this.createAllFaces(scene, allPieces, cubeData, rotationData);
 
-    return new RubikCube(scene, allFaces, allPieces);
+    return new RubikCube(allPieces);
   }
 
   private createAllPieces(
     loadedPiece: THREE.Group,
-    materials: IRubikCubeMaterials<RealFacesNames, PieceCoverFacesNames>,
-    cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
-  ): Array<RubikCubePieceWrapper> {
-    const createdPieces: Array<RubikCubePieceWrapper> = [];
+    materials: IRubikCubePieceMaterials<CubeRealFacesNames, PieceEdgeFacesNames>,
+    cubeData: IRubikCubeData<CubeRealFacesNames | CubePseudoFacesNames>,
+  ): Array<RubikCubePiece> {
+    const createdPieces: Array<RubikCubePiece> = [];
 
-    for (const { id, position } of cubeData.basicDataOfAllCubePieces) {
+    for (const { id, position } of cubeData.piecesBasicData) {
       const loadedPieceFaces: Array<THREE.Mesh> = loadedPiece.children.filter(
         (child) => child instanceof THREE.Mesh,
       ) as Array<THREE.Mesh>;
@@ -53,7 +36,7 @@ export class RubikCubeBuilder<
       const newPiece: RubikCubePiece = this.createPiece(id, loadedPieceFaces, materials, cubeData);
 
       newPiece.setPosition(position);
-      createdPieces.push(new RubikCubePieceWrapper(newPiece));
+      createdPieces.push(newPiece);
     }
 
     return createdPieces;
@@ -62,15 +45,14 @@ export class RubikCubeBuilder<
   private createPiece(
     id: TRubikCubePieceId,
     loadedPieceFaces: Array<THREE.Mesh>,
-    materials: IRubikCubeMaterials<RealFacesNames, PieceCoverFacesNames>,
-    cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
+    materials: IRubikCubePieceMaterials<CubeRealFacesNames, PieceEdgeFacesNames>,
+    cubeData: IRubikCubeData<CubeRealFacesNames | CubePseudoFacesNames>,
   ): RubikCubePiece {
-    const realFaces: Array<RubikCubePieceVisibleFace> = [];
-    const otherFaces: Array<TRubikCubePieceOtherFace> = [];
+    const otherFaces: Array<TRubikCubePieceHiddenFace> = [];
 
     loadedPieceFaces.forEach((pieceFace) => {
       if (
-        !this.checkFaceName(materials.pieceCoverFacesMaterials, pieceFace.name) &&
+        !this.checkFaceName(materials.pieceEdgeFacesMaterials, pieceFace.name) &&
         !this.checkFaceName(materials.pieceVisibleFacesMaterials, pieceFace.name)
       ) {
         return;
@@ -79,41 +61,32 @@ export class RubikCubeBuilder<
       const faceName = pieceFace.name;
       const createdPieceFace = this.createPieceFace(id, faceName, pieceFace, materials, cubeData);
 
-      if (createdPieceFace instanceof RubikCubePieceVisibleFace) {
-        realFaces.push(createdPieceFace);
-      } else {
-        otherFaces.push(createdPieceFace);
-      }
+      otherFaces.push(createdPieceFace);
     });
 
-    return new RubikCubePiece(id, realFaces, otherFaces);
+    return new RubikCubePiece(id, otherFaces);
   }
 
   private createPieceFace(
     pieceId: TRubikCubePieceId,
-    faceName: RealFacesNames | PieceCoverFacesNames,
+    faceName: CubeRealFacesNames | PieceEdgeFacesNames,
     loadedPieceFace: THREE.Mesh,
-    materials: IRubikCubeMaterials<RealFacesNames, PieceCoverFacesNames>,
-    cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
-  ): RubikCubePieceVisibleFace | TRubikCubePieceOtherFace {
+    materials: IRubikCubePieceMaterials<CubeRealFacesNames, PieceEdgeFacesNames>,
+    cubeData: IRubikCubeData<CubeRealFacesNames, CubePseudoFacesNames>,
+  ): TRubikCubePieceHiddenFace {
     const newPieceFace = new THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>(
       loadedPieceFace.geometry,
     );
     newPieceFace.scale.copy(loadedPieceFace.scale);
-    if (this.checkFaceName(materials.pieceCoverFacesMaterials, faceName)) {
-      newPieceFace.material = materials.pieceCoverFacesMaterials[faceName];
+    if (this.checkFaceName(materials.pieceEdgeFacesMaterials, faceName)) {
+      newPieceFace.material = materials.pieceEdgeFacesMaterials[faceName];
       return newPieceFace;
     } else {
-      if (cubeData.initPiecesIdxsOfAllFaces[faceName].includes(pieceId)) {
-        const newVisibleFace = new RubikCubePieceVisibleFace(
-          newPieceFace.geometry,
-          materials.pieceVisibleFacesMaterials[faceName],
-          cubeData.initNormalsOfRealFaces[faceName].clone(),
-        );
-        newVisibleFace.scale.copy(newPieceFace.scale);
-        return newVisibleFace;
+      if (cubeData.initFacesPiecesIdx[faceName].includes(pieceId)) {
+        newPieceFace.material = materials.pieceVisibleFacesMaterials[faceName];
+        return newPieceFace;
       } else {
-        newPieceFace.material = materials.pieceInvisibleFacesMaterial;
+        newPieceFace.material = materials.pieceHiddenFacesMaterial;
         return newPieceFace;
       }
     }
@@ -124,46 +97,5 @@ export class RubikCubeBuilder<
     faceName: string,
   ): faceName is T {
     return Object.keys(recordWithFacesNamesKeys).includes(faceName);
-  }
-
-  private createAllFaces(
-    scene: THREE.Scene,
-    allPieces: Array<RubikCubePieceWrapper>,
-    cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
-    rotationData: IRubikCubeRotationData<RealFacesNames | PseudoFacesNames, RotationTypes>,
-  ): TRubikCubeFaces<RealFacesNames | PseudoFacesNames, RotationTypes> {
-    return this._allFacesNamesArray.reduce(
-      (acc, faceName) => {
-        return {
-          ...acc,
-          [faceName]: this.createFace(
-            scene,
-            faceName,
-            allPieces,
-            cubeData,
-            rotationData.rotationData[faceName],
-          ),
-        };
-      },
-      {} as TRubikCubeFaces<RealFacesNames | PseudoFacesNames, RotationTypes>,
-    );
-  }
-
-  private createFace(
-    scene: THREE.Scene,
-    faceName: RealFacesNames | PseudoFacesNames,
-    allPieces: Array<RubikCubePieceWrapper>,
-    cubeData: IRubikCubeData<RealFacesNames, PseudoFacesNames>,
-    faceRotationData: TRubikCubeFaceRotationData<RotationTypes>,
-  ): RubikCubeFace<RealFacesNames | PseudoFacesNames, RotationTypes> {
-    return new RubikCubeFace(
-      scene,
-      faceName,
-      cubeData.initPiecesIdxsOfAllFaces[faceName].map((id) => allPieces[id]),
-      faceRotationData,
-      this.checkFaceName(cubeData.initNormalsOfRealFaces, faceName)
-        ? cubeData.initNormalsOfRealFaces[faceName].clone()
-        : undefined,
-    );
   }
 }

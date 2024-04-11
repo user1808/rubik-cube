@@ -1,19 +1,19 @@
-import type { ScreenSizeRepo } from './ScreenSizeRepo';
+import type { ScreenSize } from './ScreenSize';
 
 export class ScreenSizeTracker {
-  constructor(
-    screenSizeRepo: ScreenSizeRepo,
+  public startTrack(
+    screenSize: ScreenSize,
     camera: THREE.PerspectiveCamera,
     renderer: THREE.WebGLRenderer,
   ) {
     window.addEventListener('resize', () => {
-      screenSizeRepo.width = window.innerWidth;
-      screenSizeRepo.height = window.innerHeight;
+      screenSize.width = window.innerWidth;
+      screenSize.height = window.innerHeight;
 
-      camera.aspect = screenSizeRepo.width / screenSizeRepo.height;
+      camera.aspect = screenSize.width / screenSize.height;
       camera.updateProjectionMatrix();
 
-      renderer.setSize(screenSizeRepo.width, screenSizeRepo.height);
+      renderer.setSize(screenSize.width, screenSize.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
   }
