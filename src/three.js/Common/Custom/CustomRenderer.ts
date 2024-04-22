@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import type { ScreenSizeRepo } from '../ScreenSizeRepo';
+import type { ScreenSize } from '../ScreenSize';
 
 export class CustomRenderer extends THREE.WebGLRenderer {
-  constructor(canvas: HTMLCanvasElement, { width, height }: ScreenSizeRepo) {
+  constructor(canvas: HTMLCanvasElement, { width, height }: ScreenSize) {
     super({
       canvas,
       antialias: true,

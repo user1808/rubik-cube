@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import type { ScreenSizeRepo } from './ScreenSizeRepo';
+import type { ScreenSize } from './ScreenSize';
 
 export class MouseTouchTracker {
   private readonly _pointerPosition: THREE.Vector2 = new THREE.Vector2();
 
-  constructor(private readonly screenSizeRepo: ScreenSizeRepo) {
+  constructor(private readonly screenSizeRepo: ScreenSize) {
     window.addEventListener('mousemove', (event) => {
       this._pointerPosition.x = (event.clientX / screenSizeRepo.width) * 2 - 1;
       this._pointerPosition.y = -((event.clientY / screenSizeRepo.height) * 2 - 1);

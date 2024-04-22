@@ -1,16 +1,8 @@
-import * as THREE from 'three';
-import type { TRubikCubePieceBasicData } from '../classes/RubikCube/RubikCubeStructure/RubikCubePiece/RubikCubePiece';
+import type { TRubikCubePieceBasicData } from '../classes/RubikCube/RubikCubeStructure/RubikCubePiece';
 
 export type TRubikCubePieceIdx = number;
 
-export interface IRubikCubeData<
-  RealFacesNames extends string,
-  PseudoFacesNames extends string | never,
-> {
-  get basicDataOfAllCubePieces(): Array<TRubikCubePieceBasicData>;
-  get initPiecesIdxsOfAllFaces(): Record<
-    RealFacesNames | PseudoFacesNames,
-    Array<TRubikCubePieceIdx>
-  >;
-  get initNormalsOfRealFaces(): Record<RealFacesNames, THREE.Vector3>;
+export interface IRubikCubeData<FacesNames extends string> {
+  get piecesBasicData(): Array<TRubikCubePieceBasicData>;
+  get initFacesPiecesIdx(): Record<FacesNames, Array<TRubikCubePieceIdx>>;
 }
