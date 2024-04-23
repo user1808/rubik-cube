@@ -4,6 +4,7 @@ import { ScreenSize, ScreenSizeTracker } from './Common';
 import type { RubikCube } from './RubikCube/classes/RubikCube/RubikCubeStructure/RubikCube';
 import type { RubikCubeFactory } from './RubikCube/classes/RubikCube/RubikCubeHelpers/RubikCubeFactory';
 
+// TODO: uncomment
 export class RubikCubeApp<
   RealFacesNames extends string = string,
   PseudoFacesNames extends string | never = string | never,
@@ -41,23 +42,33 @@ export class RubikCubeApp<
     loadedPiece: THREE.Group,
     cubeFactory: RubikCubeFactory<RealFacesNames, PseudoFacesNames, EdgeFacesNames>,
   ): void {
-    this.cube = cubeFactory.createRubikCube(loadedPiece, this.scene);
+    console.log(loadedPiece.children);
+    loadedPiece.children.forEach((child) => {
+      if (child instanceof THREE.Mesh) {
+        if (child.name === 'FaceF')
+          child.material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        else child.material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      }
+    });
+    this.scene.add(...loadedPiece.children);
+    this.scene.add(new THREE.AxesHelper(5));
+    // this.cube = cubeFactory.createRubikCube(loadedPiece, this.scene);
   }
 
   private setUpScene(): void {
-    if (!this.cube) {
-      throw new Error('Cube was not loaded correctly!');
-    }
+    // if (!this.cube) {
+    //   throw new Error('Cube was not loaded correctly!');
+    // }
     this.scene.add(this.camera);
-    this.cube.addToScene(this.scene);
+    // this.cube.addToScene(this.scene);
   }
 
   private setUpTick(): void {
     const tick = () => {
-      if (!this.cube) {
-        window.requestAnimationFrame(tick);
-        return;
-      }
+      // if (!this.cube) {
+      //   window.requestAnimationFrame(tick);
+      //   return;
+      // }
 
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
