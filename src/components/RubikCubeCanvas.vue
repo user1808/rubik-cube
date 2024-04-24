@@ -13,7 +13,7 @@ const canvas = ref<Nullable<HTMLCanvasElement>>(null);
 const rubikCubeApp = ref<Nullable<RubikCubeApp>>(null);
 
 const gltfLoader: CustomGLTFLoader = new CustomGLTFLoader();
-const factories: Array<RubikCubeFactory> = [new RubikCube2x2Factory()];
+const factory: RubikCubeFactory = new RubikCube2x2Factory();
 
 onMounted(() => {
   if (!canvas.value) {
@@ -21,9 +21,8 @@ onMounted(() => {
   }
   const app = new RubikCubeApp(canvas.value);
   rubikCubeApp.value = app;
-  gltfLoader.load('RubikCubePiece.glb', (data) => {
-    console.log(data.scene);
-    app.start(data.scene, factories[0]);
+  gltfLoader.load('RubikDodecahedronVertexPiece.glb', (data) => {
+    app.start(data.scene, factory);
   });
 });
 </script>
