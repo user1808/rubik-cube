@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import type { IRubikCubeData } from '../../../interfaces/IRubikCubeData';
 import type { IRubikCubePieceMaterials } from '../../../interfaces/IRubikCubePiecesMaterials';
-import { RubikCubePiece, type TRubikCubePieceId } from '../RubikCubeStructure/RubikCubePiece';
-import { RubikCube } from '../RubikCubeStructure/RubikCube';
+import { RubikCubePiece, type TRubikCubePieceId } from '../CubeStructure/Piece/RubikCubePiece';
+import { RubikCube } from '../CubeStructure/RubikCube';
 
 export class RubikCubeBuilder<
   CubeRealFacesNames extends string,
