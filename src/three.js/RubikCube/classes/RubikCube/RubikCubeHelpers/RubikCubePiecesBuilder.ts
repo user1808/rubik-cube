@@ -1,6 +1,6 @@
 import type { IRubikCubeData } from '@/three.js/RubikCube/interfaces/IRubikCubeData';
 import type { IRubikCubePieceMaterials } from '@/three.js/RubikCube/interfaces/IRubikCubePiecesMaterials';
-import type { RubikCubePiece } from '../RubikCubeStructure/RubikCubePiece';
+import type { RubikCubePiece } from '../CubeStructure/Piece/RubikCubePiece';
 
 export class RubikCubePiecesBuilder<
   Piece extends string,

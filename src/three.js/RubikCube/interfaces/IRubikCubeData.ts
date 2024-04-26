@@ -1,4 +1,4 @@
-import type { TRubikCubePieceBasicData } from '../classes/RubikCube/RubikCubeStructure/RubikCubePiece';
+import type { TRubikCubePieceBasicData } from '../classes/RubikCube/CubeStructure/Piece/RubikCubePiece';
 
 export type TRubikCubePieceIdx = number;
 

@@ -1,16 +1,11 @@
 import * as THREE from 'three';
 import { CustomPersepctiveCamera, CustomRenderer, CustomOrbitControls } from './Common/Custom';
 import { ScreenSize, ScreenSizeTracker } from './Common';
-import type { RubikCube } from './RubikCube/classes/RubikCube/RubikCubeStructure/RubikCube';
-import type { RubikCubeFactory } from './RubikCube/classes/RubikCube/RubikCubeHelpers/RubikCubeFactory';
+import type { RubikCubePiece } from './RubikCube/classes/RubikCube/RubikCubeStructure/RubikCubePiece/RubikCubePiece';
+import { RubikCubePieceLoader } from './RubikCube/classes/RubikCube/RubikCubeHelpers/RubikCubePieceLoader';
+import { RubikCubePieceBuilder } from './RubikCube/classes/RubikCube/RubikCubeHelpers/RubikCubePieceBuilder';
 
-// TODO: uncomment
-export class RubikCubeApp<
-  RealFacesNames extends string = string,
-  PseudoFacesNames extends string | never = string | never,
-  EdgeFacesNames extends string = string,
-  RotationTypes extends string = string,
-> {
+export class RubikCubeApp<TRubikCubePiecesNames extends string = string> {
   private readonly scene: THREE.Scene = new THREE.Scene();
 
   private readonly screenSize: ScreenSize = new ScreenSize();
@@ -20,7 +15,9 @@ export class RubikCubeApp<
   private readonly renderer: CustomRenderer;
   private readonly controls: CustomOrbitControls;
 
-  private cube: Nullable<RubikCube<RealFacesNames | PseudoFacesNames, RotationTypes>> = null;
+  private pieceLoader: RubikCubePieceLoader<TRubikCubePiecesNames> = new RubikCubePieceLoader();
+  private pieceBuilder: RubikCubePieceBuilder = new RubikCubePieceBuilder();
+  private piece: Nullable<RubikCubePiece> = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.camera = new CustomPersepctiveCamera(this.screenSize);
@@ -29,46 +26,36 @@ export class RubikCubeApp<
     this.controls = new CustomOrbitControls(this.camera, canvas);
   }
 
-  public start(
-    loadedPiece: THREE.Group,
-    cubeFactory: RubikCubeFactory<RealFacesNames, PseudoFacesNames, EdgeFacesNames>,
-  ) {
-    this.setUpCube(loadedPiece, cubeFactory);
-    this.setUpScene();
-    this.setUpTick();
+  public start(pieceName: TRubikCubePiecesNames) {
+    this.setUpPiece(pieceName);
   }
 
-  private setUpCube(
-    loadedPiece: THREE.Group,
-    cubeFactory: RubikCubeFactory<RealFacesNames, PseudoFacesNames, EdgeFacesNames>,
-  ): void {
-    console.log(loadedPiece.children);
-    loadedPiece.children.forEach((child) => {
-      if (child instanceof THREE.Mesh) {
-        if (child.name === 'FaceF')
-          child.material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        else child.material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      }
-    });
-    this.scene.add(...loadedPiece.children);
+  private setUpPiece(pieceName: TRubikCubePiecesNames): void {
+    // TODO: at the finish of the job you can remove it
     this.scene.add(new THREE.AxesHelper(5));
-    // this.cube = cubeFactory.createRubikCube(loadedPiece, this.scene);
+
+    this.pieceLoader.load(pieceName, (loadedData) => {
+      this.piece = this.pieceBuilder.createPiece(loadedData.scene);
+      this.setUpScene();
+    });
   }
 
   private setUpScene(): void {
-    // if (!this.cube) {
-    //   throw new Error('Cube was not loaded correctly!');
-    // }
+    if (!this.piece) {
+      throw new Error('Piece was not loaded correctly!');
+    }
     this.scene.add(this.camera);
-    // this.cube.addToScene(this.scene);
+    this.scene.add(this.piece);
+    console.log(this.piece);
+    this.setUpTick();
   }
 
   private setUpTick(): void {
     const tick = () => {
-      // if (!this.cube) {
-      //   window.requestAnimationFrame(tick);
-      //   return;
-      // }
+      if (!this.piece) {
+        window.requestAnimationFrame(tick);
+        return;
+      }
 
       this.controls.update();
       this.renderer.render(this.scene, this.camera);

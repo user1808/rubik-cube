@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { RubikCubePiece } from './RubikCubePiece';
+import type { RubikCubePiece } from './RubikCubePiece/RubikCubePiece';
 import type { RubikCubeFace } from './RubikCubeFace';
 
 export abstract class RubikCube<CubeFacesNames extends string, RotationTypes extends string> {
