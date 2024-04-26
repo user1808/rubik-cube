@@ -1,5 +1,5 @@
 <template>
-  <canvas id="rubik-cube" ref="canvas"></canvas>
+  <canvas class="fixed top-0 left-0 outline-none" id="rubik-cube" ref="canvas"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -18,12 +18,3 @@ onMounted(() => {
   app.start('RubikCubePiece.glb');
 });
 </script>
-
-<style scoped lang="scss">
-canvas#rubik-cube {
-  position: fixed;
-  top: 0;
-  left: 0;
-  outline: none;
-}
-</style>
