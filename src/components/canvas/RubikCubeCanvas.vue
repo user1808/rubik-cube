@@ -1,5 +1,5 @@
 <template>
-  <canvas class="fixed top-0 left-0 outline-none" id="rubik-cube" ref="canvas"></canvas>
+  <canvas id="rubik-cube" ref="canvas"></canvas>
 </template>
 
 <script setup lang="ts">
