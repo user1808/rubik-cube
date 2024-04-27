@@ -1,7 +1,7 @@
 <template>
   <main>
-    <RubikCubeCanvas class="fixed top-0 left-0" />
-    <RubikCubeSteps class="fixed top-0 inset-x-0" />
+    <RubikCubeCanvas class="fixed left-0 top-0" />
+    <RubikCubeSteps class="fixed inset-x-0 top-0" />
   </main>
 </template>
 

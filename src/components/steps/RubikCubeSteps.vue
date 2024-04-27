@@ -1,17 +1,17 @@
 <template>
-  <menu class="flex flex-row m-auto p-4 gap-x-6 max-w-6xl w-full bg-black">
+  <menu class="m-auto flex w-full max-w-6xl flex-row gap-x-6 bg-black p-4">
     <li
-      class="flex flex-col group gap-y-1 cursor-pointer select-none w-full"
+      class="group flex w-full cursor-pointer select-none flex-col gap-y-1"
       :class="{ 'active-step': idx === chosenStepIdx, 'previous-step': idx < chosenStepIdx }"
       v-for="(step, idx) in steps"
       :key="idx"
       @click="onStepClick(idx)"
     >
       <div
-        class="flex flex-row justify-center items-end gap-x-2 lg:gap-x-4 text-neutral-700 group-[.previous-step]:text-neutral-200 group-[.active-step]:text-white group-hover:text-neutral-500"
+        class="flex flex-row items-end justify-center gap-x-2 text-neutral-700 group-hover:text-neutral-500 group-[.active-step]:text-white group-[.previous-step]:text-neutral-200 lg:gap-x-4"
       >
         <span class="hidden sm:block sm:text-4xl md:text-6xl lg:text-7xl">{{ idx + 1 }}</span>
-        <span class="text-sm sm:text-base md:text-base md:pb-2.5 lg:text-lg lg:pb-3 text-nowrap">
+        <span class="text-nowrap text-sm sm:text-base md:pb-2.5 md:text-base lg:pb-3 lg:text-lg">
           {{ step }}
         </span>
       </div>
