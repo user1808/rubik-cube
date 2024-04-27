@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { RubikCubePieceFace } from './RubikCubePieceFace';
+import { RubikCubePieceFace } from './RubikCubePiece/RubikCubePieceFace';
 
 type TRubikCubePieceVisibleFaceValue = number;
 
