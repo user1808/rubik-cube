@@ -4,7 +4,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import { RubikCubeApp } from '@/three.js/RubikCubeApp';
+import { RubikCubeApp } from '@/three.js/rubik-cube-app';
+import { RubikCube2x2Data } from '@/three.js/rubik-cube/classes/cube-2x2/cube-data';
 
 const props = defineProps<{
   filename: string;
@@ -16,7 +17,7 @@ const restart = () => {
   }
   const app = new RubikCubeApp(canvas.value);
   rubikCubeApp.value = app;
-  app.start(props.filename);
+  app.start(props.filename, new RubikCube2x2Data());
 };
 
 const canvas = ref<Nullable<HTMLCanvasElement>>(null);
