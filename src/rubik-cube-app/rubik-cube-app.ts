@@ -49,9 +49,6 @@ export class RubikCubeApp {
 
   private async setUpCube(factory: IRubikCubeFactory): Promise<void> {
     this.cube = await factory.createRubikCube();
-    // TODO: remove this console.log
-    console.log(toRaw(this.cube));
-    console.log(toRaw(this.renderer.info));
     this.scene.add(this.cube);
   }
 
