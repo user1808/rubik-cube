@@ -6,15 +6,17 @@ import { RubikCube } from '../structure/cube/rubik-cube';
 import { RubikCubePiecesLoader } from './rubik-cube-pieces-loader';
 import { RubikCubePieceBuilder } from './rubik-cube-piece-builder';
 import type { RubikCubePiece } from '../structure/piece/rubik-cube-piece';
+import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 
-export abstract class ARubikCubeFactory<TPiecesFilenames extends string>
-  implements IRubikCubeFactory<TPiecesFilenames>
+export abstract class ARubikCubeFactory<TPiecesFilenames extends string, TCubeFaces extends string>
+  implements IRubikCubeFactory<TPiecesFilenames, TCubeFaces>
 {
   private cube: Nullable<RubikCube> = null;
 
   public abstract get commonName(): string;
 
   public abstract createRubikCubePiecesData(): IRubikCubePiecesData<TPiecesFilenames>;
+  public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces>;
 
   public createRubikCubePiecesLoader(): IRubikCubePiecesLoader<TPiecesFilenames> {
     return new RubikCubePiecesLoader();
@@ -26,8 +28,11 @@ export abstract class ARubikCubeFactory<TPiecesFilenames extends string>
   public async createRubikCube(): Promise<RubikCube> {
     if (this.cube) return this.cube;
 
-    const loader = this.createRubikCubePiecesLoader();
     const data = this.createRubikCubePiecesData();
+    // TODO: color the cube using these materials
+    const materials = this.createRubikCubeMaterials();
+
+    const loader = this.createRubikCubePiecesLoader();
     const builder = this.createRubikCubePieceBuilder();
 
     const loadedGltfPieces = await loader.loadGltfPieces(data.piecesFilenames);
