@@ -6,28 +6,36 @@ import { RubikCube } from '../structure/cube/rubik-cube';
 import { RubikCubePiecesLoader } from './rubik-cube-pieces-loader';
 import { RubikCubePieceBuilder } from './rubik-cube-piece-builder';
 import type { RubikCubePiece } from '../structure/piece/rubik-cube-piece';
+import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 
-export abstract class ARubikCubeFactory<TPiecesFilenames extends string>
-  implements IRubikCubeFactory<TPiecesFilenames>
+export abstract class ARubikCubeFactory<
+  TPiecesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
+  TCubeFaces extends string,
+  TPiecesFilenames extends string = Extract<keyof TPiecesWithFaces, string>,
+  TPiecesFaces extends string = string,
+> implements IRubikCubeFactory<TPiecesWithFaces, TCubeFaces>
 {
   private cube: Nullable<RubikCube> = null;
 
   public abstract get commonName(): string;
 
-  public abstract createRubikCubePiecesData(): IRubikCubePiecesData<TPiecesFilenames>;
+  public abstract createRubikCubePiecesData(): IRubikCubePiecesData<TPiecesWithFaces, TCubeFaces>;
+  public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces>;
 
-  public createRubikCubePiecesLoader(): IRubikCubePiecesLoader<TPiecesFilenames> {
+  public createRubikCubePiecesLoader(): IRubikCubePiecesLoader<TPiecesWithFaces> {
     return new RubikCubePiecesLoader();
   }
-  public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<TPiecesFilenames> {
+  public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<TPiecesWithFaces, TCubeFaces> {
     return new RubikCubePieceBuilder();
   }
 
   public async createRubikCube(): Promise<RubikCube> {
     if (this.cube) return this.cube;
 
-    const loader = this.createRubikCubePiecesLoader();
     const data = this.createRubikCubePiecesData();
+    const materials = this.createRubikCubeMaterials();
+
+    const loader = this.createRubikCubePiecesLoader();
     const builder = this.createRubikCubePieceBuilder();
 
     const loadedGltfPieces = await loader.loadGltfPieces(data.piecesFilenames);
@@ -35,7 +43,7 @@ export abstract class ARubikCubeFactory<TPiecesFilenames extends string>
     const cubePieces: Array<RubikCubePiece> = [];
 
     data.piecesData.forEach((pieceData) => {
-      cubePieces.push(builder.createPiece(pieceData, loadedGltfPieces));
+      cubePieces.push(builder.createPiece(pieceData, loadedGltfPieces, materials));
     });
 
     this.cube = new RubikCube(cubePieces);
