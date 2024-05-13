@@ -1,13 +1,17 @@
 import type { IRubikCubePiecesLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-loader';
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-export class RubikCubePiecesLoader<TPiecesFilenames extends string>
-  implements IRubikCubePiecesLoader<TPiecesFilenames>
+export class RubikCubePiecesLoader<
+  TPiecesWithFaces extends Record<TPiecesFilenames, string>,
+  TPiecesFilenames extends string = Extract<keyof TPiecesWithFaces, string>,
+> implements IRubikCubePiecesLoader<TPiecesWithFaces, TPiecesFilenames>
 {
   private readonly FOLDER_WITH_MODELS: string = 'models';
   private readonly gltfLoader: GLTFLoader = new GLTFLoader();
 
-  async loadGltfPieces(filenames: Array<TPiecesFilenames>): Promise<Map<TPiecesFilenames, GLTF>> {
+  public async loadGltfPieces(
+    filenames: Array<TPiecesFilenames>,
+  ): Promise<Map<TPiecesFilenames, GLTF>> {
     const gltfPiecesMap: Map<TPiecesFilenames, GLTF> = new Map();
 
     for (const filename of filenames) {

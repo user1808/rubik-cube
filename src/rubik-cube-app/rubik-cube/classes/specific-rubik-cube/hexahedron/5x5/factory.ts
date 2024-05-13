@@ -1,4 +1,4 @@
-import type { THexahedronFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/filenames';
+import type { THexahedronFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-filenames';
 import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-data';
 import { RubikHexahedron5x5PiecesData } from './pieces-data';
 import { ARubikHexahedronFactory } from '../factory';
