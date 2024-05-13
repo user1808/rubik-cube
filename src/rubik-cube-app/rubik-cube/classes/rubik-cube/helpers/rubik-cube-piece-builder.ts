@@ -58,8 +58,7 @@ export class RubikCubePieceBuilder<
     pieceFacesToCubeFaces: Partial<Record<TPiecesWithFaces[TPiecesFilenames], TCubeFaces>>,
     materials: IRubikCubeMaterials<TCubeFaces>,
   ): RubikCubePieceFace {
-    if (isT(pieceFace, THREE.Mesh) == false)
-      throw new Error('Loaded Piece Face is not a three.js Mesh');
+    if (!isT(pieceFace, THREE.Mesh)) throw new Error('Loaded Piece Face is not a three.js Mesh');
 
     let material = this.edgeFaceMaterial;
     const pieceFaceName = pieceFace.name;
