@@ -4,9 +4,8 @@ import { RubikCubePieceFace } from '../structure/piece/rubik-cube-piece-face';
 import type { IRubikCubePieceBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-piece-builder';
 import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube/piece-data';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { isT } from '@/utils/is-t';
 import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
-import { isObjectKey } from '@/utils/is-object-key';
+import { TypeGuards } from '@/utils/type-guards';
 
 export class RubikCubePieceBuilder<
   TPiecesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
@@ -62,15 +61,16 @@ export class RubikCubePieceBuilder<
     pieceFacesToCubeFaces: Partial<Record<TPiecesWithFaces[TPiecesFilenames], TCubeFaces>>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
   ): RubikCubePieceFace {
-    if (!isT(pieceFace, THREE.Mesh)) throw new Error('Loaded Piece Face is not a three.js Mesh');
+    if (!TypeGuards.isT(pieceFace, THREE.Mesh))
+      throw new Error('Loaded Piece Face is not a three.js Mesh');
 
     let material: THREE.MeshBasicMaterial = materials.cubeInvisibleFacesMaterials;
     const pieceFaceName = pieceFace.name;
-    if (isObjectKey(pieceFaceName, pieceFacesToCubeFaces)) {
+    if (TypeGuards.isObjectKey(pieceFaceName, pieceFacesToCubeFaces)) {
       const cubeFace = pieceFacesToCubeFaces[pieceFaceName];
       material = cubeFace ? materials.cubeFacesMaterials[cubeFace] : material;
     }
-    if (isObjectKey(pieceFaceName, materials.cubeEdgeFacesMaterials)) {
+    if (TypeGuards.isObjectKey(pieceFaceName, materials.cubeEdgeFacesMaterials)) {
       material = materials.cubeEdgeFacesMaterials[pieceFaceName];
     }
 
