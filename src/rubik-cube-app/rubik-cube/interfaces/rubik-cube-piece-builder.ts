@@ -6,6 +6,7 @@ import type { IRubikCubeMaterials } from './rubik-cube-materials';
 export interface IRubikCubePieceBuilder<
   TPiecesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
   TCubeFaces extends string,
+  TCubeEdgeFaces extends string,
   TPiecesFilenames extends Extract<keyof TPiecesWithFaces, string> = Extract<
     keyof TPiecesWithFaces,
     string
@@ -15,6 +16,6 @@ export interface IRubikCubePieceBuilder<
   createPiece(
     pieceData: TPieceData<TPiecesWithFaces, TCubeFaces, TPiecesFilenames>,
     loadedGltfPieces: Map<TPiecesFilenames, GLTF>,
-    materials: IRubikCubeMaterials<TCubeFaces>,
+    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
   ): RubikCubePiece;
 }

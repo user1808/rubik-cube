@@ -1,14 +1,18 @@
 import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-data';
 import { RubikTetrahedronPiecesData } from './pieces-data';
 import { ARubikCubeFactory } from '../../rubik-cube/helpers/rubik-cube-factory';
-import type { TTetrahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/cube-faces';
+import type {
+  TTetrahedronEdgeFaces,
+  TTetrahedronFaces,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/cube-faces';
 import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 import type { TTetrahedronPiecesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/pieces-faces';
 import { RubikTetrahedronMaterials } from './materials';
 
 export class RubikTetrahedronFactory extends ARubikCubeFactory<
   TTetrahedronPiecesWithFaces,
-  TTetrahedronFaces
+  TTetrahedronFaces,
+  TTetrahedronEdgeFaces
 > {
   public get commonName(): string {
     return 'Pyraminx';
@@ -19,7 +23,7 @@ export class RubikTetrahedronFactory extends ARubikCubeFactory<
   > {
     return new RubikTetrahedronPiecesData();
   }
-  public createRubikCubeMaterials(): IRubikCubeMaterials<TTetrahedronFaces> {
+  public createRubikCubeMaterials(): IRubikCubeMaterials<TTetrahedronFaces, TTetrahedronEdgeFaces> {
     return new RubikTetrahedronMaterials();
   }
 }
