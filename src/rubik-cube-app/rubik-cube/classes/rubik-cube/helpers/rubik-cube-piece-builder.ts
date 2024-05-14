@@ -11,21 +11,25 @@ import { isObjectKey } from '@/utils/is-object-key';
 export class RubikCubePieceBuilder<
   TPiecesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
   TCubeFaces extends string,
+  TCubeEdgeFaces extends string,
   TPiecesFilenames extends Extract<keyof TPiecesWithFaces, string> = Extract<
     keyof TPiecesWithFaces,
     string
   >,
   TPiecesFaces extends string = TPiecesWithFaces[TPiecesFilenames],
-> implements IRubikCubePieceBuilder<TPiecesWithFaces, TCubeFaces, TPiecesFilenames, TPiecesFaces>
+> implements
+    IRubikCubePieceBuilder<
+      TPiecesWithFaces,
+      TCubeFaces,
+      TCubeEdgeFaces,
+      TPiecesFilenames,
+      TPiecesFaces
+    >
 {
-  private edgeFaceMaterial: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-    color: 0x525252,
-  });
-
   public createPiece(
     pieceData: TPieceData<TPiecesWithFaces, TCubeFaces, TPiecesFilenames, TPiecesFaces>,
     loadedGltfPieces: Map<Extract<keyof TPiecesWithFaces, string>, GLTF>,
-    materials: IRubikCubeMaterials<TCubeFaces>,
+    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
   ): RubikCubePiece {
     const { id, position, rotation, filename, pieceFacesToCubeFaces } = pieceData;
 
@@ -46,7 +50,7 @@ export class RubikCubePieceBuilder<
   private transformGLTFPieceFaces(
     gltfPiece: THREE.Group,
     pieceFacesToCubeFaces: Partial<Record<TPiecesWithFaces[TPiecesFilenames], TCubeFaces>>,
-    materials: IRubikCubeMaterials<TCubeFaces>,
+    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
   ): Array<RubikCubePieceFace> {
     return gltfPiece.children.map((pieceFace) =>
       this.createPieceCallback(pieceFace, pieceFacesToCubeFaces, materials),
@@ -56,15 +60,18 @@ export class RubikCubePieceBuilder<
   private createPieceCallback(
     pieceFace: THREE.Object3D,
     pieceFacesToCubeFaces: Partial<Record<TPiecesWithFaces[TPiecesFilenames], TCubeFaces>>,
-    materials: IRubikCubeMaterials<TCubeFaces>,
+    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
   ): RubikCubePieceFace {
     if (!isT(pieceFace, THREE.Mesh)) throw new Error('Loaded Piece Face is not a three.js Mesh');
 
-    let material = this.edgeFaceMaterial;
+    let material: THREE.MeshBasicMaterial = materials.cubeInvisibleFacesMaterials;
     const pieceFaceName = pieceFace.name;
     if (isObjectKey(pieceFaceName, pieceFacesToCubeFaces)) {
       const cubeFace = pieceFacesToCubeFaces[pieceFaceName];
-      material = cubeFace ? materials.cubeFacesMaterials[cubeFace] : this.edgeFaceMaterial;
+      material = cubeFace ? materials.cubeFacesMaterials[cubeFace] : material;
+    }
+    if (isObjectKey(pieceFaceName, materials.cubeEdgeFacesMaterials)) {
+      material = materials.cubeEdgeFacesMaterials[pieceFaceName];
     }
 
     return new RubikCubePieceFace({

@@ -11,21 +11,26 @@ import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces
 export abstract class ARubikCubeFactory<
   TPiecesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
   TCubeFaces extends string,
+  TCubeEdgeFaces extends string,
   TPiecesFilenames extends string = Extract<keyof TPiecesWithFaces, string>,
   TPiecesFaces extends string = string,
-> implements IRubikCubeFactory<TPiecesWithFaces, TCubeFaces>
+> implements IRubikCubeFactory<TPiecesWithFaces, TCubeFaces, TCubeEdgeFaces>
 {
   private cube: Nullable<RubikCube> = null;
 
   public abstract get commonName(): string;
 
   public abstract createRubikCubePiecesData(): IRubikCubePiecesData<TPiecesWithFaces, TCubeFaces>;
-  public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces>;
+  public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
 
   public createRubikCubePiecesLoader(): IRubikCubePiecesLoader<TPiecesWithFaces> {
     return new RubikCubePiecesLoader();
   }
-  public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<TPiecesWithFaces, TCubeFaces> {
+  public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
+    TPiecesWithFaces,
+    TCubeFaces,
+    TCubeEdgeFaces
+  > {
     return new RubikCubePieceBuilder();
   }
 

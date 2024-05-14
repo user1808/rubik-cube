@@ -7,6 +7,7 @@ import type { IRubikCubePiecesLoader } from './rubik-cube-pieces-loader';
 export interface IRubikCubeFactory<
   TPiecesWithFaces extends Record<TPiecesFilenames, TPiecesFaces> = any,
   TCubeFaces extends string = string,
+  TCubeEdgeFaces extends string = string,
   TPiecesFilenames extends string = Extract<keyof TPiecesWithFaces, string>,
   TPiecesFaces extends string = string,
 > {
@@ -14,8 +15,12 @@ export interface IRubikCubeFactory<
 
   createRubikCubePiecesData(): IRubikCubePiecesData<TPiecesWithFaces, TCubeFaces>;
   createRubikCubePiecesLoader(): IRubikCubePiecesLoader<TPiecesWithFaces>;
-  createRubikCubePieceBuilder(): IRubikCubePieceBuilder<TPiecesWithFaces, TCubeFaces>;
-  createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces>;
+  createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
+    TPiecesWithFaces,
+    TCubeFaces,
+    TCubeEdgeFaces
+  >;
+  createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
 
   createRubikCube(): Promise<RubikCube>;
 }
