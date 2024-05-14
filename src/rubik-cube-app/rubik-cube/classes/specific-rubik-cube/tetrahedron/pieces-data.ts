@@ -3,13 +3,13 @@ import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interface
 import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube/piece-data';
 import { Radians } from '@/utils/radians';
 import type {
-  TTetrahedronPiecesWithFaces,
+  TTetrahedronPiecesFilenamesWithFaces,
   TTetrahedronPiecesFilenames,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/pieces-faces';
 import type { TTetrahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/cube-faces';
 
 export class RubikTetrahedronPiecesData
-  implements IRubikCubePiecesData<TTetrahedronPiecesWithFaces, TTetrahedronFaces>
+  implements IRubikCubePiecesData<TTetrahedronPiecesFilenamesWithFaces, TTetrahedronFaces>
 {
   private readonly _piecesData: typeof this.piecesData = [
     {
@@ -166,7 +166,7 @@ export class RubikTetrahedronPiecesData
     return ['RubikTetrahedronPiece.glb', 'RubikOctahedronPiece.glb'];
   }
 
-  public get piecesData(): Array<TPieceData<TTetrahedronPiecesWithFaces, TTetrahedronFaces>> {
+  public get piecesData(): Array<TPieceData<TTetrahedronPiecesFilenamesWithFaces, TTetrahedronFaces>> {
     return this._piecesData;
   }
 }

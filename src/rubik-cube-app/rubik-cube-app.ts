@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { ScreenSize, ScreenSizeTracker } from './common';
 import { CustomPersepctiveCamera, CustomRenderer, CustomOrbitControls } from './common/custom';
-import type { RubikCube } from './rubik-cube/classes/rubik-cube/structure/cube/rubik-cube';
 import { toRaw, isProxy } from 'vue';
-import type { IRubikCubeFactory } from './rubik-cube/interfaces/rubik-cube-factory';
+import type { TUniversalRubikCubeFactory } from './rubik-cube/interfaces/rubik-cube-factory';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
+import type { IRubikCube } from './rubik-cube/interfaces/structure/rubik-cube';
 
 export class RubikCubeApp {
   private readonly scene: THREE.Scene = new THREE.Scene();
@@ -17,7 +17,7 @@ export class RubikCubeApp {
   private readonly controls: CustomOrbitControls;
   private readonly stats = new Stats();
 
-  private cube: Nullable<RubikCube> = null;
+  private cube: Nullable<IRubikCube> = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.camera = new CustomPersepctiveCamera(this.screenSize);
@@ -29,13 +29,13 @@ export class RubikCubeApp {
     document.body.appendChild(this.stats.dom);
   }
 
-  public async start(factory: IRubikCubeFactory): Promise<void> {
+  public async start(factory: TUniversalRubikCubeFactory): Promise<void> {
     await this.setUpCube(factory);
     this.setUpCamera();
     this.setUpTick();
   }
 
-  public async changeCube(factory: IRubikCubeFactory): Promise<void> {
+  public async changeCube(factory: TUniversalRubikCubeFactory): Promise<void> {
     this.removeCube();
     await this.setUpCube(factory);
   }
@@ -47,7 +47,7 @@ export class RubikCubeApp {
     }
   }
 
-  private async setUpCube(factory: IRubikCubeFactory): Promise<void> {
+  private async setUpCube(factory: TUniversalRubikCubeFactory): Promise<void> {
     this.cube = await factory.createRubikCube();
     this.scene.add(this.cube);
   }

@@ -4,7 +4,7 @@ import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube/pi
 import { Radians } from '@/utils/radians';
 import type {
   TDodecahedronPiecesFilenames,
-  TDodecahedronPiecesWithFaces,
+  TDodecahedronPiecesFilenamesWithFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
 import type { TDodecahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
 
@@ -16,13 +16,13 @@ type TCreateGroupOfPiecesDataParams = {
     positionData: Record<'x' | 'y' | 'z', Array<number>>;
     filename: TDodecahedronPieceFilename;
     pieceFacesToCubeFaces: Array<
-      Partial<Record<TDodecahedronPiecesWithFaces[TDodecahedronPieceFilename], TDodecahedronFaces>>
+      Partial<Record<TDodecahedronPiecesFilenamesWithFaces[TDodecahedronPieceFilename], TDodecahedronFaces>>
     >;
   };
 }[TDodecahedronPiecesFilenames];
 
 export class RubikDodecahedronPiecesData
-  implements IRubikCubePiecesData<TDodecahedronPiecesWithFaces, TDodecahedronFaces>
+  implements IRubikCubePiecesData<TDodecahedronPiecesFilenamesWithFaces, TDodecahedronFaces>
 {
   public get piecesFilenames(): Array<TDodecahedronPiecesFilenames> {
     return [
@@ -31,7 +31,7 @@ export class RubikDodecahedronPiecesData
       'RubikDodecahedronVertexPiece.glb',
     ];
   }
-  public get piecesData(): Array<TPieceData<TDodecahedronPiecesWithFaces, TDodecahedronFaces>> {
+  public get piecesData(): Array<TPieceData<TDodecahedronPiecesFilenamesWithFaces, TDodecahedronFaces>> {
     return [
       ...this.createTopLayerEdgePiecesData(),
       ...this.createTopLayerVertexPiecesData(),
