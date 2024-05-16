@@ -1,4 +1,4 @@
-const DodecahedronPiecesFaces = {
+const DodecahedronPiecesFilenamesWithFaces = {
   'RubikDodecahedronEdgePiece.glb': ['FaceA', 'FaceB', 'FaceC', 'FaceD', 'FaceE', 'FaceF'] as const,
   'RubikDodecahedronFacePiece.glb': [
     'FaceA',
@@ -19,7 +19,7 @@ const DodecahedronPiecesFaces = {
   ] as const,
 };
 
-export type TDodecahedronPiecesFilenames = keyof typeof DodecahedronPiecesFaces;
-export type TDodecahedronPiecesWithFaces = {
-  [DodecahedronPieceFilename in TDodecahedronPiecesFilenames]: (typeof DodecahedronPiecesFaces)[DodecahedronPieceFilename][number];
+export type TDodecahedronPiecesFilenames = keyof typeof DodecahedronPiecesFilenamesWithFaces;
+export type TDodecahedronPiecesFilenamesWithFaces = {
+  [DodecahedronPieceFilename in TDodecahedronPiecesFilenames]: (typeof DodecahedronPiecesFilenamesWithFaces)[DodecahedronPieceFilename][number];
 };

@@ -1,25 +1,32 @@
 import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-data';
 import { RubikDodecahedronPiecesData } from './pieces-data';
-import { ARubikCubeFactory } from '../../rubik-cube/helpers/rubik-cube-factory';
-import type { TDodecahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
+import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
+import type {
+  TDodecahedronEdgeFaces,
+  TDodecahedronFaces,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
 import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 import { RubikDodecahedronMaterials } from './materials';
-import type { TDodecahedronPiecesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
+import type { TDodecahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
 
-export class RubikDodecahedronFactory extends ARubikCubeFactory<
-  TDodecahedronPiecesWithFaces,
-  TDodecahedronFaces
+export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
+  TDodecahedronPiecesFilenamesWithFaces,
+  TDodecahedronFaces,
+  TDodecahedronEdgeFaces
 > {
   public get commonName(): string {
     return 'Megaminx';
   }
   public createRubikCubePiecesData(): IRubikCubePiecesData<
-    TDodecahedronPiecesWithFaces,
+    TDodecahedronPiecesFilenamesWithFaces,
     TDodecahedronFaces
   > {
     return new RubikDodecahedronPiecesData();
   }
-  public createRubikCubeMaterials(): IRubikCubeMaterials<TDodecahedronFaces> {
+  public createRubikCubeMaterials(): IRubikCubeMaterials<
+    TDodecahedronFaces,
+    TDodecahedronEdgeFaces
+  > {
     return new RubikDodecahedronMaterials();
   }
 }
