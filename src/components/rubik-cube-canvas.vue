@@ -5,10 +5,10 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { RubikCubeApp } from '@/rubik-cube-app/rubik-cube-app';
-import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
+import type { TUniversalRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
 
 const props = defineProps<{
-  factory: IRubikCubeFactory;
+  factory: TUniversalRubikCubeFactory;
 }>();
 
 const canvas = ref<Nullable<HTMLCanvasElement>>(null);

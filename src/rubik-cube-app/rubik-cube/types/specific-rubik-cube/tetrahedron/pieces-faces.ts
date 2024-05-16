@@ -1,4 +1,4 @@
-const TetrahedronPiecesFaces = {
+const TetrahedronPiecesFilenamesWithFaces = {
   'RubikTetrahedronPiece.glb': ['FaceA', 'FaceB', 'FaceC', 'FaceD'] as const,
   'RubikOctahedronPiece.glb': [
     'FaceA',
@@ -12,7 +12,7 @@ const TetrahedronPiecesFaces = {
   ] as const,
 };
 
-export type TTetrahedronPiecesFilenames = keyof typeof TetrahedronPiecesFaces;
-export type TTetrahedronPiecesWithFaces = {
-  [TetrahedronPieceFilename in TTetrahedronPiecesFilenames]: (typeof TetrahedronPiecesFaces)[TetrahedronPieceFilename][number];
+export type TTetrahedronPiecesFilenames = keyof typeof TetrahedronPiecesFilenamesWithFaces;
+export type TTetrahedronPiecesFilenamesWithFaces = {
+  [TetrahedronPieceFilename in TTetrahedronPiecesFilenames]: (typeof TetrahedronPiecesFilenamesWithFaces)[TetrahedronPieceFilename][number];
 };

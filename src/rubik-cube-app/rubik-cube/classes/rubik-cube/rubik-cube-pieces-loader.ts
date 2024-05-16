@@ -1,10 +1,11 @@
 import type { IRubikCubePiecesLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-loader';
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-export class RubikCubePiecesLoader<
-  TPiecesWithFaces extends Record<TPiecesFilenames, string>,
-  TPiecesFilenames extends string = Extract<keyof TPiecesWithFaces, string>,
-> implements IRubikCubePiecesLoader<TPiecesWithFaces, TPiecesFilenames>
+/**
+ * Class for the RubikCubePiecesLoader class. Implements the IRubikCubePiecesLoader interface. It is some kind of wrapper for the GLTFLoader class. It suppose to load several gltf files and return them as a map.
+ */
+export class RubikCubePiecesLoader<TPiecesFilenames extends string>
+  implements IRubikCubePiecesLoader<TPiecesFilenames>
 {
   private readonly FOLDER_WITH_MODELS: string = 'models';
   private readonly gltfLoader: GLTFLoader = new GLTFLoader();

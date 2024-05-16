@@ -2,14 +2,14 @@ import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interface
 import { RubikHexahedron2x2PiecesData } from './pieces-data';
 import { ARubikHexahedronFactory } from '../factory';
 import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
-import type { THexahedronPiecesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
+import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
 
 export class RubikHexahedron2x2Factory extends ARubikHexahedronFactory {
   public get commonName(): string {
     return '2x2 Cube';
   }
   public createRubikCubePiecesData(): IRubikCubePiecesData<
-    THexahedronPiecesWithFaces,
+    THexahedronPiecesFilenamesWithFaces,
     THexahedronFaces
   > {
     return new RubikHexahedron2x2PiecesData();
