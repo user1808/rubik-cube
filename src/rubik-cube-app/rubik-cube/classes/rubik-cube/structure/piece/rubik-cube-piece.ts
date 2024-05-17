@@ -5,10 +5,7 @@ import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/str
 /**
  * Class for the RubikCubePiece class. Extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>, because it implements the IRubikCubePiece interface, which extends the THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> class.
  */
-export class RubikCubePiece
-  extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>
-  implements IRubikCubePiece
-{
+export class RubikCubePiece extends THREE.Group implements IRubikCubePiece {
   constructor(
     private readonly _pieceId: number,
     private readonly _pieceFaces: Array<RubikCubePieceFace>,
@@ -27,5 +24,12 @@ export class RubikCubePiece
 
   public dispose() {
     this._pieceFaces.forEach((face) => face.dispose());
+  }
+
+  public override clone(): this {
+    return new RubikCubePiece(
+      this._pieceId,
+      this._pieceFaces.map((face) => face.clone()),
+    ) as this;
   }
 }

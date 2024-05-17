@@ -27,6 +27,7 @@ import type { TPieceData } from '../types/rubik-cube/piece-data';
 export interface IRubikCubePiecesData<
   TPiecesFilenamesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
   TCubeFaces extends string,
+  TCubeRotationGroups extends string,
   TPiecesFilenames extends
     ExtractStringKeys<TPiecesFilenamesWithFaces> = ExtractStringKeys<TPiecesFilenamesWithFaces>,
   TPiecesFaces extends string = TPiecesFilenamesWithFaces[TPiecesFilenames],
@@ -39,4 +40,5 @@ export interface IRubikCubePiecesData<
    * The data of the pieces. More info in the {@link TPieceData} type.
    */
   get piecesData(): Array<TPieceData<TPiecesFilenamesWithFaces, TCubeFaces>>;
+  get piecesIdxsForRotationGroups(): Record<TCubeRotationGroups, Array<ArrayIdx>>;
 }

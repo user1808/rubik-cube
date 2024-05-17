@@ -25,7 +25,7 @@ import { RubikHexahedron5x5Factory } from '@/rubik-cube-app/rubik-cube/classes/s
 import { RubikTetrahedronFactory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/tetrahedron/factory';
 import type { TUniversalRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
 
-const selectedFactoryIdx = ref<number>(5);
+const selectedFactoryIdx = ref<number>(4);
 const selectedFactory = computed(() => rubikFactories[selectedFactoryIdx.value]);
 
 const rubikFactories: Array<TUniversalRubikCubeFactory> = [

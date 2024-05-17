@@ -1,10 +1,15 @@
 import * as THREE from 'three';
 import { ScreenSize, ScreenSizeTracker } from './common';
-import { CustomPersepctiveCamera, CustomRenderer, CustomOrbitControls } from './common/custom';
+import {
+  CustomPersepctiveCamera,
+  CustomRenderer,
+  CustomOrbitControls,
+  CustomDebugGUI,
+} from './common/custom';
 import { toRaw, isProxy } from 'vue';
 import type { TUniversalRubikCubeFactory } from './rubik-cube/interfaces/rubik-cube-factory';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
-import type { IRubikCube } from './rubik-cube/interfaces/structure/rubik-cube';
+import type { TUniversalRubikCube } from './rubik-cube/interfaces/structure/rubik-cube';
 
 export class RubikCubeApp {
   private readonly scene: THREE.Scene = new THREE.Scene();
@@ -15,9 +20,11 @@ export class RubikCubeApp {
   private readonly camera: CustomPersepctiveCamera;
   private readonly renderer: CustomRenderer;
   private readonly controls: CustomOrbitControls;
-  private readonly stats = new Stats();
 
-  private cube: Nullable<IRubikCube> = null;
+  private readonly stats: Stats = new Stats();
+  private debugGUI: CustomDebugGUI = new CustomDebugGUI();
+
+  private cube: Nullable<TUniversalRubikCube> = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.camera = new CustomPersepctiveCamera(this.screenSize);
@@ -50,6 +57,7 @@ export class RubikCubeApp {
   private async setUpCube(factory: TUniversalRubikCubeFactory): Promise<void> {
     this.cube = await factory.createRubikCube();
     this.scene.add(this.cube);
+    this.setUpDebugUI();
   }
 
   private setUpCamera(): void {
@@ -67,5 +75,25 @@ export class RubikCubeApp {
     };
 
     tick();
+  }
+
+  private setUpDebugUI(): void {
+    if (!this.cube) return;
+
+    const cubeRotationGroups = Object.keys(this.cube.cubeRotationGroups);
+    const cubeRotaitonTypes = Object.keys(this.cube.cubeRotationData.rotationTypesData);
+    const debugParams = {
+      face: cubeRotationGroups[0],
+      rotationType: cubeRotaitonTypes[0],
+    };
+    const debugFunctions = {
+      rotation: () => {
+        toRaw(this.cube)?.rotate(debugParams.face, debugParams.rotationType, this.scene);
+      },
+    };
+    this.debugGUI = new CustomDebugGUI();
+    this.debugGUI.add(debugParams, 'face', cubeRotationGroups).name('Face');
+    this.debugGUI.add(debugParams, 'rotationType', cubeRotaitonTypes).name('Rotation Type');
+    this.debugGUI.add(debugFunctions, 'rotation').name('Rotate Cube');
   }
 }
