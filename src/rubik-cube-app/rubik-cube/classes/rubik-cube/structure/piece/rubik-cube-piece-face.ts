@@ -21,11 +21,4 @@ export class RubikCubePieceFace
     this.geometry.dispose();
     this.material.dispose();
   }
-
-  public override clone(): this {
-    return new RubikCubePieceFace({
-      geometry: this.geometry.clone(),
-      material: this.material.clone(),
-    }) as this;
-  }
 }

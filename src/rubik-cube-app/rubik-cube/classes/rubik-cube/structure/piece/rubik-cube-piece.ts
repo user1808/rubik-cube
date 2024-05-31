@@ -25,11 +25,4 @@ export class RubikCubePiece extends THREE.Group implements IRubikCubePiece {
   public dispose() {
     this._pieceFaces.forEach((face) => face.dispose());
   }
-
-  public override clone(): this {
-    return new RubikCubePiece(
-      this._pieceId,
-      this._pieceFaces.map((face) => face.clone()),
-    ) as this;
-  }
 }
