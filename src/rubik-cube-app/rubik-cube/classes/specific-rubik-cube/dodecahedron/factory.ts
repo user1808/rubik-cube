@@ -8,20 +8,33 @@ import type {
 import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 import { RubikDodecahedronMaterials } from './materials';
 import type { TDodecahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
+import type { TDodecahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-groups';
+import type { TDodecahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-types';
+import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-rotation-data';
+import { RubikDodecahedronRotationData } from './rotation-data';
 
 export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronPiecesFilenamesWithFaces,
   TDodecahedronFaces,
-  TDodecahedronEdgeFaces
+  TDodecahedronEdgeFaces,
+  TDodecahedronRotationGroups,
+  TDodecahedronRotationTypes
 > {
   public get commonName(): string {
     return 'Megaminx';
   }
   public createRubikCubePiecesData(): IRubikCubePiecesData<
     TDodecahedronPiecesFilenamesWithFaces,
-    TDodecahedronFaces
+    TDodecahedronFaces,
+    TDodecahedronRotationGroups
   > {
     return new RubikDodecahedronPiecesData();
+  }
+  public createRubikCubeRotationData(): IRubikCubeRotationData<
+    TDodecahedronRotationGroups,
+    TDodecahedronRotationTypes
+  > {
+    return new RubikDodecahedronRotationData();
   }
   public createRubikCubeMaterials(): IRubikCubeMaterials<
     TDodecahedronFaces,

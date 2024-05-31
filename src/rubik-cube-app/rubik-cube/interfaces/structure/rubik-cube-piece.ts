@@ -4,7 +4,7 @@ import type { IRubikCubePieceFace } from './rubik-cube-piece-face';
 /**
  * Interface for the RubikCubePiece class. Extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>.
  */
-export interface IRubikCubePiece extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> {
+export interface IRubikCubePiece extends THREE.Group {
   /**
    * Get method for the pieceId property.
    */
