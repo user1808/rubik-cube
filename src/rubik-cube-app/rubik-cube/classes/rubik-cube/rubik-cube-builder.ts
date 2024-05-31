@@ -44,7 +44,7 @@ export class RubikCubeBuilder<
 
   private createRotationGroups(
     pieces: Array<IRubikCubePieceWrapper>,
-    piecesIdxsForRotationGroups: Record<TCubeRotationGroups, Array<ArrayIdx>>,
+    piecesIdxsForRotationGroups: Record<TCubeRotationGroups, Array<number>>,
   ): Record<TCubeRotationGroups, Array<IRubikCubePieceWrapper>> {
     const result = (<Array<TCubeRotationGroups>>Object.keys(piecesIdxsForRotationGroups)).reduce(
       (acc, cur) => ({

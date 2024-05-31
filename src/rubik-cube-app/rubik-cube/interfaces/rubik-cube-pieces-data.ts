@@ -40,5 +40,5 @@ export interface IRubikCubePiecesData<
    * The data of the pieces. More info in the {@link TPieceData} type.
    */
   get piecesData(): Array<TPieceData<TPiecesFilenamesWithFaces, TCubeFaces>>;
-  get piecesIdxsForRotationGroups(): Record<TCubeRotationGroups, Array<ArrayIdx>>;
+  get piecesIdxsForRotationGroups(): Record<TCubeRotationGroups, Array<number>>;
 }
