@@ -73,7 +73,10 @@ export abstract class AbstractRubikCubeFactory<
     return new RubikCubeBuilder();
   }
 
-  public createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation {
+  public createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
+    TCubeRotationGroups,
+    TCubeRotationTypes
+  > {
     return new RubikCubeRotationImplementation();
   }
 

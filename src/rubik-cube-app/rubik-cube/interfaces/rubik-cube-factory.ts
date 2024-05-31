@@ -70,7 +70,10 @@ export interface IRubikCubeFactory<
     TCubeRotationTypes
   >;
 
-  createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation;
+  createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
+    TCubeRotationGroups,
+    TCubeRotationTypes
+  >;
 
   /**
    * Creates the Rubik's Cube.

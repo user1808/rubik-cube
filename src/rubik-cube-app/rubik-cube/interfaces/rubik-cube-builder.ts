@@ -17,6 +17,9 @@ export interface IRubikCubeBuilder<
     pieces: Array<IRubikCubePieceWrapper>,
     piecesData: IRubikCubePiecesData<TPiecesFilenamesWithFaces, TCubeFaces, TCubeRotationGroups>,
     rotationData: IRubikCubeRotationData<TCubeRotationGroups, TCubeRotationTypes>,
-    rotationImplementation: IRubikCubeRotationImplementation,
+    rotationImplementation: IRubikCubeRotationImplementation<
+      TCubeRotationGroups,
+      TCubeRotationTypes
+    >,
   ): IRubikCube<TCubeRotationGroups, TCubeRotationTypes>;
 }
