@@ -1,25 +1,25 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 import type { IRubikCubeRotationImplementation } from '../../interfaces/rubik-cube-rotation-implementation';
-import type { IRubikCubePieceWrapper } from '../../interfaces/structure/rubik-cube-piece-wrapper';
-import type { IRubikCube } from '../../interfaces/structure/rubik-cube';
-import type { TRotationTypeData } from '../../types/rubik-cube/rotation-type-data';
+import type { TRotationTypeData } from '../../types/rubik-cube';
+import type { IRubikCube, IRubikCubePieceWrapper } from '../../interfaces/structure';
 
 export class RubikCubeRotationImplementation<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-> implements IRubikCubeRotationImplementation<TCubeRotationGroups, TCubeRotationTypes>
+  TCubeShellPieces extends string,
+> implements
+    IRubikCubeRotationImplementation<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
 {
   public async rotateRubikCubeGroup(
+    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
-    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes>,
-    scene: THREE.Scene,
   ): Promise<void> {
-    const rotatingGroup = rubikCube.cubeRotationGroups[rotationGroup];
-    const rotatingThreeJSGroup = this.createRotatingThreeJSGroup(rotatingGroup, scene);
+    const rotatingGroup = rubikCube.rotationGroups[rotationGroup];
+    const rotatingThreeJSGroup = this.createRotatingThreeJSGroup(rubikCube, rotatingGroup);
 
-    const rotationData = rubikCube.cubeRotationData;
+    const rotationData = rubikCube.rotationData;
     const rotatedGroupNewIdxs = rotationData.rotationGroupsNewIdxs[rotationType][rotationGroup];
     const rotationTypeData = rotationData.rotationTypesData[rotationType];
     const rotationNormal = rotationData.rotationGroupsNormalVectors[rotationGroup];
@@ -33,7 +33,7 @@ export class RubikCubeRotationImplementation<
       rotationNormal,
     );
 
-    this.removeRotatingThreeJSGroup(rubikCube, rotatingThreeJSGroup, scene);
+    this.removeRotatingThreeJSGroup(rubikCube, rotatingThreeJSGroup);
   }
 
   private rotateGroupAsync(
@@ -77,22 +77,21 @@ export class RubikCubeRotationImplementation<
   }
 
   private createRotatingThreeJSGroup(
+    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
     rotatingGroup: Array<IRubikCubePieceWrapper>,
-    scene: THREE.Scene,
   ): THREE.Group {
     const rotatingThreeJSGroup = new THREE.Group();
-    scene.add(rotatingThreeJSGroup);
+    rubikCube.scene.add(rotatingThreeJSGroup);
     rotatingThreeJSGroup.add(...rotatingGroup.map((pieceWrapper) => pieceWrapper.piece));
     return rotatingThreeJSGroup;
   }
 
   private removeRotatingThreeJSGroup(
-    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes>,
+    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
     rotatedThreeJSGroup: THREE.Group,
-    scene: THREE.Scene,
   ): void {
-    scene.remove(rotatedThreeJSGroup);
-    rubikCube.add(...rubikCube.cubePieces.map((pieceWrapper) => pieceWrapper.piece));
+    rubikCube.scene.remove(rotatedThreeJSGroup);
+    rubikCube.add(...rubikCube.pieces.map((pieceWrapper) => pieceWrapper.piece));
   }
 
   private createSingleRotationEuler(rotationNormal: THREE.Vector3, angle: number): THREE.Euler {

@@ -1,4 +1,4 @@
-import type { TTetrahedronFaces } from './cube-faces';
+import type { TTetrahedronFaces } from '.';
 
 type TTetrahedronCorners = 'RightCorner' | 'LeftCorner' | 'BackCorner' | 'UpCorner';
 type TTetrahedronMidLayers = 'RightMidLayer' | 'LeftMidLayer' | 'BackMidLayer' | 'UpMidLayer';

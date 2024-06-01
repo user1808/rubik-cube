@@ -4,10 +4,10 @@ import type { ScreenSize } from './screen-size';
 export class MouseTouchTracker {
   private readonly _pointerPosition: THREE.Vector2 = new THREE.Vector2();
 
-  constructor(private readonly screenSizeRepo: ScreenSize) {
+  constructor(private readonly screenSize: ScreenSize) {
     window.addEventListener('mousemove', (event) => {
-      this._pointerPosition.x = (event.clientX / screenSizeRepo.width) * 2 - 1;
-      this._pointerPosition.y = -((event.clientY / screenSizeRepo.height) * 2 - 1);
+      this._pointerPosition.x = (event.clientX / screenSize.width) * 2 - 1;
+      this._pointerPosition.y = -((event.clientY / screenSize.height) * 2 - 1);
     });
     window.addEventListener('touchmove', (event) => this.touchEventListener(event));
     window.addEventListener('touchstart', (event) => this.touchEventListener(event));
@@ -22,7 +22,7 @@ export class MouseTouchTracker {
     if (!touch) {
       return;
     }
-    this._pointerPosition.x = (touch.clientX / this.screenSizeRepo.width) * 2 - 1;
-    this._pointerPosition.y = -((touch.clientY / this.screenSizeRepo.height) * 2 - 1);
+    this._pointerPosition.x = (touch.clientX / this.screenSize.width) * 2 - 1;
+    this._pointerPosition.y = -((touch.clientY / this.screenSize.height) * 2 - 1);
   }
 }

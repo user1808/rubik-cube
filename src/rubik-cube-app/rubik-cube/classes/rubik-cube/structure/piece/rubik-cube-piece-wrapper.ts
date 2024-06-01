@@ -1,5 +1,7 @@
-import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure/rubik-cube-piece';
-import type { IRubikCubePieceWrapper } from '@/rubik-cube-app/rubik-cube/interfaces/structure/rubik-cube-piece-wrapper';
+import type {
+  IRubikCubePiece,
+  IRubikCubePieceWrapper,
+} from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 
 export class RubikCubePieceWrapper implements IRubikCubePieceWrapper {
   constructor(private readonly _piece: IRubikCubePiece) {}

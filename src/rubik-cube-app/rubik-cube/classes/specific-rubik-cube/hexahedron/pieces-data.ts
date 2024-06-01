@@ -1,11 +1,14 @@
 import * as THREE from 'three';
-import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-data';
-import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube/piece-data';
 import type {
   THexahedronPiecesFilenames,
   THexahedronPiecesFilenamesWithFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
 import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
+import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { TPieceData, TPieceDataIdx } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+
+export type THexahedronSize = number;
+export type THexahedronPositionValues = Record<'x' | 'y' | 'z', Array<number>>;
 
 export abstract class AbstractRubikHexahedronPiecesData<THexahedronRotationGroups extends string>
   implements
@@ -15,24 +18,21 @@ export abstract class AbstractRubikHexahedronPiecesData<THexahedronRotationGroup
       THexahedronRotationGroups
     >
 {
-  public abstract get piecesIdxsForRotationGroups(): Record<
+  public abstract readonly rotationGroupsPiecesIdxs: Record<
     THexahedronRotationGroups,
-    Array<number>
+    Array<TPieceDataIdx>
   >;
 
-  public get piecesFilenames(): Array<THexahedronPiecesFilenames> {
-    return ['RubikCubePiece.glb'];
-  }
-  public get piecesData(): Array<
+  public readonly piecesFilenames: Array<THexahedronPiecesFilenames> = ['RubikCubePiece.glb'];
+
+  public readonly piecesData: Array<
     TPieceData<THexahedronPiecesFilenamesWithFaces, THexahedronFaces>
-  > {
-    return this.createCubePiecesData();
-  }
+  > = this.createCubePiecesData();
 
   /**
    * The size of the cube. For example, 2 means cube 2x2x2, 3 means 3x3x3, 4 means 4x4x4, etc.
    */
-  protected abstract get size(): number;
+  protected abstract readonly size: THexahedronSize;
   /**
    * The position values for the cube pieces. Arrays should be length of `size`.
    * For example, if size is 3, then the arrays should be length of 3.
@@ -40,7 +40,7 @@ export abstract class AbstractRubikHexahedronPiecesData<THexahedronRotationGroup
    * For example, if size is 3, then the position values for x axis should be [-1, 0, 1]
    * because the cube pieces should be positioned at -1, 0, 1 on x axis.
    */
-  protected abstract get positionValues(): Record<'x' | 'y' | 'z', Array<number>>;
+  protected abstract readonly positionValues: THexahedronPositionValues;
 
   /**
    * Creates the cube (regular hexahedron) pieces data.

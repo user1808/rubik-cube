@@ -1,75 +1,74 @@
 import * as THREE from 'three';
-import type { IRubikCube } from '@/rubik-cube-app/rubik-cube/interfaces/structure/rubik-cube';
-import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-rotation-data';
 import type { IRubikCubeRotationImplementation } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-rotation-implementation';
-import type { IRubikCubePieceWrapper } from '@/rubik-cube-app/rubik-cube/interfaces/structure/rubik-cube-piece-wrapper';
+import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type {
+  IRubikCube,
+  IRubikCubePieceWrapper,
+  IRubikCubeShell,
+} from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 
-/**
- * Class for the RubikCube class. Extends the THREE.Group class because it implements the IRubikCube interface, which extends the THREE.Group class.
- */
-export class RubikCube<TCubeRotationGroups extends string, TCubeRotationTypes extends string>
+export class RubikCube<
+    TCubeRotationGroups extends string,
+    TCubeRotationTypes extends string,
+    TCubeShellPieces extends string,
+  >
   extends THREE.Group
-  implements IRubikCube<TCubeRotationGroups, TCubeRotationTypes>
+  implements IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
 {
   private _rotationPending = false;
 
   constructor(
-    private readonly _cubePieces: Array<IRubikCubePieceWrapper>,
-    private readonly _cubeRotationGroups: Record<
+    public readonly scene: THREE.Scene,
+    public readonly shell: IRubikCubeShell<
       TCubeRotationGroups,
-      Array<IRubikCubePieceWrapper>
+      TCubeRotationTypes,
+      TCubeShellPieces
     >,
-    private readonly _cubeRotationData: IRubikCubeRotationData<
+    public readonly pieces: Array<IRubikCubePieceWrapper>,
+    public readonly rotationGroups: Record<TCubeRotationGroups, Array<IRubikCubePieceWrapper>>,
+    public readonly rotationData: IRubikCubeRotationData<
       TCubeRotationGroups,
       TCubeRotationTypes
     >,
-    private readonly _cubeRotationImplementation: IRubikCubeRotationImplementation<
+    public readonly rotationImplementation: IRubikCubeRotationImplementation<
       TCubeRotationGroups,
-      TCubeRotationTypes
+      TCubeRotationTypes,
+      TCubeShellPieces
     >,
   ) {
     super();
-    this.add(..._cubePieces.map((piece) => piece.piece));
+    this.add(...pieces.map((piece) => piece.piece));
+    this.add(...shell.children);
   }
 
-  public get cubePieces(): Array<IRubikCubePieceWrapper> {
-    return this._cubePieces;
-  }
-  public get cubeRotationGroups(): Record<TCubeRotationGroups, Array<IRubikCubePieceWrapper>> {
-    return this._cubeRotationGroups;
-  }
-  public get cubeRotationData(): IRubikCubeRotationData<TCubeRotationGroups, TCubeRotationTypes> {
-    return this._cubeRotationData;
-  }
   public get rotationPending(): boolean {
     return this._rotationPending;
-  }
-  public get cubeRotationImplementation(): IRubikCubeRotationImplementation<
-    TCubeRotationGroups,
-    TCubeRotationTypes
-  > {
-    return this._cubeRotationImplementation;
   }
 
   public async rotate(
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
-    scene: THREE.Scene,
   ): Promise<void> {
     if (this._rotationPending) return;
     this._rotationPending = true;
 
-    await this._cubeRotationImplementation.rotateRubikCubeGroup(
-      rotationGroup,
-      rotationType,
-      this,
-      scene,
-    );
+    await this.rotationImplementation.rotateRubikCubeGroup(this, rotationGroup, rotationType);
 
     this._rotationPending = false;
   }
 
-  public dispose() {
-    this._cubePieces.forEach((piece) => piece.piece.dispose());
+  public addToScene(): void {
+    this.scene.add(this);
+  }
+
+  public removeFromScene(): void {
+    this.pieces.forEach((piece) => piece.piece.dispose());
+    this.shell.children.forEach((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.geometry.dispose();
+        child.material.dispose();
+      }
+    });
+    this.scene.remove(this);
   }
 }

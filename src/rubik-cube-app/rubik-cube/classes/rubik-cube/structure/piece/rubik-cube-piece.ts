@@ -1,10 +1,7 @@
 import * as THREE from 'three';
 import type { RubikCubePieceFace } from './rubik-cube-piece-face';
-import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure/rubik-cube-piece';
+import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 
-/**
- * Class for the RubikCubePiece class. Extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>, because it implements the IRubikCubePiece interface, which extends the THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> class.
- */
 export class RubikCubePiece extends THREE.Group implements IRubikCubePiece {
   constructor(
     private readonly _pieceId: number,

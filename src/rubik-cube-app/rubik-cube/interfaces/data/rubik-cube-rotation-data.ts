@@ -1,4 +1,4 @@
-import type { TRotationTypeData } from '../types/rubik-cube/rotation-type-data';
+import type { TRotationTypeData } from '../../types/rubik-cube';
 
 export interface IRubikCubeRotationData<
   TCubeRotationGroups extends string,
