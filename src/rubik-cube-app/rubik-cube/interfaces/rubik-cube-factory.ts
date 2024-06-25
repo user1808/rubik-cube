@@ -44,11 +44,6 @@ export interface IRubikCubeFactory<
   >;
   createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
   createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>;
-  createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
-    TCubePiecesFilenamesWithFaces,
-    TCubeFaces,
-    TCubeEdgeFaces
-  >;
   createRubikCubeBuilder(): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
     TCubeFaces,

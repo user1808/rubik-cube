@@ -4,20 +4,23 @@ import type {
   IRubikCubePiecesData,
   IRubikCubeRotationData,
   IRubikCubeShellData,
-} from '../../interfaces/data';
-import type { IRubikCubeBuilder, IRubikCubePieceBuilder } from '../../interfaces/builders';
+} from '../../../interfaces/data';
+import type { IRubikCubeBuilder, IRubikCubePieceBuilder } from '../../../interfaces/builders';
 import type {
   IRubikCubePieceWrapper,
   IRubikCube,
   IRubikCubeShell,
   IRubikCubeShellPiece,
-} from '../../interfaces/structure';
-import type { IRubikCubeRotationImplementation } from '../../interfaces/rubik-cube-rotation-implementation';
-import type { IRubikCubeGLTFLoader } from '../../interfaces/rubik-cube-gltf-loader';
-import { RubikCube } from './structure/cube/rubik-cube';
-import { RubikCubePieceWrapper } from './structure/piece/rubik-cube-piece-wrapper';
-import { RubikCubeShell } from './structure/shell/rubik-cube-shell';
-import { RubikCubeShellPiece } from './structure/shell/rubik-cube-shell-piece';
+} from '../../../interfaces/structure';
+import type { IRubikCubeRotationImplementation } from '../../../interfaces/rubik-cube-rotation-implementation';
+import type { IRubikCubeGLTFLoader } from '../../../interfaces/rubik-cube-gltf-loader';
+import { RubikCube } from '../structure/cube/rubik-cube';
+import { RubikCubePieceWrapper } from '../structure/piece/rubik-cube-piece-wrapper';
+import { RubikCubeShell } from '../structure/shell/rubik-cube-shell';
+import { RubikCubeShellPiece } from '../structure/shell/rubik-cube-shell-piece';
+import type { IRubikCubeShellBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-shell-builder';
+import { RubikCubeShellBuilder } from './rubik-cube-shell-builder';
+import { RubikCubePieceBuilder } from './rubik-cube-piece-builder';
 
 export class RubikCubeBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
@@ -42,10 +45,16 @@ export class RubikCubeBuilder<
       TCubePiecesFilenames
     >
 {
+  public readonly cubePieceBuilder: IRubikCubePieceBuilder<
+    TCubePiecesFilenamesWithFaces,
+    TCubeFaces,
+    TCubeEdgeFaces
+  > = new RubikCubePieceBuilder();
+  public readonly cubeShellBuilder: IRubikCubeShellBuilder = new RubikCubeShellBuilder();
+
   public async buildCube(
     scene: THREE.Scene,
     gltfLoader: IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>,
-    pieceBuilder: IRubikCubePieceBuilder<TCubePiecesFilenamesWithFaces, TCubeFaces, TCubeEdgeFaces>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
     cubeShellData: IRubikCubeShellData<
       TCubeRotationGroups,
@@ -67,7 +76,12 @@ export class RubikCubeBuilder<
     >,
   ): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>> {
     const cubeShell = await this.buildCubeShell(gltfLoader, cubeShellData);
-    const cubePieces = await this.buildCubePieces(gltfLoader, pieceBuilder, materials, piecesData);
+    const cubePieces = await this.buildCubePieces(
+      gltfLoader,
+      this.cubePieceBuilder,
+      materials,
+      piecesData,
+    );
     const cubeRotationGroups = this.buildCubeRotationGroups(cubePieces, piecesData);
 
     return new RubikCube(

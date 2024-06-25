@@ -1,8 +1,7 @@
 import { RubikCubeGLTFLoader } from './rubik-cube-gltf-loader';
-import { RubikCubePieceBuilder } from './rubik-cube-piece-builder';
 import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
 import type { IRubikCubeGLTFLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-gltf-loader';
-import { RubikCubeBuilder } from './rubik-cube-builder';
+import { RubikCubeBuilder } from './builders/rubik-cube-builder';
 import { RubikCubeRotationImplementation } from './rubik-cube-rotation-implementation';
 import type { IRubikCubeRotationImplementation } from '../../interfaces/rubik-cube-rotation-implementation';
 import type { IRubikCubeShellData } from '../../interfaces/data/rubik-cube-shell-data';
@@ -11,7 +10,7 @@ import type {
   IRubikCubePiecesData,
   IRubikCubeRotationData,
 } from '../../interfaces/data';
-import type { IRubikCubeBuilder, IRubikCubePieceBuilder } from '../../interfaces/builders';
+import type { IRubikCubeBuilder } from '../../interfaces/builders';
 import type { IRubikCube } from '../../interfaces/structure';
 
 export abstract class AbstractRubikCubeFactory<
@@ -65,13 +64,6 @@ export abstract class AbstractRubikCubeFactory<
   > {
     return new RubikCubeGLTFLoader();
   }
-  public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
-    TCubePiecesFilenamesWithFaces,
-    TCubeFaces,
-    TCubeEdgeFaces
-  > {
-    return new RubikCubePieceBuilder();
-  }
   public createRubikCubeBuilder(): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
     TCubeFaces,
@@ -103,7 +95,6 @@ export abstract class AbstractRubikCubeFactory<
     const materials = this.createRubikCubeMaterials();
 
     const gltfLoader = this.createRubikCubeGLTFLoader();
-    const pieceBuilder = this.createRubikCubePieceBuilder();
     const cubeBuilder = this.createRubikCubeBuilder();
 
     const rotationImplementation = this.createRubikCubeRotationImplementation();
@@ -111,7 +102,6 @@ export abstract class AbstractRubikCubeFactory<
     this.cube = await cubeBuilder.buildCube(
       scene,
       gltfLoader,
-      pieceBuilder,
       materials,
       shellData,
       piecesData,
