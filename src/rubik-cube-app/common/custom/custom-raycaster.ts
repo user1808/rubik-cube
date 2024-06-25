@@ -4,6 +4,7 @@ import { MouseButtonEnum } from '@/utils/mouse_button_enum';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { IRubikCube } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 
+// TODO: Amend this class
 export class CustomRaycaster<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
