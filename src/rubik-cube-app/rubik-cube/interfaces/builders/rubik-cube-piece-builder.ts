@@ -1,5 +1,5 @@
-import type { TPieceData } from '../../types/rubik-cube';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import type { TPieceData } from '../../types/rubik-cube';
 import type { IRubikCubeMaterials } from '../data';
 import type { IRubikCubePiece } from '../structure';
 

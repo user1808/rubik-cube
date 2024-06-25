@@ -1,11 +1,7 @@
 import * as THREE from 'three';
 import type { IRubikCubeRotationImplementation } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-rotation-implementation';
-import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
-import type {
-  IRubikCube,
-  IRubikCubePieceWrapper,
-  IRubikCubeShell,
-} from '@/rubik-cube-app/rubik-cube/interfaces/structure';
+import type { IRubikCube, IRubikCubeShell } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
+import type { TCubePieces, TRotationGroups } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export class RubikCube<
     TCubeRotationGroups extends string,
@@ -24,13 +20,10 @@ export class RubikCube<
       TCubeRotationTypes,
       TCubeShellPieces
     >,
-    public readonly pieces: Array<IRubikCubePieceWrapper>,
-    public readonly rotationGroups: Record<TCubeRotationGroups, Array<IRubikCubePieceWrapper>>,
-    public readonly rotationData: IRubikCubeRotationData<
-      TCubeRotationGroups,
-      TCubeRotationTypes
-    >,
-    public readonly rotationImplementation: IRubikCubeRotationImplementation<
+    public readonly pieces: TCubePieces,
+    public readonly rotationGroups: TRotationGroups<TCubeRotationGroups>,
+    public readonly rotationTypes: Array<TCubeRotationTypes>,
+    private readonly rotationImplementation: IRubikCubeRotationImplementation<
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellPieces

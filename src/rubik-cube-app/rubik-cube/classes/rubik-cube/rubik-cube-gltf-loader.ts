@@ -1,5 +1,5 @@
-import type { IRubikCubeGLTFLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-gltf-loader';
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import type { IRubikCubeGLTFLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-gltf-loader';
 
 export class RubikCubeGLTFLoader<TShellFilename extends string, TPiecesFilenames extends string>
   implements IRubikCubeGLTFLoader<TShellFilename, TPiecesFilenames>

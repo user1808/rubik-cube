@@ -1,11 +1,11 @@
 import * as THREE from 'three';
-import { RubikCubePiece } from './structure/piece/rubik-cube-piece';
-import { RubikCubePieceFace } from './structure/piece/rubik-cube-piece-face';
 import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TypeGuards } from '@/utils/type-guards';
-import type { IRubikCubeMaterials } from '../../interfaces/data';
-import type { IRubikCubePieceBuilder } from '../../interfaces/builders';
+import type { IRubikCubePieceBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders';
+import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import { RubikCubePiece } from '../structure/piece/rubik-cube-piece';
+import { RubikCubePieceFace } from '../structure/piece/rubik-cube-piece-face';
 
 /**
  * The Rubik's Cube Piece Builder class. It is responsible for creating the Rubik's Cube pieces. It is universal to any Rubik's Cube that I made so far.
