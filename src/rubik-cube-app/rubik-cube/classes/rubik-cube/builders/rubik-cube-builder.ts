@@ -19,8 +19,7 @@ import { RubikCubePieceWrapper } from '../structure/piece/rubik-cube-piece-wrapp
 import { RubikCubeShell } from '../structure/shell/rubik-cube-shell';
 import { RubikCubeShellPiece } from '../structure/shell/rubik-cube-shell-piece';
 import type { IRubikCubeShellBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-shell-builder';
-import { RubikCubeShellBuilder } from './rubik-cube-shell-builder';
-import { RubikCubePieceBuilder } from './rubik-cube-piece-builder';
+import { RubikCubePieceBuilder, RubikCubeShellBuilder } from '.';
 
 export class RubikCubeBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
