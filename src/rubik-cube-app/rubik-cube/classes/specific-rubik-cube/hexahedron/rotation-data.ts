@@ -1,5 +1,5 @@
-import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-rotation-data';
-import type { TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube/rotation-type-data';
+import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import { Radians } from '@/utils/radians';
 

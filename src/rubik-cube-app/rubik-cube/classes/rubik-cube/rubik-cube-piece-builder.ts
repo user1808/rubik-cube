@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import { RubikCubePiece } from './structure/piece/rubik-cube-piece';
 import { RubikCubePieceFace } from './structure/piece/rubik-cube-piece-face';
-import type { IRubikCubePieceBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-piece-builder';
-import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube/piece-data';
+import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 import { TypeGuards } from '@/utils/type-guards';
+import type { IRubikCubeMaterials } from '../../interfaces/data';
+import type { IRubikCubePieceBuilder } from '../../interfaces/builders';
 
 /**
  * The Rubik's Cube Piece Builder class. It is responsible for creating the Rubik's Cube pieces. It is universal to any Rubik's Cube that I made so far.
@@ -21,13 +21,13 @@ export class RubikCubePieceBuilder<
     IRubikCubePieceBuilder<TPiecesFilenamesWithFaces, TCubeFaces, TCubeEdgeFaces, TPiecesFilenames>
 {
   public createPiece(
-    loadedGltfPieces: Map<TPiecesFilenames, GLTF>,
+    loadedGLTFPieces: Map<TPiecesFilenames, GLTF>,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
   ): RubikCubePiece {
     const { id, position, rotation, filename } = pieceData;
 
-    const gltfPiece = loadedGltfPieces.get(filename)?.scene;
+    const gltfPiece = loadedGLTFPieces.get(filename)?.scene;
     if (!gltfPiece) throw new Error(`${filename} piece was not found`);
 
     const pieceFaces = this.transformGLTFPieceFaces(gltfPiece, pieceData, materials);

@@ -1,110 +1,119 @@
-import { RubikCubePiecesLoader } from './rubik-cube-pieces-loader';
+import { RubikCubeGLTFLoader } from './rubik-cube-gltf-loader';
 import { RubikCubePieceBuilder } from './rubik-cube-piece-builder';
 import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
-import type { IRubikCubePieceBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-piece-builder';
-import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-data';
-import type { IRubikCubePiecesLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-loader';
-import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
-import type { IRubikCubeBuilder } from '../../interfaces/rubik-cube-builder';
-import type { IRubikCube } from '../../interfaces/structure/rubik-cube';
+import type { IRubikCubeGLTFLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-gltf-loader';
 import { RubikCubeBuilder } from './rubik-cube-builder';
-import type { IRubikCubeRotationData } from '../../interfaces/rubik-cube-rotation-data';
 import { RubikCubeRotationImplementation } from './rubik-cube-rotation-implementation';
 import type { IRubikCubeRotationImplementation } from '../../interfaces/rubik-cube-rotation-implementation';
-import type { IRubikCubePieceWrapper } from '../../interfaces/structure/rubik-cube-piece-wrapper';
-import { RubikCubePieceWrapper } from './structure/piece/rubik-cube-piece-wrapper';
+import type { IRubikCubeShellData } from '../../interfaces/data/rubik-cube-shell-data';
+import type {
+  IRubikCubeMaterials,
+  IRubikCubePiecesData,
+  IRubikCubeRotationData,
+} from '../../interfaces/data';
+import type { IRubikCubeBuilder, IRubikCubePieceBuilder } from '../../interfaces/builders';
+import type { IRubikCube } from '../../interfaces/structure';
 
-/**
- * The abstract Rubik's Cube Factory class. It is responsible for creating the Rubik's Cube. It is universal to any Rubik's Cube that I made so far. It have to be extended by a concrete Rubik's Cube Factory class.
- */
 export abstract class AbstractRubikCubeFactory<
-  TPiecesFilenamesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
+  TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
   TCubeFaces extends string,
   TCubeEdgeFaces extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TPiecesFilenames extends
-    ExtractStringKeys<TPiecesFilenamesWithFaces> = ExtractStringKeys<TPiecesFilenamesWithFaces>,
-  TPiecesFaces extends string = TPiecesFilenamesWithFaces[TPiecesFilenames],
+  TCubeShellFilename extends string,
+  TCubeShellPieces extends string,
+  TCubePiecesFilenames extends
+    ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
+  TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > implements
     IRubikCubeFactory<
-      TPiecesFilenamesWithFaces,
+      TCubePiecesFilenamesWithFaces,
       TCubeFaces,
       TCubeEdgeFaces,
       TCubeRotationGroups,
-      TCubeRotationTypes
+      TCubeRotationTypes,
+      TCubeShellFilename,
+      TCubeShellPieces
     >
 {
-  /**
-   * The Rubik's Cube instance. It is created only once. I implemented this to prevent creating multiple Rubik's Cube instances when it is not necessary.
-   */
-  private cube: Nullable<IRubikCube<TCubeRotationGroups, TCubeRotationTypes>> = null;
+  private cube: Nullable<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>> =
+    null;
 
   public abstract get commonName(): string;
 
   public abstract createRubikCubePiecesData(): IRubikCubePiecesData<
-    TPiecesFilenamesWithFaces,
+    TCubePiecesFilenamesWithFaces,
     TCubeFaces,
     TCubeRotationGroups,
-    TPiecesFilenames
+    TCubePiecesFilenames
   >;
   public abstract createRubikCubeRotationData(): IRubikCubeRotationData<
     TCubeRotationGroups,
     TCubeRotationTypes
   >;
+  public abstract createRubikCubeShellData(): IRubikCubeShellData<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellFilename,
+    TCubeShellPieces
+  >;
   public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
 
-  public createRubikCubePiecesLoader(): IRubikCubePiecesLoader<TPiecesFilenames> {
-    return new RubikCubePiecesLoader();
+  public createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<
+    TCubeShellFilename,
+    TCubePiecesFilenames
+  > {
+    return new RubikCubeGLTFLoader();
   }
   public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
-    TPiecesFilenamesWithFaces,
+    TCubePiecesFilenamesWithFaces,
     TCubeFaces,
     TCubeEdgeFaces
   > {
     return new RubikCubePieceBuilder();
   }
   public createRubikCubeBuilder(): IRubikCubeBuilder<
-    TPiecesFilenamesWithFaces,
+    TCubePiecesFilenamesWithFaces,
     TCubeFaces,
+    TCubeEdgeFaces,
     TCubeRotationGroups,
-    TCubeRotationTypes
+    TCubeRotationTypes,
+    TCubeShellFilename,
+    TCubeShellPieces
   > {
     return new RubikCubeBuilder();
   }
 
   public createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
     TCubeRotationGroups,
-    TCubeRotationTypes
+    TCubeRotationTypes,
+    TCubeShellPieces
   > {
     return new RubikCubeRotationImplementation();
   }
 
-  public async createRubikCube(): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes>> {
+  public async createRubikCube(
+    scene: THREE.Scene,
+  ): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>> {
     if (this.cube) return this.cube;
 
+    const shellData = this.createRubikCubeShellData();
     const piecesData = this.createRubikCubePiecesData();
     const rotationData = this.createRubikCubeRotationData();
     const materials = this.createRubikCubeMaterials();
 
-    const loader = this.createRubikCubePiecesLoader();
+    const gltfLoader = this.createRubikCubeGLTFLoader();
     const pieceBuilder = this.createRubikCubePieceBuilder();
     const cubeBuilder = this.createRubikCubeBuilder();
 
     const rotationImplementation = this.createRubikCubeRotationImplementation();
 
-    const loadedGltfPieces = await loader.loadGltfPieces(piecesData.piecesFilenames);
-
-    const cubePieces: Array<IRubikCubePieceWrapper> = [];
-
-    piecesData.piecesData.forEach((pieceData) => {
-      cubePieces.push(
-        new RubikCubePieceWrapper(pieceBuilder.createPiece(loadedGltfPieces, pieceData, materials)),
-      );
-    });
-
-    this.cube = cubeBuilder.createCube(
-      cubePieces,
+    this.cube = await cubeBuilder.buildCube(
+      scene,
+      gltfLoader,
+      pieceBuilder,
+      materials,
+      shellData,
       piecesData,
       rotationData,
       rotationImplementation,

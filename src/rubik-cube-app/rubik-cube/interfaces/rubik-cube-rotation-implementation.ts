@@ -1,14 +1,13 @@
-import * as THREE from 'three';
-import type { IRubikCube } from './structure/rubik-cube';
+import type { IRubikCube } from './structure';
 
 export interface IRubikCubeRotationImplementation<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
+  TCubeShellPieces extends string,
 > {
   rotateRubikCubeGroup(
+    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
-    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes>,
-    scene: THREE.Scene,
   ): Promise<void>;
 }

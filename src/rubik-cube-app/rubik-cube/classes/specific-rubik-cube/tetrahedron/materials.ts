@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
+import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type {
-  TTetrahedronEdgeFaces,
   TTetrahedronFaces,
-} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/cube-faces';
+  TTetrahedronEdgeFaces,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
 
 export class RubikTetrahedronMaterials
   implements IRubikCubeMaterials<TTetrahedronFaces, TTetrahedronEdgeFaces>

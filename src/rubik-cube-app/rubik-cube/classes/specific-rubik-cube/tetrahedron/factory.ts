@@ -1,24 +1,32 @@
-import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-data';
-import { RubikTetrahedronPiecesData } from './pieces-data';
 import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
-import type {
-  TTetrahedronEdgeFaces,
-  TTetrahedronFaces,
-} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/cube-faces';
-import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
-import type { TTetrahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/pieces-faces';
+import { RubikTetrahedronPiecesData } from './pieces-data';
 import { RubikTetrahedronMaterials } from './materials';
-import type { TTetrahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/rotation-groups';
-import type { TTetrahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/rotation-types';
-import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-rotation-data';
 import { RubikTetrahedronRotationData } from './rotation-data';
+import { RubikTetrahedronShellData } from './shell-data';
+import type {
+  IRubikCubeMaterials,
+  IRubikCubePiecesData,
+  IRubikCubeRotationData,
+  IRubikCubeShellData,
+} from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type {
+  TTetrahedronPiecesFilenamesWithFaces,
+  TTetrahedronFaces,
+  TTetrahedronEdgeFaces,
+  TTetrahedronRotationGroups,
+  TTetrahedronRotationTypes,
+  TTetrahedronShellPieces,
+  TTetrahedronShellFilename,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
 
 export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronPiecesFilenamesWithFaces,
   TTetrahedronFaces,
   TTetrahedronEdgeFaces,
   TTetrahedronRotationGroups,
-  TTetrahedronRotationTypes
+  TTetrahedronRotationTypes,
+  TTetrahedronShellFilename,
+  TTetrahedronShellPieces
 > {
   public get commonName(): string {
     return 'Pyraminx';
@@ -38,5 +46,13 @@ export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   }
   public createRubikCubeMaterials(): IRubikCubeMaterials<TTetrahedronFaces, TTetrahedronEdgeFaces> {
     return new RubikTetrahedronMaterials();
+  }
+  public createRubikCubeShellData(): IRubikCubeShellData<
+    TTetrahedronRotationGroups,
+    TTetrahedronRotationTypes,
+    TTetrahedronShellFilename,
+    TTetrahedronShellPieces
+  > {
+    return new RubikTetrahedronShellData();
   }
 }

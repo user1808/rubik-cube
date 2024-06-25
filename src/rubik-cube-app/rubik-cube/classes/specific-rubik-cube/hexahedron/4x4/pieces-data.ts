@@ -1,10 +1,15 @@
 import type { THexahedron4x4RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/4x4/rotation-groups';
-import { AbstractRubikHexahedronPiecesData } from '../pieces-data';
+import type { TPieceDataIdx } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import {
+  AbstractRubikHexahedronPiecesData,
+  type THexahedronPositionValues,
+  type THexahedronSize,
+} from '../pieces-data';
 
 export class RubikHexahedron4x4PiecesData extends AbstractRubikHexahedronPiecesData<THexahedron4x4RotationGroups> {
-  public override get piecesIdxsForRotationGroups(): Record<
+  public override get rotationGroupsPiecesIdxs(): Record<
     THexahedron4x4RotationGroups,
-    Array<number>
+    Array<TPieceDataIdx>
   > {
     return {
       Front: [12, 13, 14, 15, 24, 25, 26, 27, 36, 37, 38, 39, 52, 53, 54, 55],
@@ -21,14 +26,12 @@ export class RubikHexahedron4x4PiecesData extends AbstractRubikHexahedronPiecesD
       DownSlice: [36, 37, 38, 39, 34, 35, 32, 33, 28, 29, 30, 31],
     };
   }
-  protected override get size(): number {
-    return 4;
-  }
-  protected override get positionValues(): Record<'x' | 'y' | 'z', number[]> {
-    return {
-      x: [-1.5, -0.5, 0.5, 1.5],
-      y: [1.5, 0.5, -0.5, -1.5],
-      z: [-1.5, -0.5, 0.5, 1.5],
-    };
-  }
+
+  protected override readonly size: THexahedronSize = 4;
+
+  protected override readonly positionValues: THexahedronPositionValues = {
+    x: [-1.5, -0.5, 0.5, 1.5],
+    y: [1.5, 0.5, -0.5, -1.5],
+    z: [-1.5, -0.5, 0.5, 1.5],
+  };
 }
