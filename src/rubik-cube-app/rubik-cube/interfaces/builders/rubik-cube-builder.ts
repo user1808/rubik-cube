@@ -24,7 +24,12 @@ export interface IRubikCubeBuilder<
     TCubeFaces,
     TCubeEdgeFaces
   >;
-  readonly cubeShellBuilder: IRubikCubeShellBuilder;
+  readonly cubeShellBuilder: IRubikCubeShellBuilder<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellFilename,
+    TCubeShellPieces
+  >;
 
   buildCube(
     scene: THREE.Scene,

@@ -6,18 +6,11 @@ import type {
   IRubikCubeShellData,
 } from '../../../interfaces/data';
 import type { IRubikCubeBuilder, IRubikCubePieceBuilder } from '../../../interfaces/builders';
-import type {
-  IRubikCubePieceWrapper,
-  IRubikCube,
-  IRubikCubeShell,
-  IRubikCubeShellPiece,
-} from '../../../interfaces/structure';
+import type { IRubikCubePieceWrapper, IRubikCube } from '../../../interfaces/structure';
 import type { IRubikCubeRotationImplementation } from '../../../interfaces/rubik-cube-rotation-implementation';
 import type { IRubikCubeGLTFLoader } from '../../../interfaces/rubik-cube-gltf-loader';
 import { RubikCube } from '../structure/cube/rubik-cube';
 import { RubikCubePieceWrapper } from '../structure/piece/rubik-cube-piece-wrapper';
-import { RubikCubeShell } from '../structure/shell/rubik-cube-shell';
-import { RubikCubeShellPiece } from '../structure/shell/rubik-cube-shell-piece';
 import type { IRubikCubeShellBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-shell-builder';
 import { RubikCubePieceBuilder, RubikCubeShellBuilder } from '.';
 
@@ -49,7 +42,12 @@ export class RubikCubeBuilder<
     TCubeFaces,
     TCubeEdgeFaces
   > = new RubikCubePieceBuilder();
-  public readonly cubeShellBuilder: IRubikCubeShellBuilder = new RubikCubeShellBuilder();
+  public readonly cubeShellBuilder: IRubikCubeShellBuilder<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellFilename,
+    TCubeShellPieces
+  > = new RubikCubeShellBuilder();
 
   public async buildCube(
     scene: THREE.Scene,
@@ -74,7 +72,9 @@ export class RubikCubeBuilder<
       TCubeShellPieces
     >,
   ): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>> {
-    const cubeShell = await this.buildCubeShell(gltfLoader, cubeShellData);
+    const loadedGLTFCubeShell = await gltfLoader.loadGLTFCubeShell(cubeShellData.filename);
+    const cubeShell = this.cubeShellBuilder.buildShell(loadedGLTFCubeShell, cubeShellData);
+
     const cubePieces = await this.buildCubePieces(
       gltfLoader,
       this.cubePieceBuilder,
@@ -91,53 +91,6 @@ export class RubikCubeBuilder<
       rotationData,
       rotationImplementation,
     );
-  }
-
-  private async buildCubeShell(
-    gltfLoader: IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>,
-    cubeShellData: IRubikCubeShellData<
-      TCubeRotationGroups,
-      TCubeRotationTypes,
-      TCubeShellFilename,
-      TCubeShellPieces
-    >,
-  ): Promise<IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>> {
-    const loadedGLTFCubeShell = await gltfLoader.loadGLTFCubeShell(cubeShellData.filename);
-
-    const transparentMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
-
-    const shellPieces: {
-      [TCubeShellPiece in TCubeShellPieces]: IRubikCubeShellPiece<
-        TCubeRotationGroups,
-        TCubeRotationTypes,
-        TCubeShellPiece
-      >;
-    } = loadedGLTFCubeShell.scene.children.reduce(
-      (acc, cur) => {
-        const piece = cur as THREE.Mesh;
-        const name = cur.name as TCubeShellPieces;
-        const data = cubeShellData.piecesData[name];
-
-        return {
-          ...acc,
-          [name]: new RubikCubeShellPiece(
-            name,
-            data,
-            piece.geometry as THREE.BufferGeometry,
-            transparentMaterial,
-          ),
-        };
-      },
-      {} as {
-        [TCubeShellPiece in TCubeShellPieces]: IRubikCubeShellPiece<
-          TCubeRotationGroups,
-          TCubeRotationTypes,
-          TCubeShellPiece
-        >;
-      },
-    );
-
-    return new RubikCubeShell(shellPieces);
   }
 
   private async buildCubePieces(
