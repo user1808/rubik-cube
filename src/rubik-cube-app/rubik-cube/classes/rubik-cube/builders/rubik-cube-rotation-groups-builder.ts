@@ -1,25 +1,36 @@
-import type { IRubikCubeRotationGroupBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-rotation-group-builder';
 import type { IRubikCubeRotationGroupsBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-rotation-groups-builder';
-import type { IRubikCubePieceWrapper } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
+import type {
+  IRubikCube,
+  IRubikCubePieceWrapper,
+} from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 
-export class RubikCubeRotationGroupsBuidler<TCubeRotationGroups extends string>
-  implements IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>
+export class RubikCubeRotationGroupsBuidler<
+  TCubeRotationGroups extends string,
+  TCubeRotationTypes extends string,
+  TCubeShellPieces extends string,
+> implements
+    IRubikCubeRotationGroupsBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
 {
-  constructor(private rotationGroupBuilder: IRubikCubeRotationGroupBuilder) {}
+  constructor(
+    private readonly cubePieces: Array<IRubikCubePieceWrapper>,
+    private readonly rotationGroupsPiecesIdxs: Record<TCubeRotationGroups, Array<number>>,
+  ) {}
 
-  public buildRotationGroups(
-    cubePieces: Array<IRubikCubePieceWrapper>,
-    rotationGroupsPiecesIdxs: Record<TCubeRotationGroups, Array<number>>,
-  ): Record<TCubeRotationGroups, Array<IRubikCubePieceWrapper>> {
-    return Object.entries<(typeof rotationGroupsPiecesIdxs)[TCubeRotationGroups]>(
-      rotationGroupsPiecesIdxs,
+  public buildRotationGroups(): IRubikCube<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  >['rotationGroups'] {
+    return Object.entries<(typeof this.rotationGroupsPiecesIdxs)[TCubeRotationGroups]>(
+      this.rotationGroupsPiecesIdxs,
     ).reduce(
       (rotationGroups, [rotationGroupName, rotationGroupPiecesIdxs]) => {
-        rotationGroups[rotationGroupName as TCubeRotationGroups] =
-          this.rotationGroupBuilder.buildRotationGroup(cubePieces, rotationGroupPiecesIdxs);
+        rotationGroups[rotationGroupName as TCubeRotationGroups] = rotationGroupPiecesIdxs.map(
+          (idx) => this.cubePieces[idx],
+        );
         return rotationGroups;
       },
-      {} as Record<TCubeRotationGroups, Array<IRubikCubePieceWrapper>>,
+      {} as IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>['rotationGroups'],
     );
   }
 }
