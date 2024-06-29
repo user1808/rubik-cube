@@ -4,8 +4,6 @@ import type { IRubikCubeShellData } from '../data/rubik-cube-shell-data';
 import type { IRubikCubeMaterials, IRubikCubePiecesData, IRubikCubeRotationData } from '../data';
 import type { IRubikCube } from '../structure';
 import type { IRubikCubeGLTFLoader } from '../rubik-cube-gltf-loader';
-import type { IRubikCubePieceBuilder } from '.';
-import type { IRubikCubeShellBuilder } from './rubik-cube-shell-builder';
 
 export interface IRubikCubeBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
@@ -19,18 +17,6 @@ export interface IRubikCubeBuilder<
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
-  readonly cubePieceBuilder: IRubikCubePieceBuilder<
-    TCubePiecesFilenamesWithFaces,
-    TCubeFaces,
-    TCubeEdgeFaces
-  >;
-  readonly cubeShellBuilder: IRubikCubeShellBuilder<
-    TCubeRotationGroups,
-    TCubeRotationTypes,
-    TCubeShellFilename,
-    TCubeShellPieces
-  >;
-
   buildCube(
     scene: THREE.Scene,
     gltfLoader: IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>,

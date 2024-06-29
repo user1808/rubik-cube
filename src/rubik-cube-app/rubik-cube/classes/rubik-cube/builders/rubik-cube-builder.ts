@@ -12,7 +12,9 @@ import type { IRubikCubeGLTFLoader } from '../../../interfaces/rubik-cube-gltf-l
 import { RubikCube } from '../structure/cube/rubik-cube';
 import { RubikCubePieceWrapper } from '../structure/piece/rubik-cube-piece-wrapper';
 import type { IRubikCubeShellBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-shell-builder';
-import { RubikCubePieceBuilder, RubikCubeShellBuilder } from '.';
+import type { IRubikCubePiecesBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-pieces-builder';
+import type { IRubikCubeRotationGroupBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-rotation-group-builder';
+import type { IRubikCubeRotationGroupsBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-rotation-groups-builder';
 
 export class RubikCubeBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
@@ -37,17 +39,22 @@ export class RubikCubeBuilder<
       TCubePiecesFilenames
     >
 {
-  public readonly cubePieceBuilder: IRubikCubePieceBuilder<
-    TCubePiecesFilenamesWithFaces,
-    TCubeFaces,
-    TCubeEdgeFaces
-  > = new RubikCubePieceBuilder();
-  public readonly cubeShellBuilder: IRubikCubeShellBuilder<
-    TCubeRotationGroups,
-    TCubeRotationTypes,
-    TCubeShellFilename,
-    TCubeShellPieces
-  > = new RubikCubeShellBuilder();
+  constructor(
+    private readonly cubePieceBuilder: IRubikCubePieceBuilder<
+      TCubePiecesFilenamesWithFaces,
+      TCubeFaces,
+      TCubeEdgeFaces
+    >,
+    private readonly cubePiecesBuilder: IRubikCubePiecesBuilder,
+    private readonly cubeRotationGroupBuilder: IRubikCubeRotationGroupBuilder,
+    private readonly cubeRotationGroupsBuilder: IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>,
+    private readonly cubeShellBuilder: IRubikCubeShellBuilder<
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilename,
+      TCubeShellPieces
+    >,
+  ) {}
 
   public async buildCube(
     scene: THREE.Scene,
@@ -110,28 +117,5 @@ export class RubikCubeBuilder<
       (pieceData) =>
         new RubikCubePieceWrapper(pieceBuilder.createPiece(loadedGLTFPieces, pieceData, materials)),
     );
-  }
-
-  private buildCubeRotationGroups(
-    cubePieces: Array<IRubikCubePieceWrapper>,
-    cubePiecesData: IRubikCubePiecesData<
-      TCubePiecesFilenamesWithFaces,
-      TCubeFaces,
-      TCubeRotationGroups
-    >,
-  ): Record<TCubeRotationGroups, Array<IRubikCubePieceWrapper>> {
-    const { rotationGroupsPiecesIdxs } = cubePiecesData;
-
-    const rotationGroups = (<Array<TCubeRotationGroups>>(
-      Object.keys(rotationGroupsPiecesIdxs)
-    )).reduce(
-      (acc, cur) => ({
-        ...acc,
-        [cur]: rotationGroupsPiecesIdxs[cur].map((idx) => cubePieces[idx]),
-      }),
-      {} as Record<TCubeRotationGroups, Array<IRubikCubePieceWrapper>>,
-    );
-
-    return rotationGroups;
   }
 }
