@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { IRubikCubePieceFace } from './rubik-cube-piece-face';
+import type { IRubikCubePieceFace } from './piece/rubik-cube-piece-face';
 
 export interface IRubikCubePiece extends THREE.Group {
   get pieceId(): number;

@@ -1,4 +1,4 @@
-import type { IRubikCubePieceFace } from './rubik-cube-piece-face';
+import type { IRubikCubePieceFace } from './piece/rubik-cube-piece-face';
 import type { IRubikCubePieceWrapper } from './rubik-cube-piece-wrapper';
 import type { IRubikCubePiece } from './rubik-cube-piece';
 import type { IRubikCubeShell } from './rubik-cube-shell';
