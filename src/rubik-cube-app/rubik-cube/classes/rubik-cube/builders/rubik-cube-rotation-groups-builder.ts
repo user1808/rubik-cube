@@ -12,21 +12,18 @@ export class RubikCubeRotationGroupsBuidler<
     IRubikCubeRotationGroupsBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
 {
   constructor(
-    private readonly cubePieces: Array<IRubikCubePieceWrapper>,
     private readonly rotationGroupsPiecesIdxs: Record<TCubeRotationGroups, Array<number>>,
   ) {}
 
-  public buildRotationGroups(): IRubikCube<
-    TCubeRotationGroups,
-    TCubeRotationTypes,
-    TCubeShellPieces
-  >['rotationGroups'] {
+  public buildRotationGroups(
+    cubePieces: Array<IRubikCubePieceWrapper>,
+  ): IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>['rotationGroups'] {
     return Object.entries<(typeof this.rotationGroupsPiecesIdxs)[TCubeRotationGroups]>(
       this.rotationGroupsPiecesIdxs,
     ).reduce(
       (rotationGroups, [rotationGroupName, rotationGroupPiecesIdxs]) => {
         rotationGroups[rotationGroupName as TCubeRotationGroups] = rotationGroupPiecesIdxs.map(
-          (idx) => this.cubePieces[idx],
+          (idx) => cubePieces[idx],
         );
         return rotationGroups;
       },

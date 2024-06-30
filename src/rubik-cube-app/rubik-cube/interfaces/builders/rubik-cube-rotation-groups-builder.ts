@@ -1,13 +1,11 @@
-import type { IRubikCube } from '../structure';
+import type { IRubikCube, IRubikCubePieceWrapper } from '../structure';
 
 export interface IRubikCubeRotationGroupsBuilder<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
   TCubeShellPieces extends string,
 > {
-  buildRotationGroups(): IRubikCube<
-    TCubeRotationGroups,
-    TCubeRotationTypes,
-    TCubeShellPieces
-  >['rotationGroups'];
+  buildRotationGroups(
+    cubePieces: Array<IRubikCubePieceWrapper>,
+  ): IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>['rotationGroups'];
 }

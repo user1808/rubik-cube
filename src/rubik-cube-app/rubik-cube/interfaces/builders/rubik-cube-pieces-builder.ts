@@ -1,1 +1,5 @@
-export interface IRubikCubePiecesBuilder {}
+import type { IRubikCubePieceWrapper } from '../structure';
+
+export interface IRubikCubePiecesBuilder {
+  buildPieces(): Array<IRubikCubePieceWrapper>;
+}

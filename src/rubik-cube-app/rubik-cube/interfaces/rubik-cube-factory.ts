@@ -1,10 +1,13 @@
-import * as THREE from 'three';
 import type { IRubikCubeGLTFLoader } from './rubik-cube-gltf-loader';
 import type { IRubikCubeRotationImplementation } from './rubik-cube-rotation-implementation';
 import type { IRubikCubeShellData } from './data/rubik-cube-shell-data';
 import type { IRubikCubeMaterials, IRubikCubePiecesData, IRubikCubeRotationData } from './data';
-import type { IRubikCubeBuilder, IRubikCubePieceBuilder } from './builders';
-import type { IRubikCube } from './structure';
+import type { IRubikCubeBuilder, IRubikCubePieceBuilder, IRubikCubeShellBuilder } from './builders';
+import type { IRubikCube, IRubikCubePieceWrapper } from './structure';
+import type { IRubikCubeShellPiecesBuilder } from './builders/rubik-cube-shell-pieces-builder';
+import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import type { IRubikCubePiecesBuilder } from './builders/rubik-cube-pieces-builder';
+import type { IRubikCubeRotationGroupsBuilder } from './builders/rubik-cube-rotation-groups-builder';
 
 export type TUniversalRubikCubeFactory = IRubikCubeFactory<
   Record<string, string>,
@@ -42,15 +45,35 @@ export interface IRubikCubeFactory<
     TCubeShellFilename,
     TCubeShellPieces
   >;
+
   createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
+
   createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>;
-  createRubikCubeBuilder(): IRubikCubeBuilder<
+
+  createRubikCubeShellPiecesBuilder(
+    loadedGLTFCubeShell: GLTF,
+  ): IRubikCubeShellPiecesBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
+  createRubikCubeShellBuilder(
+    loadedGLTFCubeShell: GLTF,
+  ): IRubikCubeShellBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
+  createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
     TCubePiecesFilenamesWithFaces,
     TCubeFaces,
-    TCubeEdgeFaces,
+    TCubeEdgeFaces
+  >;
+  createRubikCubePiecesBuilder(
+    loadedGLTFPieces: Map<TCubePiecesFilenames, GLTF>,
+  ): IRubikCubePiecesBuilder;
+  createRubikCubeRotationGroupsBuilder(
+    cubePieces: Array<IRubikCubePieceWrapper>,
+  ): IRubikCubeRotationGroupsBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
+  createRubikCubeBuilder(
+    loadedGLTFCubeShell: GLTF,
+    loadedGLTFPieces: Map<TCubePiecesFilenames, GLTF>,
+  ): IRubikCubeBuilder<
+    TCubePiecesFilenamesWithFaces,
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellFilename,
     TCubeShellPieces
   >;
 
@@ -60,7 +83,5 @@ export interface IRubikCubeFactory<
     TCubeShellPieces
   >;
 
-  createRubikCube(
-    scene: THREE.Scene,
-  ): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>>;
+  createRubikCube(): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>>;
 }
