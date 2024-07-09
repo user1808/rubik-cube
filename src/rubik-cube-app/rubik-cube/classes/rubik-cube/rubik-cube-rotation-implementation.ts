@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import type { IRubikCubeRotationImplementation } from '../../interfaces/rubik-cube-rotation-implementation';
 import type { TRotationTypeData } from '../../types/rubik-cube';
 import type { IRubikCube, IRubikCubePieceWrapper } from '../../interfaces/structure';
+import type { IRubikCubeRotationData } from '../../interfaces/data';
 
 export class RubikCubeRotationImplementation<
   TCubeRotationGroups extends string,
@@ -11,6 +12,10 @@ export class RubikCubeRotationImplementation<
 > implements
     IRubikCubeRotationImplementation<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
 {
+  constructor(
+    private readonly rotationData: IRubikCubeRotationData<TCubeRotationGroups, TCubeRotationTypes>,
+  ) {}
+
   public async rotateRubikCubeGroup(
     rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
     rotationGroup: TCubeRotationGroups,
@@ -19,10 +24,10 @@ export class RubikCubeRotationImplementation<
     const rotatingGroup = rubikCube.rotationGroups[rotationGroup];
     const rotatingThreeJSGroup = this.createRotatingThreeJSGroup(rubikCube, rotatingGroup);
 
-    const rotationData = rubikCube.rotationData;
-    const rotatedGroupNewIdxs = rotationData.rotationGroupsNewIdxs[rotationType][rotationGroup];
-    const rotationTypeData = rotationData.rotationTypesData[rotationType];
-    const rotationNormal = rotationData.rotationGroupsNormalVectors[rotationGroup];
+    const rotatedGroupNewIdxs =
+      this.rotationData.rotationGroupsNewIdxs[rotationType][rotationGroup];
+    const rotationTypeData = this.rotationData.rotationTypesData[rotationType];
+    const rotationNormal = this.rotationData.rotationGroupsNormalVectors[rotationGroup];
     rotationNormal.normalize();
 
     await this.rotateGroupAsync(

@@ -1,16 +1,15 @@
-import type { IRubikCubePieceFace } from './rubik-cube-piece-face';
-import type { IRubikCubePieceWrapper } from './rubik-cube-piece-wrapper';
-import type { IRubikCubePiece } from './rubik-cube-piece';
-import type { IRubikCubeShell } from './rubik-cube-shell';
-import type { IRubikCubeShellPiece } from './rubik-cube-shell-piece';
-import type { IRubikCube, TUniversalRubikCube } from './rubik-cube';
+import type { IRubikCube } from './cube/rubik-cube';
+import type { IRubikCubePieceFace } from './piece/rubik-cube-piece-face';
+import type { IRubikCubePieceWrapper } from './piece/rubik-cube-piece-wrapper';
+import type { IRubikCubePiece } from './piece/rubik-cube-piece';
+import type { IRubikCubeShellPiece } from './shell/rubik-cube-shell-piece';
+import type { IRubikCubeShell } from './shell/rubik-cube-shell';
 
 export type {
+  IRubikCube,
   IRubikCubePieceFace,
   IRubikCubePieceWrapper,
   IRubikCubePiece,
-  IRubikCubeShell,
   IRubikCubeShellPiece,
-  IRubikCube,
-  TUniversalRubikCube,
+  IRubikCubeShell,
 };

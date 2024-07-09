@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { TPieceDataId } from '.';
+import type { TPieceDataId } from './piece-data-id';
 
 export type TPieceData<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,

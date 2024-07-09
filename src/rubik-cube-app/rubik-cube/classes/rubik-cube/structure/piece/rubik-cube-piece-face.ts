@@ -1,5 +1,5 @@
-import type { IRubikCubePieceFace } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import * as THREE from 'three';
+import type { IRubikCubePieceFace } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 
 type TRubikCubePieceFaceConstructorParams = {
   geometry: THREE.BufferGeometry;

@@ -1,6 +1,6 @@
+import * as THREE from 'three';
 import type { IRubikCubeShellPiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
-import * as THREE from 'three';
 
 export class RubikCubeShellPiece<
     TCubeRotationGroups extends string,
