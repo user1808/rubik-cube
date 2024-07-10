@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
+import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces';
 
 defineProps<{
   factories: Array<IRubikCubeFactory<Record<string, string>>>;

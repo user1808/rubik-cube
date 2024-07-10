@@ -1,13 +1,12 @@
 import * as THREE from 'three';
-import type { IRubikCubeRotationData } from '../../../interfaces/data';
+import type { IRubikCube } from '../../../interfaces/structure';
+import type { IRubikCubeRotationImplementation } from '@/rubik-cube-app/rubik-cube/interfaces';
 import type {
   IRubikCubeBuilder,
   IRubikCubePiecesBuilder,
   IRubikCubeRotationGroupsBuilder,
   IRubikCubeShellBuilder,
 } from '../../../interfaces/builders';
-import type { IRubikCube } from '../../../interfaces/structure';
-import type { IRubikCubeRotationImplementation } from '../../../interfaces/rubik-cube-rotation-implementation';
 import { RubikCube } from '../structure/cube/rubik-cube';
 
 export class RubikCubeBuilder<
@@ -36,7 +35,6 @@ export class RubikCubeBuilder<
     >,
     private readonly cubePiecesBuilder: IRubikCubePiecesBuilder,
     private readonly cubeRotationGroupsBuilder: IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>,
-    private readonly rotationData: IRubikCubeRotationData<TCubeRotationGroups, TCubeRotationTypes>,
     private readonly rotationImplementation: IRubikCubeRotationImplementation<
       TCubeRotationGroups,
       TCubeRotationTypes,
@@ -44,9 +42,11 @@ export class RubikCubeBuilder<
     >,
   ) {}
 
-  public buildCube(): IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces> {
-    const cubeShell = this.cubeShellBuilder.buildShell();
-    const cubePieces = this.cubePiecesBuilder.buildPieces();
+  public async buildCube(): Promise<
+    IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  > {
+    const cubeShell = await this.cubeShellBuilder.buildShell();
+    const cubePieces = await this.cubePiecesBuilder.buildPieces();
     const cubeRotationGroups = this.cubeRotationGroupsBuilder.buildRotationGroups(cubePieces);
 
     return new RubikCube(
@@ -54,7 +54,6 @@ export class RubikCubeBuilder<
       cubeShell,
       cubePieces,
       cubeRotationGroups,
-      Object.keys(this.rotationData.rotationGroupsNewIdxs) as Array<TCubeRotationTypes>,
       this.rotationImplementation,
     );
   }

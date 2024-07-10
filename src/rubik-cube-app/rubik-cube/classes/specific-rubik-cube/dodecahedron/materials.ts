@@ -8,7 +8,7 @@ import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces
 export class RubikDodecahedronMaterials
   implements IRubikCubeMaterials<TDodecahedronFaces, TDodecahedronEdgeFaces>
 {
-  private readonly _cubeFacesMaterials: typeof this.cubeFacesMaterials = {
+  public readonly cubeFacesMaterials: Record<TDodecahedronFaces, THREE.MeshBasicMaterial> = {
     Up: new THREE.MeshBasicMaterial({ color: 0x0062ff }),
     Down: new THREE.MeshBasicMaterial({ color: 0x00fbff }),
     Right: new THREE.MeshBasicMaterial({ color: 0xff00f2 }),
@@ -22,19 +22,10 @@ export class RubikDodecahedronMaterials
     UpRight: new THREE.MeshBasicMaterial({ color: 0x7bff00 }),
     DownLeft: new THREE.MeshBasicMaterial({ color: 0x00ff8c }),
   };
-  private readonly _cubeEdgeFacesMaterials: typeof this.cubeEdgeFacesMaterials = {
-    EdgeFace: new THREE.MeshBasicMaterial({ color: 0x454545 }),
-  };
-  private readonly _cubeInvisibleFacesMaterials: typeof this.cubeInvisibleFacesMaterials =
+  public readonly cubeEdgeFacesMaterials: Record<TDodecahedronEdgeFaces, THREE.MeshBasicMaterial> =
+    {
+      EdgeFace: new THREE.MeshBasicMaterial({ color: 0x454545 }),
+    };
+  public readonly cubeInvisibleFacesMaterials: THREE.MeshBasicMaterial =
     new THREE.MeshBasicMaterial({ color: 0x2b2b2b });
-
-  public get cubeFacesMaterials(): Record<TDodecahedronFaces, THREE.MeshBasicMaterial> {
-    return this._cubeFacesMaterials;
-  }
-  public get cubeEdgeFacesMaterials(): Record<TDodecahedronEdgeFaces, THREE.MeshBasicMaterial> {
-    return this._cubeEdgeFacesMaterials;
-  }
-  public get cubeInvisibleFacesMaterials(): THREE.MeshBasicMaterial {
-    return this._cubeInvisibleFacesMaterials;
-  }
 }

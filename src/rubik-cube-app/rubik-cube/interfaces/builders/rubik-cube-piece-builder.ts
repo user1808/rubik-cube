@@ -11,7 +11,7 @@ export interface IRubikCubePieceBuilder<
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
-  createPiece(
+  buildPiece(
     loadedGLTFPieces: Map<TCubePiecesFilenames, GLTF>,
     pieceData: TPieceData<TCubePiecesFilenamesWithFaces, TCubeFaces, TCubePiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,

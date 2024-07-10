@@ -9,5 +9,5 @@ export interface IRubikCubeBuilder<
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
-  buildCube(): IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
+  buildCube(): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>>;
 }

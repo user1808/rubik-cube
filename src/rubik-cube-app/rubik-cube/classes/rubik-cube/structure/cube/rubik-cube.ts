@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import type { IRubikCubeRotationImplementation } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-rotation-implementation';
 import type { IRubikCube, IRubikCubeShell } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import type { TCubePieces, TRotationGroups } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { IRubikCubeRotationImplementation } from '@/rubik-cube-app/rubik-cube/interfaces';
 
 export class RubikCube<
     TCubeRotationGroups extends string,
@@ -22,7 +22,6 @@ export class RubikCube<
     >,
     public readonly pieces: TCubePieces,
     public readonly rotationGroups: TRotationGroups<TCubeRotationGroups>,
-    public readonly rotationTypes: Array<TCubeRotationTypes>,
     private readonly rotationImplementation: IRubikCubeRotationImplementation<
       TCubeRotationGroups,
       TCubeRotationTypes,
@@ -32,10 +31,6 @@ export class RubikCube<
     super();
     this.add(...pieces.map((piece) => piece.piece));
     this.add(...shell.children);
-  }
-
-  public get rotationPending(): boolean {
-    return this._rotationPending;
   }
 
   public async rotate(

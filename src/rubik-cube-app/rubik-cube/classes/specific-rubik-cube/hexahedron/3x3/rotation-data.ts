@@ -4,7 +4,10 @@ import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types
 import { AbstractRubikHexahedronRotationData } from '../rotation-data';
 
 export class RubikHexahedron3x3RotationData extends AbstractRubikHexahedronRotationData<THexahedron3x3RotationGroups> {
-  private readonly _rotationGroupsNormalVectors: typeof this.rotationGroupsNormalVectors = {
+  public override readonly rotationGroupsNormalVectors: Record<
+    THexahedron3x3RotationGroups,
+    THREE.Vector3
+  > = {
     Front: new THREE.Vector3(0, 0, 1),
     Back: new THREE.Vector3(0, 0, -1),
     Right: new THREE.Vector3(1, 0, 0),
@@ -16,7 +19,10 @@ export class RubikHexahedron3x3RotationData extends AbstractRubikHexahedronRotat
     ZSlice: new THREE.Vector3(0, 0, 1),
   };
 
-  private readonly _rotationGroupsNewIdxs: typeof this.rotationGroupsNewIdxs = {
+  public override readonly rotationGroupsNewIdxs: Record<
+    THexahedronRotationTypes,
+    Record<THexahedron3x3RotationGroups, Array<number>>
+  > = {
     Clockwise: {
       Front: [6, 3, 0, 7, 4, 1, 8, 5, 2],
       Back: [6, 3, 0, 7, 4, 1, 8, 5, 2],
@@ -51,14 +57,4 @@ export class RubikHexahedron3x3RotationData extends AbstractRubikHexahedronRotat
       ZSlice: [7, 6, 5, 4, 3, 2, 1, 0],
     },
   };
-
-  public get rotationGroupsNormalVectors(): Record<THexahedron3x3RotationGroups, THREE.Vector3> {
-    return this._rotationGroupsNormalVectors;
-  }
-  public get rotationGroupsNewIdxs(): Record<
-    THexahedronRotationTypes,
-    Record<THexahedron3x3RotationGroups, Array<number>>
-  > {
-    return this._rotationGroupsNewIdxs;
-  }
 }

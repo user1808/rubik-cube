@@ -19,7 +19,10 @@ export class RubikCubeShellBuilder<
     >,
   ) {}
 
-  public buildShell(): IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces> {
-    return new RubikCubeShell(this.shellPiecesBuilder.buildShellPieces());
+  public async buildShell(): Promise<
+    IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  > {
+    const shellPieces = await this.shellPiecesBuilder.buildShellPieces();
+    return new RubikCubeShell(shellPieces);
   }
 }

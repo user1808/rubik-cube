@@ -4,9 +4,9 @@ export interface IRubikCubeRotationData<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
 > {
-  get rotationTypesData(): Record<TCubeRotationTypes, TRotationTypeData>;
-  get rotationGroupsNormalVectors(): Record<TCubeRotationGroups, THREE.Vector3>;
-  get rotationGroupsNewIdxs(): Record<
+  readonly rotationTypesData: Record<TCubeRotationTypes, TRotationTypeData>;
+  readonly rotationGroupsNormalVectors: Record<TCubeRotationGroups, THREE.Vector3>;
+  readonly rotationGroupsNewIdxs: Record<
     TCubeRotationTypes,
     Record<TCubeRotationGroups, Array<number>>
   >;

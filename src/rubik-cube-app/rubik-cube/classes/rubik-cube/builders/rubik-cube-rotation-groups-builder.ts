@@ -1,19 +1,23 @@
 import type { IRubikCubeRotationGroupsBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders';
-import type { IRubikCubePieceWrapper } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
-import type { TPieceDataIdx, TRotationGroups } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { IRubikCubeRotationGroupsData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { TCubePieces, TRotationGroups } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
-export class RubikCubeRotationGroupsBuidler<TCubeRotationGroups extends string>
-  implements IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>
+export class RubikCubeRotationGroupsBuidler<
+  TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
+  TCubeRotationGroups extends string,
+  TCubePiecesFilenames extends
+    ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
+  TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
+> implements IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>
 {
   constructor(
-    private readonly rotationGroupsPiecesIdxs: Record<TCubeRotationGroups, Array<TPieceDataIdx>>,
+    private readonly rotationGroupsData: IRubikCubeRotationGroupsData<TCubeRotationGroups>,
   ) {}
 
-  public buildRotationGroups(
-    cubePieces: Array<IRubikCubePieceWrapper>,
-  ): TRotationGroups<TCubeRotationGroups> {
-    return Object.entries<(typeof this.rotationGroupsPiecesIdxs)[TCubeRotationGroups]>(
-      this.rotationGroupsPiecesIdxs,
+  public buildRotationGroups(cubePieces: TCubePieces): TRotationGroups<TCubeRotationGroups> {
+    const { rotationGroupsPiecesIdxs } = this.rotationGroupsData;
+    return Object.entries<(typeof rotationGroupsPiecesIdxs)[TCubeRotationGroups]>(
+      rotationGroupsPiecesIdxs,
     ).reduce((rotationGroups, [rotationGroupName, rotationGroupPiecesIdxs]) => {
       rotationGroups[rotationGroupName as TCubeRotationGroups] = rotationGroupPiecesIdxs.map(
         (idx) => cubePieces[idx],

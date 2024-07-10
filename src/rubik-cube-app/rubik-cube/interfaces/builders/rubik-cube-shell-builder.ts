@@ -5,5 +5,5 @@ export interface IRubikCubeShellBuilder<
   TCubeRotationTypes extends string,
   TCubeShellPieces extends string,
 > {
-  buildShell(): IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
+  buildShell(): Promise<IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>>;
 }
