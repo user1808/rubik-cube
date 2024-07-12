@@ -1,9 +1,6 @@
 import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
-import type {
-  IRubikCubeMaterials,
-  IRubikCubeShellData,
-} from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type {
   THexahedronEdgeFaces,
   THexahedronFaces,
@@ -13,23 +10,17 @@ import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
 
 export abstract class AbstractRubikHexahedronFactory<
   THexahedronRotationGroups extends string,
+  THexahedronShellFilename extends string,
+  THexahedronShellPieces extends string,
 > extends AbstractRubikCubeFactory<
   THexahedronPiecesFilenamesWithFaces,
   THexahedronFaces,
   THexahedronEdgeFaces,
   THexahedronRotationGroups,
   THexahedronRotationTypes,
-  'TODO',
-  'TODO'
+  THexahedronShellFilename,
+  THexahedronShellPieces
 > {
-  public override createRubikCubeShellData(): IRubikCubeShellData<
-    THexahedronRotationGroups,
-    THexahedronRotationTypes,
-    'TODO',
-    'TODO'
-  > {
-    throw new Error('Method not implemented.');
-  }
   public override createRubikCubeMaterials(): IRubikCubeMaterials<
     THexahedronFaces,
     THexahedronEdgeFaces

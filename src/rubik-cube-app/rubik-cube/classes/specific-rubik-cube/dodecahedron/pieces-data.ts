@@ -1,11 +1,11 @@
 import * as THREE from 'three';
-import type { TDodecahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
-import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
-import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
   TDodecahedronPiecesFilenames,
   TDodecahedronPiecesFilenamesWithFaces,
-} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
+  TDodecahedronFaces,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron';
+import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import { Radians } from '@/utils/radians';
 
 type TCreateGroupOfPiecesDataParams = {

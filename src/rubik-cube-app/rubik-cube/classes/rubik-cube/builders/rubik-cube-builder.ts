@@ -28,6 +28,7 @@ export class RubikCubeBuilder<
 {
   constructor(
     private readonly scene: THREE.Scene,
+    private readonly camera: THREE.PerspectiveCamera,
     private readonly cubeShellBuilder: IRubikCubeShellBuilder<
       TCubeRotationGroups,
       TCubeRotationTypes,
@@ -51,6 +52,7 @@ export class RubikCubeBuilder<
 
     return new RubikCube(
       this.scene,
+      this.camera,
       cubeShell,
       cubePieces,
       cubeRotationGroups,

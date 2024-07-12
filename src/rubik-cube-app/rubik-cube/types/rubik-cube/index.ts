@@ -6,6 +6,7 @@ import type { TRotationGroups } from './rotation/rotation-groups';
 import type { TRotationTypeData } from './rotation/rotation-type-data';
 import type { TShellPieceData } from './shell/shell-piece-data';
 import type { TShellPieces } from './shell/shell-pieces';
+import type { TShellRotationData } from './shell/shell-rotation-data';
 
 export type {
   TCubePieces,
@@ -16,4 +17,5 @@ export type {
   TRotationTypeData,
   TShellPieceData,
   TShellPieces,
+  TShellRotationData,
 };

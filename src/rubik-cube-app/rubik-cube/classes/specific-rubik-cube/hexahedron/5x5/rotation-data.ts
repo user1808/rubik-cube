@@ -24,7 +24,7 @@ export class RubikHexahedron5x5RotationData extends AbstractRubikHexahedronRotat
     SliceY: new THREE.Vector3(0, 1, 0),
     SliceZ: new THREE.Vector3(0, 0, 1),
   };
-  public override readonly rotationGroupsNewIdxs: Record<
+  public override readonly rotationPiecesChangesPatterns: Record<
     THexahedronRotationTypes,
     Record<THexahedron5x5RotationGroups, Array<number>>
   > = {

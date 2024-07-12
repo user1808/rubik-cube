@@ -1,25 +1,34 @@
 import * as THREE from 'three';
+import type {
+  TDodecahedronRotationGroups,
+  TDodecahedronRotationTypes,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron';
 import type { TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
-import type { TDodecahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-groups';
-import type { TDodecahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-types';
-import { Radians } from '@/utils/radians';
 import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
-
+import { Radians } from '@/utils/radians';
 export class RubikDodecahedronRotationData
   implements IRubikCubeRotationData<TDodecahedronRotationGroups, TDodecahedronRotationTypes>
 {
   public readonly rotationTypesData: Record<TDodecahedronRotationTypes, TRotationTypeData> = {
     Clockwise: {
       angle: -Radians['72deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
     CounterClockwise: {
       angle: Radians['72deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
     DoubleClockwise: {
       angle: -2 * Radians['72deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
     DoubleCounterClockwise: {
       angle: 2 * Radians['72deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
   };
   public readonly rotationGroupsNormalVectors: Record<TDodecahedronRotationGroups, THREE.Vector3> =
@@ -37,7 +46,7 @@ export class RubikDodecahedronRotationData
       UpRight: new THREE.Vector3(0.5257, 0.4472, -0.7236),
       DownLeft: new THREE.Vector3(-0.5257, -0.4472, 0.7236),
     };
-  public readonly rotationGroupsNewIdxs: Record<
+  public readonly rotationPiecesChangesPatterns: Record<
     TDodecahedronRotationTypes,
     Record<TDodecahedronRotationGroups, Array<number>>
   > = {

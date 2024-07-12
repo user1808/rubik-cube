@@ -1,3 +1,4 @@
+import { toRaw } from 'vue';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import type { TRotationTypeData } from '../../types/rubik-cube';
@@ -25,7 +26,7 @@ export class RubikCubeRotationImplementation<
     const rotatingThreeJSGroup = this.createRotatingThreeJSGroup(rubikCube, rotatingGroup);
 
     const rotatedGroupNewIdxs =
-      this.rotationData.rotationGroupsNewIdxs[rotationType][rotationGroup];
+      this.rotationData.rotationPiecesChangesPatterns[rotationType][rotationGroup];
     const rotationTypeData = this.rotationData.rotationTypesData[rotationType];
     const rotationNormal = this.rotationData.rotationGroupsNormalVectors[rotationGroup];
     rotationNormal.normalize();
@@ -48,18 +49,13 @@ export class RubikCubeRotationImplementation<
     rotationTypeData: TRotationTypeData,
     rotationNormal: THREE.Vector3,
   ): Promise<void> {
-    const { angle } = rotationTypeData;
-    const rotationFrequency = 10;
-    const rotationDuration = 0.5;
+    const { angle, durationInSeconds, stepsCount } = rotationTypeData;
 
-    const singleRotationEuler = this.createSingleRotationEuler(
-      rotationNormal,
-      angle / rotationFrequency,
-    );
+    const singleRotationEuler = this.createSingleRotationEuler(rotationNormal, angle / stepsCount);
 
     return new Promise((resolve) => {
       const timeline = gsap.timeline({
-        repeat: rotationFrequency - 1,
+        repeat: stepsCount - 1,
         onRepeat: () => {
           this.updateRotatedGroupPresentation(rotatingGroup, rotatingThreeJSGroup);
         },
@@ -72,7 +68,7 @@ export class RubikCubeRotationImplementation<
       });
 
       timeline.to(rotatingThreeJSGroup.rotation, {
-        duration: rotationDuration / rotationFrequency,
+        duration: durationInSeconds / stepsCount,
         ease: 'none',
         x: singleRotationEuler.x,
         y: singleRotationEuler.y,
@@ -87,7 +83,7 @@ export class RubikCubeRotationImplementation<
   ): THREE.Group {
     const rotatingThreeJSGroup = new THREE.Group();
     rubikCube.scene.add(rotatingThreeJSGroup);
-    rotatingThreeJSGroup.add(...rotatingGroup.map((pieceWrapper) => pieceWrapper.piece));
+    rotatingThreeJSGroup.add(...rotatingGroup.map((pieceWrapper) => toRaw(pieceWrapper.piece)));
     return rotatingThreeJSGroup;
   }
 
@@ -109,14 +105,13 @@ export class RubikCubeRotationImplementation<
     rotatingGroup: Array<IRubikCubePieceWrapper>,
     rotatingThreeJSGroup: THREE.Group,
   ): void {
-    rotatingGroup.map(({ piece }) => {
+    rotatingGroup.forEach(({ piece }) => {
       const position = new THREE.Vector3();
       const quaternion = new THREE.Quaternion();
       piece.getWorldPosition(position);
       piece.position.set(position.x, position.y, position.z);
       rotatingThreeJSGroup.getWorldQuaternion(quaternion);
       piece.applyQuaternion(quaternion);
-      return piece;
     });
   }
 

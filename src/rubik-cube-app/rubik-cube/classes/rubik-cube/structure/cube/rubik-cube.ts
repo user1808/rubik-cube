@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 import type { IRubikCube, IRubikCubeShell } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import type { TCubePieces, TRotationGroups } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
-import type { IRubikCubeRotationImplementation } from '@/rubik-cube-app/rubik-cube/interfaces';
+import type {
+  IRubikCubeRotationImplementation,
+  IRubikCubeRotationRaycaster,
+} from '@/rubik-cube-app/rubik-cube/interfaces';
 
 export class RubikCube<
     TCubeRotationGroups extends string,
@@ -11,10 +14,14 @@ export class RubikCube<
   extends THREE.Group
   implements IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
 {
+  private _rotationRaycaster: Nullable<IRubikCubeRotationRaycaster> = null;
   private _rotationPending = false;
+
+  public isOnScene = false;
 
   constructor(
     public readonly scene: THREE.Scene,
+    public readonly camera: THREE.PerspectiveCamera,
     public readonly shell: IRubikCubeShell<
       TCubeRotationGroups,
       TCubeRotationTypes,
@@ -33,11 +40,15 @@ export class RubikCube<
     this.add(...shell.children);
   }
 
+  public setRotationRaycaster(raycaster: IRubikCubeRotationRaycaster) {
+    this._rotationRaycaster = raycaster;
+  }
+
   public async rotate(
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
   ): Promise<void> {
-    if (this._rotationPending) return;
+    if (this._rotationPending || !this.isOnScene) return;
     this._rotationPending = true;
 
     await this.rotationImplementation.rotateRubikCubeGroup(this, rotationGroup, rotationType);
@@ -47,6 +58,8 @@ export class RubikCube<
 
   public addToScene(): void {
     this.scene.add(this);
+    this._rotationRaycaster?.start();
+    this.isOnScene = true;
   }
 
   public removeFromScene(): void {
@@ -58,5 +71,7 @@ export class RubikCube<
       }
     });
     this.scene.remove(this);
+    this._rotationRaycaster?.stop();
+    this.isOnScene = false;
   }
 }

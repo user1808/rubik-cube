@@ -1,6 +1,6 @@
 import type { IRubikCubeRotationGroupsData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type { TPieceIdx } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
-import type { TDodecahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-groups';
+import type { TDodecahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron';
 
 export class RubikDodecahedronRotationGroupsData
   implements IRubikCubeRotationGroupsData<TDodecahedronRotationGroups>

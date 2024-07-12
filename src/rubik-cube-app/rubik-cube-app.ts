@@ -1,16 +1,11 @@
 import * as THREE from 'three';
-import { toRaw, isProxy } from 'vue';
-import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { toRaw } from 'vue';
 import type { IRubikCube } from './rubik-cube/interfaces/structure';
 import type { IRubikCubeFactory } from './rubik-cube/interfaces';
 import { MouseTouchTracker, ScreenSize, ScreenSizeTracker } from './common';
-import {
-  CustomPersepctiveCamera,
-  CustomRenderer,
-  CustomOrbitControls,
-  CustomDebugGUI,
-  CustomRaycaster,
-} from './common/custom';
+import { CustomPersepctiveCamera, CustomRenderer, CustomOrbitControls } from './common/custom';
+import { DebugModeCoordinator } from './rubik-cube/classes/debug/debug-mode-coordinator';
+import { DebugAxes, DebugStats, DebugCubeUI } from './rubik-cube/classes/debug/subscribers';
 
 export class RubikCubeApp {
   private readonly scene: THREE.Scene = new THREE.Scene();
@@ -21,40 +16,33 @@ export class RubikCubeApp {
 
   private readonly camera: CustomPersepctiveCamera = new CustomPersepctiveCamera(this.screenSize);
   private readonly renderer: CustomRenderer;
-  private readonly controls: CustomOrbitControls;
-  private readonly raycaster: CustomRaycaster<string, string, string>;
-
-  private readonly stats: Stats = new Stats();
-  private debugGUI: CustomDebugGUI = new CustomDebugGUI();
+  private readonly orbitControls: CustomOrbitControls;
 
   private cubeFactory: Nullable<IRubikCubeFactory<Record<string, string>>> = null;
   private cube: Nullable<IRubikCube> = null;
 
+  private readonly debugModeCoordinator = new DebugModeCoordinator({
+    DebugStats: new DebugStats(),
+    DebugAxes: new DebugAxes(this.scene),
+    DebugCubeUI: new DebugCubeUI(),
+  });
+
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new CustomRenderer(canvas, this.screenSize);
     this.screenSizeTracker.startTrack(this.screenSize, this.camera, this.renderer);
-    this.controls = new CustomOrbitControls(this.camera, canvas);
-    this.raycaster = new CustomRaycaster(
-      this.mouseTouchTracker,
-      this.camera,
-      this.controls,
-      this.scene,
-    );
-
-    this.stats.showPanel(0);
-    document.body.appendChild(this.stats.dom);
+    this.orbitControls = new CustomOrbitControls(this.camera, canvas);
   }
 
   public async start(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
-    this.changeCube(factory);
-    this.setUpCamera();
-    this.setUpTick();
+    await this.changeCube(factory);
+    this.prepareCamera();
+    this.prepareTickMethod();
   }
 
   public async changeCube(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
     this.cubeFactory = factory;
     this.removeCube();
-    await this.setUpCube();
+    await this.prepareCube();
   }
 
   private removeCube() {
@@ -62,51 +50,32 @@ export class RubikCubeApp {
     this.cube.removeFromScene();
   }
 
-  private async setUpCube(): Promise<void> {
+  private async prepareCube(): Promise<void> {
     if (!this.cubeFactory) return;
-    this.cube = await this.cubeFactory.createRubikCube(this.scene);
-    this.raycaster.registerCube(this.cube);
+    this.cube = await this.cubeFactory.createRubikCube(
+      this.scene,
+      this.camera,
+      this.mouseTouchTracker,
+      this.orbitControls,
+    );
     this.cube.addToScene();
-    this.setUpDebugUI();
+    this.debugModeCoordinator.getSubscriber('DebugCubeUI').setCube(this.cube, this.cubeFactory);
   }
 
-  private setUpCamera(): void {
+  private prepareCamera(): void {
     this.scene.add(this.camera);
   }
 
-  private setUpTick(): void {
+  private prepareTickMethod(): void {
     const tick = () => {
-      this.stats.begin();
-
-      this.controls.update();
-      this.renderer.render(isProxy(this.scene) ? toRaw(this.scene) : this.scene, this.camera);
-      this.stats.end();
+      this.debugModeCoordinator.getSubscriber('DebugStats').start();
+      this.orbitControls.update();
+      this.renderer.render(toRaw(this.scene), toRaw(this.camera));
+      this.debugModeCoordinator.getSubscriber('DebugStats').end();
 
       window.requestAnimationFrame(tick);
     };
 
     tick();
-  }
-
-  private setUpDebugUI(): void {
-    if (!this.cube || !this.cubeFactory) return;
-
-    const cubeRotationGroups = Object.keys(this.cube.rotationGroups);
-    const cubeRotationTypes = Object.keys(
-      this.cubeFactory.createRubikCubeRotationData().rotationTypesData,
-    );
-    const debugParams = {
-      face: cubeRotationGroups[0],
-      rotationType: cubeRotationTypes[0],
-    };
-    const debugFunctions = {
-      rotation: () => {
-        toRaw(this.cube)?.rotate(debugParams.face, debugParams.rotationType);
-      },
-    };
-    this.debugGUI = new CustomDebugGUI();
-    this.debugGUI.add(debugParams, 'face', cubeRotationGroups).name('Face');
-    this.debugGUI.add(debugParams, 'rotationType', cubeRotationTypes).name('Rotation Type');
-    this.debugGUI.add(debugFunctions, 'rotation').name('Rotate Cube');
   }
 }

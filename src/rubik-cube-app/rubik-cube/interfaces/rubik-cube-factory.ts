@@ -1,8 +1,11 @@
 import * as THREE from 'three';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import type { MouseTouchTracker } from '@/rubik-cube-app/common';
 import type { IRubikCube } from './structure';
 import type {
   IRubikCubeGLTFLoader,
   IRubikCubeRotationImplementation,
+  IRubikCubeRotationRaycaster,
 } from '@/rubik-cube-app/rubik-cube/interfaces';
 import type {
   IRubikCubeMaterials,
@@ -75,8 +78,14 @@ export interface IRubikCubeFactory<
     TCubeShellPieces
   >;
 
+  createRubikCubeRotationRaycaster(
+    mouseTouchTracker: MouseTouchTracker,
+    orbitControls: OrbitControls,
+  ): IRubikCubeRotationRaycaster;
+
   createRubikCubeBuilder(
     scene: THREE.Scene,
+    camera: THREE.PerspectiveCamera,
   ): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
     TCubeRotationGroups,
@@ -86,5 +95,8 @@ export interface IRubikCubeFactory<
 
   createRubikCube(
     scene: THREE.Scene,
+    camera: THREE.PerspectiveCamera,
+    mouseTouchTracker: MouseTouchTracker,
+    orbitControls: OrbitControls,
   ): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>>;
 }
