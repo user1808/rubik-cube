@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
+import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces';
 import { RubikCubeApp } from '@/rubik-cube-app/rubik-cube-app';
 
 const props = defineProps<{

@@ -1,31 +1,21 @@
 import * as THREE from 'three';
+import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
+import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
   THexahedronPiecesFilenames,
   THexahedronPiecesFilenamesWithFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
-import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
-import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
-import type { TPieceData, TPieceDataIdx } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export type THexahedronSize = number;
 export type THexahedronPositionValues = Record<'x' | 'y' | 'z', Array<number>>;
 
-export abstract class AbstractRubikHexahedronPiecesData<THexahedronRotationGroups extends string>
-  implements
-    IRubikCubePiecesData<
-      THexahedronPiecesFilenamesWithFaces,
-      THexahedronFaces,
-      THexahedronRotationGroups
-    >
+export abstract class AbstractRubikHexahedronPiecesData
+  implements IRubikCubePiecesData<THexahedronPiecesFilenamesWithFaces, THexahedronFaces>
 {
-  public abstract readonly rotationGroupsPiecesIdxs: Record<
-    THexahedronRotationGroups,
-    Array<TPieceDataIdx>
-  >;
-
   public readonly piecesFilenames: Array<THexahedronPiecesFilenames> = ['RubikCubePiece.glb'];
 
-  public readonly piecesData: Array<
+  public readonly piecesInitData: Array<
     TPieceData<THexahedronPiecesFilenamesWithFaces, THexahedronFaces>
   > = this.createCubePiecesData();
 

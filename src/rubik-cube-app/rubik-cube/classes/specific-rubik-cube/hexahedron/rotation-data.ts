@@ -6,7 +6,16 @@ import { Radians } from '@/utils/radians';
 export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGroups extends string>
   implements IRubikCubeRotationData<THexahedronRotationGroups, THexahedronRotationTypes>
 {
-  private readonly _rotationTypesData: typeof this.rotationTypesData = {
+  public abstract readonly rotationGroupsNormalVectors: Record<
+    THexahedronRotationGroups,
+    THREE.Vector3
+  >;
+  public abstract readonly rotationGroupsNewIdxs: Record<
+    THexahedronRotationTypes,
+    Record<THexahedronRotationGroups, Array<number>>
+  >;
+
+  public readonly rotationTypesData: Record<THexahedronRotationTypes, TRotationTypeData> = {
     Clockwise: {
       angle: -Radians['90deg'],
     },
@@ -17,15 +26,4 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
       angle: Radians['180deg'],
     },
   };
-  public get rotationTypesData(): Record<THexahedronRotationTypes, TRotationTypeData> {
-    return this._rotationTypesData;
-  }
-  public abstract get rotationGroupsNormalVectors(): Record<
-    THexahedronRotationGroups,
-    THREE.Vector3
-  >;
-  public abstract get rotationGroupsNewIdxs(): Record<
-    THexahedronRotationTypes,
-    Record<THexahedronRotationGroups, Array<number>>
-  >;
 }

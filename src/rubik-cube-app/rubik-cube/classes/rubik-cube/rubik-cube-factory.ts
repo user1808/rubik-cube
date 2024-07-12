@@ -1,14 +1,16 @@
 import * as THREE from 'three';
-import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
-import type { IRubikCubeGLTFLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-gltf-loader';
-import type { IRubikCubeRotationImplementation } from '../../interfaces/rubik-cube-rotation-implementation';
 import type { IRubikCubeShellData } from '../../interfaces/data/rubik-cube-shell-data';
 import type { IRubikCube } from '../../interfaces/structure';
+import type {
+  IRubikCubeFactory,
+  IRubikCubeGLTFLoader,
+  IRubikCubeRotationImplementation,
+} from '../../interfaces';
 import type {
   IRubikCubeMaterials,
   IRubikCubePiecesData,
   IRubikCubeRotationData,
+  IRubikCubeRotationGroupsData,
 } from '../../interfaces/data';
 import type {
   IRubikCubeBuilder,
@@ -53,15 +55,17 @@ export abstract class AbstractRubikCubeFactory<
 {
   private cube: Nullable<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>> =
     null;
+  private gltfLoader: Nullable<IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>> =
+    null;
 
   public abstract get commonName(): string;
 
   public abstract createRubikCubePiecesData(): IRubikCubePiecesData<
     TCubePiecesFilenamesWithFaces,
     TCubeFaces,
-    TCubeRotationGroups,
     TCubePiecesFilenames
   >;
+  public abstract createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TCubeRotationGroups>;
   public abstract createRubikCubeRotationData(): IRubikCubeRotationData<
     TCubeRotationGroups,
     TCubeRotationTypes
@@ -74,25 +78,39 @@ export abstract class AbstractRubikCubeFactory<
   >;
   public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
 
+  public createRubikCubeShellMaterial(): THREE.MeshBasicMaterial {
+    return new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+  }
+
   public createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<
     TCubeShellFilename,
     TCubePiecesFilenames
   > {
-    return new RubikCubeGLTFLoader();
+    if (this.gltfLoader) return this.gltfLoader;
+
+    this.gltfLoader = new RubikCubeGLTFLoader();
+    return this.gltfLoader;
   }
 
-  public createRubikCubeShellPiecesBuilder(
-    loadedGLTFCubeShell: GLTF,
-  ): IRubikCubeShellPiecesBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces> {
+  public createRubikCubeShellPiecesBuilder(): IRubikCubeShellPiecesBuilder<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  > {
+    const gltfLoader = this.createRubikCubeGLTFLoader();
+    const material = this.createRubikCubeShellMaterial();
     const shellData = this.createRubikCubeShellData();
-    return new RubikCubeShellPiecesBuilder(loadedGLTFCubeShell, shellData.piecesData);
+    return new RubikCubeShellPiecesBuilder(gltfLoader, material, shellData);
   }
-  public createRubikCubeShellBuilder(
-    loadedGLTFCubeShell: GLTF,
-  ): IRubikCubeShellBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces> {
-    const shellPiecesBuilder = this.createRubikCubeShellPiecesBuilder(loadedGLTFCubeShell);
+  public createRubikCubeShellBuilder(): IRubikCubeShellBuilder<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  > {
+    const shellPiecesBuilder = this.createRubikCubeShellPiecesBuilder();
     return new RubikCubeShellBuilder(shellPiecesBuilder);
   }
+
   public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
     TCubePiecesFilenamesWithFaces,
     TCubeFaces,
@@ -100,41 +118,17 @@ export abstract class AbstractRubikCubeFactory<
   > {
     return new RubikCubePieceBuilder();
   }
-  public createRubikCubePiecesBuilder(
-    loadedGLTFPieces: Map<TCubePiecesFilenames, GLTF>,
-  ): IRubikCubePiecesBuilder {
+  public createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder {
+    const gltfLoader = this.createRubikCubeGLTFLoader();
     const pieceBuilder = this.createRubikCubePieceBuilder();
     const materials = this.createRubikCubeMaterials();
-    const { piecesData } = this.createRubikCubePiecesData();
-    return new RubikCubePiecesBuilder(pieceBuilder, loadedGLTFPieces, materials, piecesData);
+    const piecesData = this.createRubikCubePiecesData();
+    return new RubikCubePiecesBuilder(gltfLoader, materials, pieceBuilder, piecesData);
   }
+
   public createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<TCubeRotationGroups> {
-    const { rotationGroupsPiecesIdxs } = this.createRubikCubePiecesData();
-    return new RubikCubeRotationGroupsBuidler(rotationGroupsPiecesIdxs);
-  }
-  public createRubikCubeBuilder(
-    scene: THREE.Scene,
-    loadedGLTFCubeShell: GLTF,
-    loadedGLTFPieces: Map<TCubePiecesFilenames, GLTF>,
-  ): IRubikCubeBuilder<
-    TCubePiecesFilenamesWithFaces,
-    TCubeRotationGroups,
-    TCubeRotationTypes,
-    TCubeShellPieces
-  > {
-    const shellBuilder = this.createRubikCubeShellBuilder(loadedGLTFCubeShell);
-    const piecesBuilder = this.createRubikCubePiecesBuilder(loadedGLTFPieces);
-    const rotationGroupsBuilder = this.createRubikCubeRotationGroupsBuilder();
-    const rotationData = this.createRubikCubeRotationData();
-    const rotationImplementation = this.createRubikCubeRotationImplementation();
-    return new RubikCubeBuilder(
-      scene,
-      shellBuilder,
-      piecesBuilder,
-      rotationGroupsBuilder,
-      rotationData,
-      rotationImplementation,
-    );
+    const rotationGroupsData = this.createRubikCubeRotationGroupsData();
+    return new RubikCubeRotationGroupsBuidler(rotationGroupsData);
   }
 
   public createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
@@ -146,20 +140,36 @@ export abstract class AbstractRubikCubeFactory<
     return new RubikCubeRotationImplementation(rotationData);
   }
 
+  public createRubikCubeBuilder(
+    scene: THREE.Scene,
+  ): IRubikCubeBuilder<
+    TCubePiecesFilenamesWithFaces,
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  > {
+    const shellBuilder = this.createRubikCubeShellBuilder();
+    const piecesBuilder = this.createRubikCubePiecesBuilder();
+    const rotationGroupsBuilder = this.createRubikCubeRotationGroupsBuilder();
+
+    const rotationImplementation = this.createRubikCubeRotationImplementation();
+    return new RubikCubeBuilder(
+      scene,
+      shellBuilder,
+      piecesBuilder,
+      rotationGroupsBuilder,
+      rotationImplementation,
+    );
+  }
+
   public async createRubikCube(
     scene: THREE.Scene,
   ): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>> {
     if (this.cube) return this.cube;
 
-    const shellData = this.createRubikCubeShellData();
-    const piecesData = this.createRubikCubePiecesData();
+    const cubeBuilder = this.createRubikCubeBuilder(scene);
 
-    const gltfLoader = this.createRubikCubeGLTFLoader();
-    const loadedGLTFCubeShell = await gltfLoader.loadGLTFCubeShell(shellData.filename);
-    const loadedGLTFPieces = await gltfLoader.loadGLTFCubePieces(piecesData.piecesFilenames);
-    const cubeBuilder = this.createRubikCubeBuilder(scene, loadedGLTFCubeShell, loadedGLTFPieces);
-
-    this.cube = cubeBuilder.buildCube();
+    this.cube = await cubeBuilder.buildCube();
     return this.cube;
   }
 }

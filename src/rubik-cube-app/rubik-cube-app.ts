@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { toRaw, isProxy } from 'vue';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import type { IRubikCube } from './rubik-cube/interfaces/structure';
+import type { IRubikCubeFactory } from './rubik-cube/interfaces';
 import { MouseTouchTracker, ScreenSize, ScreenSizeTracker } from './common';
 import {
   CustomPersepctiveCamera,
@@ -10,7 +11,6 @@ import {
   CustomDebugGUI,
   CustomRaycaster,
 } from './common/custom';
-import type { IRubikCubeFactory } from './rubik-cube/interfaces/rubik-cube-factory';
 
 export class RubikCubeApp {
   private readonly scene: THREE.Scene = new THREE.Scene();
@@ -27,6 +27,7 @@ export class RubikCubeApp {
   private readonly stats: Stats = new Stats();
   private debugGUI: CustomDebugGUI = new CustomDebugGUI();
 
+  private cubeFactory: Nullable<IRubikCubeFactory<Record<string, string>>> = null;
   private cube: Nullable<IRubikCube> = null;
 
   constructor(canvas: HTMLCanvasElement) {
@@ -45,14 +46,15 @@ export class RubikCubeApp {
   }
 
   public async start(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
-    await this.setUpCube(factory);
+    this.changeCube(factory);
     this.setUpCamera();
     this.setUpTick();
   }
 
   public async changeCube(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
+    this.cubeFactory = factory;
     this.removeCube();
-    await this.setUpCube(factory);
+    await this.setUpCube();
   }
 
   private removeCube() {
@@ -60,8 +62,9 @@ export class RubikCubeApp {
     this.cube.removeFromScene();
   }
 
-  private async setUpCube(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
-    this.cube = await factory.createRubikCube(this.scene);
+  private async setUpCube(): Promise<void> {
+    if (!this.cubeFactory) return;
+    this.cube = await this.cubeFactory.createRubikCube(this.scene);
     this.raycaster.registerCube(this.cube);
     this.cube.addToScene();
     this.setUpDebugUI();
@@ -86,10 +89,12 @@ export class RubikCubeApp {
   }
 
   private setUpDebugUI(): void {
-    if (!this.cube) return;
+    if (!this.cube || !this.cubeFactory) return;
 
     const cubeRotationGroups = Object.keys(this.cube.rotationGroups);
-    const cubeRotationTypes = this.cube.rotationTypes;
+    const cubeRotationTypes = Object.keys(
+      this.cubeFactory.createRubikCubeRotationData().rotationTypesData,
+    );
     const debugParams = {
       face: cubeRotationGroups[0],
       rotationType: cubeRotationTypes[0],

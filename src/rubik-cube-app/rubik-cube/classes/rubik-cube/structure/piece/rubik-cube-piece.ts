@@ -1,25 +1,18 @@
 import * as THREE from 'three';
 import type { RubikCubePieceFace } from './rubik-cube-piece-face';
 import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
+import type { TPieceId } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export class RubikCubePiece extends THREE.Group implements IRubikCubePiece {
   constructor(
-    private readonly _pieceId: number,
-    private readonly _pieceFaces: Array<RubikCubePieceFace>,
+    public readonly pieceId: TPieceId,
+    public readonly pieceFaces: Array<RubikCubePieceFace>,
   ) {
     super();
-    this.add(..._pieceFaces);
-  }
-
-  public get pieceId(): number {
-    return this._pieceId;
-  }
-
-  public get pieceFaces(): Array<RubikCubePieceFace> {
-    return this._pieceFaces;
+    this.add(...pieceFaces);
   }
 
   public dispose() {
-    this._pieceFaces.forEach((face) => face.dispose());
+    this.pieceFaces.forEach((face) => face.dispose());
   }
 }

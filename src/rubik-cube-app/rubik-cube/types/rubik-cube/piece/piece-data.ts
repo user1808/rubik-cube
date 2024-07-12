@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { TPieceDataId } from './piece-data-id';
+import type { TPieceId } from './piece-id';
 
 export type TPieceData<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
@@ -9,7 +9,7 @@ export type TPieceData<
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > = {
   [TPieceFilename in TCubePiecesFilenames]: {
-    id: TPieceDataId;
+    id: TPieceId;
     position: THREE.Vector3;
     rotation: THREE.Euler;
     filename: TPieceFilename;

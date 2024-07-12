@@ -1,20 +1,22 @@
-import { RubikDodecahedronPiecesData } from './pieces-data';
-import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
+import type { TDodecahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
+import type { TDodecahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-groups';
+import type { TDodecahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-types';
 import type {
   TDodecahedronEdgeFaces,
   TDodecahedronFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
-import { RubikDodecahedronMaterials } from './materials';
-import type { TDodecahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
-import type { TDodecahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-groups';
-import type { TDodecahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-types';
-import { RubikDodecahedronRotationData } from './rotation-data';
 import type {
   IRubikCubeShellData,
   IRubikCubeRotationData,
   IRubikCubePiecesData,
   IRubikCubeMaterials,
+  IRubikCubeRotationGroupsData,
 } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import { RubikDodecahedronRotationData } from './rotation-data';
+import { RubikDodecahedronPiecesData } from './pieces-data';
+import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
+import { RubikDodecahedronMaterials } from './materials';
+import { RubikDodecahedronRotationGroupsData } from './rotation-groups-data';
 
 export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronPiecesFilenamesWithFaces,
@@ -28,6 +30,21 @@ export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   public get commonName(): string {
     return 'Megaminx';
   }
+  public override createRubikCubePiecesData(): IRubikCubePiecesData<
+    TDodecahedronPiecesFilenamesWithFaces,
+    TDodecahedronFaces
+  > {
+    return new RubikDodecahedronPiecesData();
+  }
+  public override createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TDodecahedronRotationGroups> {
+    return new RubikDodecahedronRotationGroupsData();
+  }
+  public override createRubikCubeRotationData(): IRubikCubeRotationData<
+    TDodecahedronRotationGroups,
+    TDodecahedronRotationTypes
+  > {
+    return new RubikDodecahedronRotationData();
+  }
   public override createRubikCubeShellData(): IRubikCubeShellData<
     TDodecahedronRotationGroups,
     TDodecahedronRotationTypes,
@@ -36,20 +53,7 @@ export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   > {
     throw new Error('Method not implemented.');
   }
-  public createRubikCubePiecesData(): IRubikCubePiecesData<
-    TDodecahedronPiecesFilenamesWithFaces,
-    TDodecahedronFaces,
-    TDodecahedronRotationGroups
-  > {
-    return new RubikDodecahedronPiecesData();
-  }
-  public createRubikCubeRotationData(): IRubikCubeRotationData<
-    TDodecahedronRotationGroups,
-    TDodecahedronRotationTypes
-  > {
-    return new RubikDodecahedronRotationData();
-  }
-  public createRubikCubeMaterials(): IRubikCubeMaterials<
+  public override createRubikCubeMaterials(): IRubikCubeMaterials<
     TDodecahedronFaces,
     TDodecahedronEdgeFaces
   > {

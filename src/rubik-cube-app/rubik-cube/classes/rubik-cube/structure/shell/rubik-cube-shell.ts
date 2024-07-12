@@ -13,7 +13,7 @@ export class RubikCubeShell<
   implements IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
 {
   constructor(
-    private readonly _pieces: {
+    public readonly pieces: {
       [TCubeShellPiece in TCubeShellPieces]: IRubikCubeShellPiece<
         TCubeRotationGroups,
         TCubeRotationTypes,
@@ -25,17 +25,7 @@ export class RubikCubeShell<
     this.add(
       ...Object.values<
         IRubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
-      >(_pieces),
+      >(pieces),
     );
-  }
-
-  public get pieces(): {
-    [TCubeShellPiece in TCubeShellPieces]: IRubikCubeShellPiece<
-      TCubeRotationGroups,
-      TCubeRotationTypes,
-      TCubeShellPiece
-    >;
-  } {
-    return this._pieces;
   }
 }

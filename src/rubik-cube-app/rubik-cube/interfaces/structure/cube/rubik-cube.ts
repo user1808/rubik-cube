@@ -12,7 +12,6 @@ export interface IRubikCube<
   readonly shell: IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
   readonly pieces: TCubePieces;
   readonly rotationGroups: TRotationGroups<TCubeRotationGroups>;
-  readonly rotationTypes: Array<TCubeRotationTypes>;
 
   rotate(rotationGroup: TCubeRotationGroups, rotationType: TCubeRotationTypes): Promise<void>;
 

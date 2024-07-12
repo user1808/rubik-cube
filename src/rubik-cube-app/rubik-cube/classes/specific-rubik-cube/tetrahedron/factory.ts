@@ -7,6 +7,7 @@ import type {
   IRubikCubeMaterials,
   IRubikCubePiecesData,
   IRubikCubeRotationData,
+  IRubikCubeRotationGroupsData,
   IRubikCubeShellData,
 } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type {
@@ -18,6 +19,7 @@ import type {
   TTetrahedronShellPieces,
   TTetrahedronShellFilename,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
+import { RubikTetrahedronRotationGroupsData } from './rotation-groups-data';
 
 export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronPiecesFilenamesWithFaces,
@@ -28,31 +30,36 @@ export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronShellFilename,
   TTetrahedronShellPieces
 > {
-  public get commonName(): string {
+  public override get commonName(): string {
     return 'Pyraminx';
   }
-  public createRubikCubePiecesData(): IRubikCubePiecesData<
+  public override createRubikCubePiecesData(): IRubikCubePiecesData<
     TTetrahedronPiecesFilenamesWithFaces,
-    TTetrahedronFaces,
-    TTetrahedronRotationGroups
+    TTetrahedronFaces
   > {
     return new RubikTetrahedronPiecesData();
   }
-  public createRubikCubeRotationData(): IRubikCubeRotationData<
+  public override createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TTetrahedronRotationGroups> {
+    return new RubikTetrahedronRotationGroupsData();
+  }
+  public override createRubikCubeRotationData(): IRubikCubeRotationData<
     TTetrahedronRotationGroups,
     TTetrahedronRotationTypes
   > {
     return new RubikTetrahedronRotationData();
   }
-  public createRubikCubeMaterials(): IRubikCubeMaterials<TTetrahedronFaces, TTetrahedronEdgeFaces> {
-    return new RubikTetrahedronMaterials();
-  }
-  public createRubikCubeShellData(): IRubikCubeShellData<
+  public override createRubikCubeShellData(): IRubikCubeShellData<
     TTetrahedronRotationGroups,
     TTetrahedronRotationTypes,
     TTetrahedronShellFilename,
     TTetrahedronShellPieces
   > {
     return new RubikTetrahedronShellData();
+  }
+  public override createRubikCubeMaterials(): IRubikCubeMaterials<
+    TTetrahedronFaces,
+    TTetrahedronEdgeFaces
+  > {
+    return new RubikTetrahedronMaterials();
   }
 }

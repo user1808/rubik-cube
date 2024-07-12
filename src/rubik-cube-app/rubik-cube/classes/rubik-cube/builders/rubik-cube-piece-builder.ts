@@ -20,7 +20,7 @@ export class RubikCubePieceBuilder<
 > implements
     IRubikCubePieceBuilder<TPiecesFilenamesWithFaces, TCubeFaces, TCubeEdgeFaces, TPiecesFilenames>
 {
-  public createPiece(
+  public buildPiece(
     loadedGLTFPieces: Map<TPiecesFilenames, GLTF>,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,

@@ -1,10 +1,7 @@
 import * as THREE from 'three';
 import { Radians } from '@/utils/radians';
 import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
-import type {
-  TPieceDataIdx,
-  TRotationTypeData,
-} from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { TPieceIdx, TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
@@ -74,7 +71,7 @@ export class RubikTetrahedronRotationData
   }
   public get rotationGroupsNewIdxs(): Record<
     TTetrahedronRotationTypes,
-    Record<TTetrahedronRotationGroups, Array<TPieceDataIdx>>
+    Record<TTetrahedronRotationGroups, Array<TPieceIdx>>
   > {
     return this._rotationPiecesChangesPatterns;
   }

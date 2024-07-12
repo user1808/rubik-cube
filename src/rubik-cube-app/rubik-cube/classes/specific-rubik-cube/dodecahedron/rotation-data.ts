@@ -8,7 +8,7 @@ import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfa
 export class RubikDodecahedronRotationData
   implements IRubikCubeRotationData<TDodecahedronRotationGroups, TDodecahedronRotationTypes>
 {
-  private readonly _rotationTypesData: typeof this.rotationTypesData = {
+  public readonly rotationTypesData: Record<TDodecahedronRotationTypes, TRotationTypeData> = {
     Clockwise: {
       angle: -Radians['72deg'],
     },
@@ -22,21 +22,25 @@ export class RubikDodecahedronRotationData
       angle: 2 * Radians['72deg'],
     },
   };
-  private readonly _rotationGroupsNormalVectors: typeof this.rotationGroupsNormalVectors = {
-    Up: new THREE.Vector3(0, 1, 0),
-    Down: new THREE.Vector3(0, -1, 0),
-    Right: new THREE.Vector3(0.85065, 0.4472, 0.2764),
-    BackLeft: new THREE.Vector3(-0.85065, -0.4472, -0.2764),
-    Front: new THREE.Vector3(0, 0.4472, 0.8944),
-    Back: new THREE.Vector3(0, -0.4472, -0.8944),
-    Left: new THREE.Vector3(-0.85065, 0.4472, 0.2764),
-    BackRight: new THREE.Vector3(0.85065, -0.4472, -0.2764),
-    UpLeft: new THREE.Vector3(-0.5257, 0.4472, -0.7236),
-    DownRight: new THREE.Vector3(0.5257, -0.4472, 0.7236),
-    UpRight: new THREE.Vector3(0.5257, 0.4472, -0.7236),
-    DownLeft: new THREE.Vector3(-0.5257, -0.4472, 0.7236),
-  };
-  private readonly _rotationGroupsNewIdxs: typeof this.rotationGroupsNewIdxs = {
+  public readonly rotationGroupsNormalVectors: Record<TDodecahedronRotationGroups, THREE.Vector3> =
+    {
+      Up: new THREE.Vector3(0, 1, 0),
+      Down: new THREE.Vector3(0, -1, 0),
+      Right: new THREE.Vector3(0.85065, 0.4472, 0.2764),
+      BackLeft: new THREE.Vector3(-0.85065, -0.4472, -0.2764),
+      Front: new THREE.Vector3(0, 0.4472, 0.8944),
+      Back: new THREE.Vector3(0, -0.4472, -0.8944),
+      Left: new THREE.Vector3(-0.85065, 0.4472, 0.2764),
+      BackRight: new THREE.Vector3(0.85065, -0.4472, -0.2764),
+      UpLeft: new THREE.Vector3(-0.5257, 0.4472, -0.7236),
+      DownRight: new THREE.Vector3(0.5257, -0.4472, 0.7236),
+      UpRight: new THREE.Vector3(0.5257, 0.4472, -0.7236),
+      DownLeft: new THREE.Vector3(-0.5257, -0.4472, 0.7236),
+    };
+  public readonly rotationGroupsNewIdxs: Record<
+    TDodecahedronRotationTypes,
+    Record<TDodecahedronRotationGroups, Array<number>>
+  > = {
     Clockwise: {
       Up: [2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 10],
       Down: [2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 10],
@@ -94,17 +98,4 @@ export class RubikDodecahedronRotationData
       DownLeft: [6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 10],
     },
   };
-
-  public get rotationTypesData(): Record<TDodecahedronRotationTypes, TRotationTypeData> {
-    return this._rotationTypesData;
-  }
-  public get rotationGroupsNormalVectors(): Record<TDodecahedronRotationGroups, THREE.Vector3> {
-    return this._rotationGroupsNormalVectors;
-  }
-  public get rotationGroupsNewIdxs(): Record<
-    TDodecahedronRotationTypes,
-    Record<TDodecahedronRotationGroups, Array<number>>
-  > {
-    return this._rotationGroupsNewIdxs;
-  }
 }

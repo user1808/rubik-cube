@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import type { IRubikCubeRotationImplementation } from '../../interfaces/rubik-cube-rotation-implementation';
 import type { TRotationTypeData } from '../../types/rubik-cube';
 import type { IRubikCube, IRubikCubePieceWrapper } from '../../interfaces/structure';
 import type { IRubikCubeRotationData } from '../../interfaces/data';
+import type { IRubikCubeRotationImplementation } from '../../interfaces';
 
 export class RubikCubeRotationImplementation<
   TCubeRotationGroups extends string,
