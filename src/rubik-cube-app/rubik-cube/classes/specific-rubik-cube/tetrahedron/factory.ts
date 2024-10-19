@@ -3,7 +3,10 @@ import { RubikTetrahedronPiecesData } from './pieces-data';
 import { RubikTetrahedronMaterials } from './materials';
 import { RubikTetrahedronRotationData } from './rotation-data';
 import { RubikTetrahedronShellData } from './shell-data';
+import { RubikTetrahedronRotationGroupsData } from './rotation-groups-data';
+import { RubikTetrahedronFacesData } from './faces-data';
 import type {
+  IRubikCubeFacesData,
   IRubikCubeMaterials,
   IRubikCubePiecesData,
   IRubikCubeRotationData,
@@ -19,7 +22,6 @@ import type {
   TTetrahedronShellPieces,
   TTetrahedronShellFilename,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
-import { RubikTetrahedronRotationGroupsData } from './rotation-groups-data';
 
 export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronPiecesFilenamesWithFaces,
@@ -38,6 +40,9 @@ export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
     TTetrahedronFaces
   > {
     return new RubikTetrahedronPiecesData();
+  }
+  public override createRubikCubeFacesData(): IRubikCubeFacesData<TTetrahedronFaces> {
+    return new RubikTetrahedronFacesData();
   }
   public override createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TTetrahedronRotationGroups> {
     return new RubikTetrahedronRotationGroupsData();

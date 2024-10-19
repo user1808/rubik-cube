@@ -15,6 +15,13 @@ export class RubikTetrahedronPiecesData
     'RubikOctahedronPiece.glb',
   ];
 
+  public readonly facesNormalVectors: Record<TTetrahedronFaces, THREE.Vector3> = {
+    Front: new THREE.Vector3(0.471, 0.333, 0.8165),
+    Right: new THREE.Vector3(0.471, 0.333, -0.8165),
+    Left: new THREE.Vector3(-0.943, 0.333, 0),
+    Down: new THREE.Vector3(0, -1, 0),
+  };
+
   public readonly piecesInitData: Array<
     TPieceData<TTetrahedronPiecesFilenamesWithFaces, TTetrahedronFaces>
   > = [

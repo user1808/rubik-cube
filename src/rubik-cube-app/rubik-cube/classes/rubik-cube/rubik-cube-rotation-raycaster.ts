@@ -7,6 +7,7 @@ import { MouseButtonEnum } from '@/utils/mouse_button_enum';
 import type { IRubikCubeRotationRaycaster } from '../../interfaces';
 
 export class RubikCubeRotationRaycaster<
+    TCubeFacesNames extends string,
     TCubeRotationGroups extends string,
     TCubeRotationTypes extends string,
     TCubeShellPieces extends string,
@@ -23,7 +24,12 @@ export class RubikCubeRotationRaycaster<
   private mouseMoveCounter = 0;
 
   constructor(
-    private readonly cube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
+    private readonly cube: IRubikCube<
+      TCubeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellPieces
+    >,
     private readonly mouseTouchTracker: MouseTouchTracker,
     private readonly orbitControls: OrbitControls,
   ) {

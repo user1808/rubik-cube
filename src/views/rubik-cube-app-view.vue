@@ -23,7 +23,7 @@ import { RubikHexahedron4x4Factory } from '@/rubik-cube-app/rubik-cube/classes/s
 import { RubikHexahedron5x5Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/5x5/factory';
 import { RubikTetrahedronFactory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/tetrahedron/factory';
 
-const selectedFactoryIdx = ref<number>(2);
+const selectedFactoryIdx = ref<number>(1);
 const selectedFactory = computed(() => rubikFactories[selectedFactoryIdx.value]);
 
 const rubikFactories: Array<IRubikCubeFactory<Record<string, string>>> = [

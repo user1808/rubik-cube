@@ -5,15 +5,16 @@ import type { IRubikCubePiece } from '../structure';
 
 export interface IRubikCubePieceBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
-  TCubeFaces extends string,
-  TCubeEdgeFaces extends string,
+  TCubeFacesNames extends string,
+  TCubeEdgeFacesNames extends string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
   buildPiece(
     loadedGLTFPieces: Map<TCubePiecesFilenames, GLTF>,
-    pieceData: TPieceData<TCubePiecesFilenamesWithFaces, TCubeFaces, TCubePiecesFilenames>,
-    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
-  ): IRubikCubePiece;
+    pieceData: TPieceData<TCubePiecesFilenamesWithFaces, TCubeFacesNames, TCubePiecesFilenames>,
+    materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
+    cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>,
+  ): IRubikCubePiece<TCubeFacesNames>;
 }
