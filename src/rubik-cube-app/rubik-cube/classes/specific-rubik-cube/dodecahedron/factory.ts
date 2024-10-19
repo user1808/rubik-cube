@@ -1,10 +1,12 @@
-import type { TDodecahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
-import type { TDodecahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-groups';
-import type { TDodecahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-types';
 import type {
   TDodecahedronEdgeFaces,
   TDodecahedronFaces,
-} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
+  TDodecahedronPiecesFilenamesWithFaces,
+  TDodecahedronRotationGroups,
+  TDodecahedronRotationTypes,
+  TDodecahedronShellFilename,
+  TDodecahedronShellPieces,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron';
 import type {
   IRubikCubeShellData,
   IRubikCubeRotationData,
@@ -12,11 +14,12 @@ import type {
   IRubikCubeMaterials,
   IRubikCubeRotationGroupsData,
 } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
 import { RubikDodecahedronRotationData } from './rotation-data';
 import { RubikDodecahedronPiecesData } from './pieces-data';
-import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
 import { RubikDodecahedronMaterials } from './materials';
 import { RubikDodecahedronRotationGroupsData } from './rotation-groups-data';
+import { RubikDodecahedronShellData } from './shell-data';
 
 export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronPiecesFilenamesWithFaces,
@@ -24,8 +27,8 @@ export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronEdgeFaces,
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
-  'TODO',
-  'TODO'
+  TDodecahedronShellFilename,
+  TDodecahedronShellPieces
 > {
   public get commonName(): string {
     return 'Megaminx';
@@ -48,10 +51,10 @@ export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   public override createRubikCubeShellData(): IRubikCubeShellData<
     TDodecahedronRotationGroups,
     TDodecahedronRotationTypes,
-    'TODO',
-    'TODO'
+    TDodecahedronShellFilename,
+    TDodecahedronShellPieces
   > {
-    throw new Error('Method not implemented.');
+    return new RubikDodecahedronShellData();
   }
   public override createRubikCubeMaterials(): IRubikCubeMaterials<
     TDodecahedronFaces,

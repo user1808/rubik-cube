@@ -6,13 +6,21 @@ import type {
   IRubikCubePiecesData,
   IRubikCubeRotationData,
   IRubikCubeRotationGroupsData,
+  IRubikCubeShellData,
 } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import { RubikHexahedron5x5RotationData } from './rotation-data';
 import { RubikHexahedron5x5PiecesData } from './pieces-data';
 import { AbstractRubikHexahedronFactory } from '../factory';
 import { RubikHexahedron5x5RotationGroupsData } from './rotation-groups-data';
+import type { THexahedron5x5ShellFilename } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/shell-filename';
+import type { THexahedron5x5ShellPieces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/shell-pieces';
+import { RubikHexahedron5x5ShellData } from './shell-data';
 
-export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<THexahedron5x5RotationGroups> {
+export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<
+  THexahedron5x5RotationGroups,
+  THexahedron5x5ShellFilename,
+  THexahedron5x5ShellPieces
+> {
   public override get commonName(): string {
     return '5x5 Cube';
   }
@@ -30,5 +38,13 @@ export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<TH
     THexahedronRotationTypes
   > {
     return new RubikHexahedron5x5RotationData();
+  }
+  public override createRubikCubeShellData(): IRubikCubeShellData<
+    THexahedron5x5RotationGroups,
+    THexahedronRotationTypes,
+    THexahedron5x5ShellFilename,
+    THexahedron5x5ShellPieces
+  > {
+    return new RubikHexahedron5x5ShellData();
   }
 }

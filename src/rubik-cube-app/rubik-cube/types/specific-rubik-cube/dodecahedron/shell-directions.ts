@@ -1,0 +1,17 @@
+export type TDodecahedronShellDirections =
+  | 'DirectionA'
+  | 'DirectionB'
+  | 'DirectionC'
+  | 'DirectionD'
+  | 'DirectionE'
+  | 'DirectionF'
+  | 'DirectionG'
+  | 'DirectionH'
+  | 'DirectionI'
+  | 'DirectionJ'
+  | 'DirectionK'
+  | 'DirectionL'
+  | 'DirectionM'
+  | 'DirectionN'
+  | 'DirectionO'
+  | 'DirectionP';

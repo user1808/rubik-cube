@@ -10,7 +10,7 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
     THexahedronRotationGroups,
     THREE.Vector3
   >;
-  public abstract readonly rotationGroupsNewIdxs: Record<
+  public abstract readonly rotationPiecesChangesPatterns: Record<
     THexahedronRotationTypes,
     Record<THexahedronRotationGroups, Array<number>>
   >;
@@ -18,12 +18,18 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
   public readonly rotationTypesData: Record<THexahedronRotationTypes, TRotationTypeData> = {
     Clockwise: {
       angle: -Radians['90deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
     CounterClockwise: {
       angle: Radians['90deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
     Double: {
       angle: Radians['180deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
   };
 }

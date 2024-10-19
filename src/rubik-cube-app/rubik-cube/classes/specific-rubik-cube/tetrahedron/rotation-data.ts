@@ -13,9 +13,13 @@ export class RubikTetrahedronRotationData
   private readonly _rotationTypesData: typeof this.rotationTypesData = {
     Clockwise: {
       angle: -2 * Radians['60deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
     CounterClockwise: {
       angle: 2 * Radians['60deg'],
+      durationInSeconds: 0.5,
+      stepsCount: 10,
     },
   };
   private readonly _rotationGroupsNormalVectors: typeof this.rotationGroupsNormalVectors = {
@@ -32,7 +36,7 @@ export class RubikTetrahedronRotationData
     BackMidLayer: new THREE.Vector3(-0.471, -0.333, -0.8165),
     UpMidLayer: new THREE.Vector3(0, 1, 0),
   };
-  private readonly _rotationPiecesChangesPatterns: typeof this.rotationGroupsNewIdxs = {
+  private readonly _rotationPiecesChangesPatterns: typeof this.rotationPiecesChangesPatterns = {
     Clockwise: {
       Front: [6, 7, 8, 0, 1, 2, 3, 4, 5],
       Right: [6, 7, 8, 0, 1, 2, 3, 4, 5],
@@ -69,7 +73,7 @@ export class RubikTetrahedronRotationData
   public get rotationGroupsNormalVectors(): Record<TTetrahedronRotationGroups, THREE.Vector3> {
     return this._rotationGroupsNormalVectors;
   }
-  public get rotationGroupsNewIdxs(): Record<
+  public get rotationPiecesChangesPatterns(): Record<
     TTetrahedronRotationTypes,
     Record<TTetrahedronRotationGroups, Array<TPieceIdx>>
   > {

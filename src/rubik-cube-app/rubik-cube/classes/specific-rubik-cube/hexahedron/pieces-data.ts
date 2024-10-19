@@ -15,10 +15,6 @@ export abstract class AbstractRubikHexahedronPiecesData
 {
   public readonly piecesFilenames: Array<THexahedronPiecesFilenames> = ['RubikCubePiece.glb'];
 
-  public readonly piecesInitData: Array<
-    TPieceData<THexahedronPiecesFilenamesWithFaces, THexahedronFaces>
-  > = this.createCubePiecesData();
-
   /**
    * The size of the cube. For example, 2 means cube 2x2x2, 3 means 3x3x3, 4 means 4x4x4, etc.
    */
@@ -31,6 +27,12 @@ export abstract class AbstractRubikHexahedronPiecesData
    * because the cube pieces should be positioned at -1, 0, 1 on x axis.
    */
   protected abstract readonly positionValues: THexahedronPositionValues;
+
+  public get piecesInitData(): Array<
+    TPieceData<THexahedronPiecesFilenamesWithFaces, THexahedronFaces>
+  > {
+    return this.createCubePiecesData();
+  }
 
   /**
    * Creates the cube (regular hexahedron) pieces data.

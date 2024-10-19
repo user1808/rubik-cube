@@ -6,7 +6,7 @@ export interface IRubikCubeRotationData<
 > {
   readonly rotationTypesData: Record<TCubeRotationTypes, TRotationTypeData>;
   readonly rotationGroupsNormalVectors: Record<TCubeRotationGroups, THREE.Vector3>;
-  readonly rotationGroupsNewIdxs: Record<
+  readonly rotationPiecesChangesPatterns: Record<
     TCubeRotationTypes,
     Record<TCubeRotationGroups, Array<number>>
   >;

@@ -1,1181 +1,221 @@
 import * as THREE from 'three';
-import type { IRubikCubeShellData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
+  TTetrahedronShellDirections,
   TTetrahedronShellFilename,
   TTetrahedronShellPieces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
+import { AbstractRubikCubeShellData } from '../shell-data';
 
-export class RubikTetrahedronShellData
-  implements
-    IRubikCubeShellData<
-      TTetrahedronRotationGroups,
-      TTetrahedronRotationTypes,
-      TTetrahedronShellFilename,
-      TTetrahedronShellPieces
-    >
-{
-  readonly filename: 'RubikTetrahedronShell.glb' = 'RubikTetrahedronShell.glb';
-  readonly piecesData: Record<
+export class RubikTetrahedronShellData extends AbstractRubikCubeShellData<
+  TTetrahedronRotationGroups,
+  TTetrahedronRotationTypes,
+  TTetrahedronShellFilename,
+  TTetrahedronShellPieces,
+  TTetrahedronShellDirections,
+  'Clockwise',
+  'CounterClockwise'
+> {
+  protected readonly ordinaryRotationName: 'Clockwise' = 'Clockwise';
+  protected readonly invertedRotationName: 'CounterClockwise' = 'CounterClockwise';
+  protected readonly directions: Record<TTetrahedronShellDirections, THREE.Vector3> = {
+    DirectionA: new THREE.Vector3(-0.3, -0.82, 0.5),
+    DirectionB: new THREE.Vector3(-0.57, 0.82, 0),
+    DirectionC: new THREE.Vector3(-0.87, 0, 0.5),
+    DirectionD: new THREE.Vector3(0.3, 0.82, 0.5),
+    DirectionE: new THREE.Vector3(0.87, 0, 0.5),
+    DirectionF: new THREE.Vector3(0, 0, -1),
+  };
+
+  public readonly filename: TTetrahedronShellFilename = 'RubikTetrahedronShell.glb';
+  public readonly piecesData: Record<
     TTetrahedronShellPieces,
     TShellPieceData<TTetrahedronRotationGroups, TTetrahedronRotationTypes>
   > = {
-    FrontTop: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'UpCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'UpCorner',
-        rotationType: 'Clockwise',
-      },
-    ],
-    FrontMiddle: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-    ],
-    FrontMiddleRight: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-    ],
-    FrontMiddleLeft: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-    ],
-    FrontBottom: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    FrontBottomLeft: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    FrontBottomLeftCorner: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'LeftCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'LeftCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    FrontBottomRight: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    FrontBottomRightCorner: [
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'RightCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'RightCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-    ],
+    FrontTop: this.createPieceRotationData([
+      ['DirectionA', 'Left'],
+      ['DirectionB', 'Right'],
+      ['DirectionC', 'UpCorner'],
+    ]),
+    FrontMiddle: this.createPieceRotationData([
+      ['DirectionA', 'Left'],
+      ['DirectionB', 'Right'],
+      ['DirectionC', 'UpMidLayer'],
+    ]),
+    FrontMiddleRight: this.createPieceRotationData([
+      ['DirectionA', 'RightMidLayer', true],
+      ['DirectionB', 'Right'],
+      ['DirectionC', 'UpMidLayer'],
+    ]),
+    FrontMiddleLeft: this.createPieceRotationData([
+      ['DirectionA', 'Left'],
+      ['DirectionB', 'LeftMidLayer', true],
+      ['DirectionC', 'UpMidLayer'],
+    ]),
+    FrontBottom: this.createPieceRotationData([
+      ['DirectionA', 'RightMidLayer', true],
+      ['DirectionB', 'LeftMidLayer', true],
+      ['DirectionC', 'Down', true],
+    ]),
+    FrontBottomLeft: this.createPieceRotationData([
+      ['DirectionA', 'Left'],
+      ['DirectionB', 'LeftMidLayer', true],
+      ['DirectionC', 'Down', true],
+    ]),
+    FrontBottomLeftCorner: this.createPieceRotationData([
+      ['DirectionA', 'Left'],
+      ['DirectionB', 'LeftCorner', true],
+      ['DirectionC', 'Down', true],
+    ]),
+    FrontBottomRight: this.createPieceRotationData([
+      ['DirectionA', 'RightMidLayer', true],
+      ['DirectionB', 'Right'],
+      ['DirectionC', 'Down', true],
+    ]),
+    FrontBottomRightCorner: this.createPieceRotationData([
+      ['DirectionA', 'RightCorner', true],
+      ['DirectionB', 'Right'],
+      ['DirectionC', 'Down', true],
+    ]),
 
-    RightTop: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'UpCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'UpCorner',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    RightMiddle: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    RightMiddleRight: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    RightMiddleLeft: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    RightBottom: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
-    RightBottomLeft: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
-    RightBottomLeftCorner: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'RightCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'RightCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
-    RightBottomRight: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
-    RightBottomRightCorner: [
-      {
-        direction: new THREE.Vector3(-0.57, 0.82, 0),
-        rotationGroup: 'BackCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.57, -0.82, 0),
-        rotationGroup: 'BackCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
+    RightTop: this.createPieceRotationData([
+      ['DirectionB', 'Front', true],
+      ['DirectionD', 'Left'],
+      ['DirectionE', 'UpCorner'],
+    ]),
+    RightMiddle: this.createPieceRotationData([
+      ['DirectionB', 'Front', true],
+      ['DirectionD', 'Left'],
+      ['DirectionE', 'UpMidLayer'],
+    ]),
+    RightMiddleRight: this.createPieceRotationData([
+      ['DirectionB', 'BackMidLayer'],
+      ['DirectionD', 'Left'],
+      ['DirectionE', 'UpMidLayer'],
+    ]),
+    RightMiddleLeft: this.createPieceRotationData([
+      ['DirectionB', 'Front', true],
+      ['DirectionD', 'RightMidLayer', true],
+      ['DirectionE', 'UpMidLayer'],
+    ]),
+    RightBottom: this.createPieceRotationData([
+      ['DirectionB', 'BackMidLayer'],
+      ['DirectionD', 'RightMidLayer'],
+      ['DirectionE', 'Down', true],
+    ]),
+    RightBottomLeft: this.createPieceRotationData([
+      ['DirectionB', 'Front'],
+      ['DirectionD', 'RightMidLayer'],
+      ['DirectionE', 'Down', true],
+    ]),
+    RightBottomLeftCorner: this.createPieceRotationData([
+      ['DirectionB', 'Front'],
+      ['DirectionD', 'RightCorner'],
+      ['DirectionE', 'Down', true],
+    ]),
+    RightBottomRight: this.createPieceRotationData([
+      ['DirectionB', 'BackMidLayer'],
+      ['DirectionD', 'Left'],
+      ['DirectionE', 'Down', true],
+    ]),
+    RightBottomRightCorner: this.createPieceRotationData([
+      ['DirectionB', 'BackCorner'],
+      ['DirectionD', 'Left'],
+      ['DirectionE', 'Down', true],
+    ]),
 
-    LeftTop: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'UpCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'UpCorner',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    LeftMiddle: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    LeftMiddleRight: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    LeftMiddleLeft: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'UpMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    LeftBottom: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
-    LeftBottomLeft: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
-    LeftBottomLeftCorner: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'BackCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'BackCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
-    LeftBottomRight: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
-    LeftBottomRightCorner: [
-      {
-        direction: new THREE.Vector3(0.3, 0.82, 0.5),
-        rotationGroup: 'LeftCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, -0.5),
-        rotationGroup: 'LeftCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.3, 0.82, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.3, -0.82, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Down',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Down',
-        rotationType: 'Clockwise',
-      },
-    ],
+    LeftTop: this.createPieceRotationData([
+      ['DirectionD', 'Right', true],
+      ['DirectionA', 'Front', true],
+      ['DirectionF', 'UpCorner'],
+    ]),
+    LeftMiddle: this.createPieceRotationData([
+      ['DirectionD', 'Right', true],
+      ['DirectionA', 'Front', true],
+      ['DirectionF', 'UpMidLayer'],
+    ]),
+    LeftMiddleRight: this.createPieceRotationData([
+      ['DirectionD', 'LeftMidLayer'],
+      ['DirectionA', 'Front', true],
+      ['DirectionF', 'UpMidLayer'],
+    ]),
+    LeftMiddleLeft: this.createPieceRotationData([
+      ['DirectionD', 'Right', true],
+      ['DirectionA', 'BackMidLayer'],
+      ['DirectionF', 'UpMidLayer'],
+    ]),
+    LeftBottom: this.createPieceRotationData([
+      ['DirectionD', 'LeftMidLayer'],
+      ['DirectionA', 'BackMidLayer'],
+      ['DirectionF', 'Down', true],
+    ]),
+    LeftBottomLeft: this.createPieceRotationData([
+      ['DirectionD', 'Right', true],
+      ['DirectionA', 'BackMidLayer'],
+      ['DirectionF', 'Down', true],
+    ]),
+    LeftBottomLeftCorner: this.createPieceRotationData([
+      ['DirectionD', 'Right', true],
+      ['DirectionA', 'BackCorner'],
+      ['DirectionF', 'Down', true],
+    ]),
+    LeftBottomRight: this.createPieceRotationData([
+      ['DirectionD', 'LeftMidLayer'],
+      ['DirectionA', 'Front', true],
+      ['DirectionF', 'Down', true],
+    ]),
+    LeftBottomRightCorner: this.createPieceRotationData([
+      ['DirectionD', 'LeftCorner'],
+      ['DirectionA', 'Front', true],
+      ['DirectionF', 'Down', true],
+    ]),
 
-    DownTop: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'BackCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'BackCorner',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    DownMiddle: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    DownMiddleRight: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    DownMiddleLeft: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'BackMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-    ],
-    DownBottom: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-    ],
-    DownBottomLeft: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'RightMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-    ],
-    DownBottomLeftCorner: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'Right',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'Right',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'RightCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'RightCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-    ],
-    DownBottomRight: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'LeftMidLayer',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-    ],
-    DownBottomRightCorner: [
-      {
-        direction: new THREE.Vector3(-0.87, 0, -0.5),
-        rotationGroup: 'LeftCorner',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, 0.5),
-        rotationGroup: 'LeftCorner',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, -1),
-        rotationGroup: 'Left',
-        rotationType: 'Clockwise',
-      },
-      {
-        direction: new THREE.Vector3(0, 0, 1),
-        rotationGroup: 'Left',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(0.87, 0, -0.5),
-        rotationGroup: 'Front',
-        rotationType: 'CounterClockwise',
-      },
-      {
-        direction: new THREE.Vector3(-0.87, 0, 0.5),
-        rotationGroup: 'Front',
-        rotationType: 'Clockwise',
-      },
-    ],
+    DownTop: this.createPieceRotationData([
+      ['DirectionE', 'Right'],
+      ['DirectionF', 'Left'],
+      ['DirectionC', 'BackCorner', true],
+    ]),
+    DownMiddle: this.createPieceRotationData([
+      ['DirectionE', 'Right'],
+      ['DirectionF', 'Left'],
+      ['DirectionC', 'BackMidLayer', true],
+    ]),
+    DownMiddleRight: this.createPieceRotationData([
+      ['DirectionE', 'LeftMidLayer', true],
+      ['DirectionF', 'Left'],
+      ['DirectionC', 'BackMidLayer', true],
+    ]),
+    DownMiddleLeft: this.createPieceRotationData([
+      ['DirectionE', 'Right'],
+      ['DirectionF', 'RightMidLayer', true],
+      ['DirectionC', 'BackMidLayer', true],
+    ]),
+    DownBottom: this.createPieceRotationData([
+      ['DirectionE', 'LeftMidLayer', true],
+      ['DirectionF', 'RightMidLayer', true],
+      ['DirectionC', 'Front'],
+    ]),
+    DownBottomLeft: this.createPieceRotationData([
+      ['DirectionE', 'Right'],
+      ['DirectionF', 'RightMidLayer', true],
+      ['DirectionC', 'Front'],
+    ]),
+    DownBottomLeftCorner: this.createPieceRotationData([
+      ['DirectionE', 'Right'],
+      ['DirectionF', 'RightCorner', true],
+      ['DirectionC', 'Front'],
+    ]),
+    DownBottomRight: this.createPieceRotationData([
+      ['DirectionE', 'LeftMidLayer', true],
+      ['DirectionF', 'Left'],
+      ['DirectionC', 'Front'],
+    ]),
+    DownBottomRightCorner: this.createPieceRotationData([
+      ['DirectionE', 'LeftCorner', true],
+      ['DirectionF', 'Left'],
+      ['DirectionC', 'Front'],
+    ]),
   };
 }

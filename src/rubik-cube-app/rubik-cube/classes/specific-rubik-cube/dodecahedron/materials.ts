@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type {
   TDodecahedronEdgeFaces,
   TDodecahedronFaces,
-} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron';
 import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 
 export class RubikDodecahedronMaterials
