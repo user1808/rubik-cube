@@ -4,6 +4,7 @@ import type { IRubikCubePieceFace } from '@/rubik-cube-app/rubik-cube/interfaces
 type TRubikCubePieceFaceConstructorParams = {
   geometry: THREE.BufferGeometry;
   material: THREE.MeshBasicMaterial;
+  color: number;
 };
 
 /**
@@ -13,12 +14,19 @@ export class RubikCubePieceFace
   extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>
   implements IRubikCubePieceFace
 {
+  private readonly color: number;
+
   constructor(params: TRubikCubePieceFaceConstructorParams) {
     super(params.geometry, params.material);
+    this.color = params.color;
   }
 
   public dispose() {
     this.geometry.dispose();
     this.material.dispose();
+  }
+
+  public getColor(): number {
+    return this.color;
   }
 }

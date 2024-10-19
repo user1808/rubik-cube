@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { TCubeFaceMaterial, TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TypeGuards } from '@/utils/type-guards';
 import type { IRubikCubePieceBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders';
@@ -73,7 +73,7 @@ export class RubikCubePieceBuilder<
     const geometry: THREE.BufferGeometry = pieceFace.geometry;
     const material = this.chooseRightMaterial(pieceFace.name, pieceData, materials);
 
-    return new RubikCubePieceFace({ geometry, material });
+    return new RubikCubePieceFace({ geometry, material: material.material, color: material.color });
   }
 
   /**
@@ -87,13 +87,13 @@ export class RubikCubePieceBuilder<
     pieceFaceName: string,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
-  ): THREE.MeshBasicMaterial {
+  ): TCubeFaceMaterial {
     const { pieceFacesToCubeFaces } = pieceData;
-    let material: THREE.MeshBasicMaterial = materials.cubeInvisibleFacesMaterials;
+    let material: TCubeFaceMaterial = materials.cubeInvisibleFacesMaterials;
 
     if (TypeGuards.isObjectKey(pieceFaceName, pieceFacesToCubeFaces)) {
       const cubeFace = pieceFacesToCubeFaces[pieceFaceName];
-      material = cubeFace ? materials.cubeFacesMaterials[cubeFace].material : material;
+      material = cubeFace ? materials.cubeFacesMaterials[cubeFace] : material;
     }
     if (TypeGuards.isObjectKey(pieceFaceName, materials.cubeEdgeFacesMaterials)) {
       material = materials.cubeEdgeFacesMaterials[pieceFaceName];
