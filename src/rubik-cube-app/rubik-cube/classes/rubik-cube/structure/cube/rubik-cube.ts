@@ -1,12 +1,17 @@
 import * as THREE from 'three';
 import type { IRubikCube, IRubikCubeShell } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
-import type { TCubePieces, TRotationGroups } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type {
+  TCubeFaces,
+  TCubePieces,
+  TRotationGroups,
+} from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
   IRubikCubeRotationImplementation,
   IRubikCubeRotationRaycaster,
 } from '@/rubik-cube-app/rubik-cube/interfaces';
 
 export class RubikCube<
+    TCubeFacesNames extends string,
     TCubeRotationGroups extends string,
     TCubeRotationTypes extends string,
     TCubeShellPieces extends string,
@@ -28,6 +33,7 @@ export class RubikCube<
       TCubeShellPieces
     >,
     public readonly pieces: TCubePieces,
+    public readonly faces: TCubeFaces<TCubeFacesNames>,
     public readonly rotationGroups: TRotationGroups<TCubeRotationGroups>,
     private readonly rotationImplementation: IRubikCubeRotationImplementation<
       TCubeRotationGroups,
