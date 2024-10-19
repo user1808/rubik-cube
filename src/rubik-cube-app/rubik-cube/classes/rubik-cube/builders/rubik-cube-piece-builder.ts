@@ -93,7 +93,7 @@ export class RubikCubePieceBuilder<
 
     if (TypeGuards.isObjectKey(pieceFaceName, pieceFacesToCubeFaces)) {
       const cubeFace = pieceFacesToCubeFaces[pieceFaceName];
-      material = cubeFace ? materials.cubeFacesMaterials[cubeFace] : material;
+      material = cubeFace ? materials.cubeFacesMaterials[cubeFace].material : material;
     }
     if (TypeGuards.isObjectKey(pieceFaceName, materials.cubeEdgeFacesMaterials)) {
       material = materials.cubeEdgeFacesMaterials[pieceFaceName];
