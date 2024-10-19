@@ -1,4 +1,5 @@
 import type { TCubePieces } from './cube/cube-pieces';
+import type { TCubeFaceMaterial } from './cube/cube-face-material';
 import type { TPieceData } from './piece/piece-data';
 import type { TPieceId } from './piece/piece-id';
 import type { TPieceIdx } from './piece/piece-idx';
@@ -10,6 +11,7 @@ import type { TShellRotationData } from './shell/shell-rotation-data';
 
 export type {
   TCubePieces,
+  TCubeFaceMaterial,
   TPieceData,
   TPieceId,
   TPieceIdx,
