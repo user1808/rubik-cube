@@ -11,14 +11,10 @@ type TRubikCubePieceVisibleFaceConstructorParams = {
  * Represents a visible face of a Rubik's Cube piece.
  */
 export class RubikCubePieceVisibleFace extends RubikCubePieceFace {
-  private readonly _color: number;
+  public readonly color: number;
 
   constructor(params: TRubikCubePieceVisibleFaceConstructorParams) {
     super(params);
-    this._color = params.color;
-  }
-
-  public get color() {
-    return this._color;
+    this.color = params.color;
   }
 }
