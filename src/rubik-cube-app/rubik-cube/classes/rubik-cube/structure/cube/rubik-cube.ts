@@ -17,7 +17,7 @@ export class RubikCube<
     TCubeShellPieces extends string,
   >
   extends THREE.Group
-  implements IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  implements IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
 {
   private _rotationRaycaster: Nullable<IRubikCubeRotationRaycaster> = null;
   private _rotationPending = false;
@@ -36,6 +36,7 @@ export class RubikCube<
     public readonly faces: TCubeFaces<TCubeFacesNames>,
     public readonly rotationGroups: TRotationGroups<TCubeRotationGroups>,
     private readonly rotationImplementation: IRubikCubeRotationImplementation<
+      TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellPieces

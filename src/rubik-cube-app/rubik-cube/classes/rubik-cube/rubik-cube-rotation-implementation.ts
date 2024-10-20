@@ -7,18 +7,29 @@ import type { IRubikCubeRotationData } from '../../interfaces/data';
 import type { IRubikCubeRotationImplementation } from '../../interfaces';
 
 export class RubikCubeRotationImplementation<
+  TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
   TCubeShellPieces extends string,
 > implements
-    IRubikCubeRotationImplementation<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCubeRotationImplementation<
+      TCubeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellPieces
+    >
 {
   constructor(
     private readonly rotationData: IRubikCubeRotationData<TCubeRotationGroups, TCubeRotationTypes>,
   ) {}
 
   public async rotateRubikCubeGroup(
-    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
+    rubikCube: IRubikCube<
+      TCubeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellPieces
+    >,
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
   ): Promise<void> {
@@ -78,7 +89,12 @@ export class RubikCubeRotationImplementation<
   }
 
   private createRotatingThreeJSGroup(
-    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
+    rubikCube: IRubikCube<
+      TCubeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellPieces
+    >,
     rotatingGroup: Array<IRubikCubePieceWrapper>,
   ): THREE.Group {
     const rotatingThreeJSGroup = new THREE.Group();
@@ -88,7 +104,12 @@ export class RubikCubeRotationImplementation<
   }
 
   private removeRotatingThreeJSGroup(
-    rubikCube: IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>,
+    rubikCube: IRubikCube<
+      TCubeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellPieces
+    >,
     rotatedThreeJSGroup: THREE.Group,
   ): void {
     rubikCube.scene.remove(rotatedThreeJSGroup);
