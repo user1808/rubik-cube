@@ -25,6 +25,7 @@ import type {
   IRubikCubeShellPiecesBuilder,
 } from '../../interfaces/builders';
 import {
+  RubikCubeFacesBuilder,
   RubikCubePieceBuilder,
   RubikCubePiecesBuilder,
   RubikCubeRotationGroupsBuidler,
@@ -136,8 +137,7 @@ export abstract class AbstractRubikCubeFactory<
   }
 
   public createRubikCubeFacesBuilder(): IRubikCubeFacesBuilder<TCubeFacesNames> {
-    // TODO: implement
-    throw new Error('Method not implemented.');
+    return new RubikCubeFacesBuilder();
   }
 
   public createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<TCubeRotationGroups> {
