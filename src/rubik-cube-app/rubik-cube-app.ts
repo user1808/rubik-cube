@@ -59,7 +59,6 @@ export class RubikCubeApp {
       this.orbitControls,
     );
     this.cube.addToScene();
-    console.log('Cube is ready', this.cube);
     this.debugModeCoordinator.getSubscriber('DebugCubeUI').setCube(this.cube, this.cubeFactory);
   }
 
