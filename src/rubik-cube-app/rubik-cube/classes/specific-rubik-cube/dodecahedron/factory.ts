@@ -1,3 +1,10 @@
+import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
+import { RubikDodecahedronRotationData } from './rotation-data';
+import { RubikDodecahedronPiecesData } from './pieces-data';
+import { RubikDodecahedronMaterials } from './materials';
+import { RubikDodecahedronRotationGroupsData } from './rotation-groups-data';
+import { RubikDodecahedronShellData } from './shell-data';
+import { RubikDodecahedronFacesData } from './faces-data';
 import type {
   TDodecahedronEdgeFaces,
   TDodecahedronFaces,
@@ -15,12 +22,6 @@ import type {
   IRubikCubeRotationGroupsData,
   IRubikCubeFacesData,
 } from '@/rubik-cube-app/rubik-cube/interfaces/data';
-import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
-import { RubikDodecahedronRotationData } from './rotation-data';
-import { RubikDodecahedronPiecesData } from './pieces-data';
-import { RubikDodecahedronMaterials } from './materials';
-import { RubikDodecahedronRotationGroupsData } from './rotation-groups-data';
-import { RubikDodecahedronShellData } from './shell-data';
 
 export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronPiecesFilenamesWithFaces,
@@ -41,7 +42,7 @@ export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
     return new RubikDodecahedronPiecesData();
   }
   public override createRubikCubeFacesData(): IRubikCubeFacesData<TDodecahedronFaces> {
-    throw new Error('Method not implemented.');
+    return new RubikDodecahedronFacesData();
   }
   public override createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TDodecahedronRotationGroups> {
     return new RubikDodecahedronRotationGroupsData();
