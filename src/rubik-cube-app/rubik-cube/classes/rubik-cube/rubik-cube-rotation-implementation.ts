@@ -72,7 +72,7 @@ export class RubikCubeRotationImplementation<
         },
         onComplete: () => {
           timeline.kill();
-          this.updateRotatedGroupPresentation(rotatingGroup, rotatingThreeJSGroup);
+          this.updateRotatedGroupPresentation(rotatingGroup, rotatingThreeJSGroup, true);
           this.updateRotatedGroupData(rotatingGroup, rotatingGroupNewIdxs);
           resolve();
         },
@@ -125,6 +125,7 @@ export class RubikCubeRotationImplementation<
   private updateRotatedGroupPresentation(
     rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
     rotatingThreeJSGroup: THREE.Group,
+    updateVisibleFaces: boolean = false,
   ): void {
     rotatingGroup.forEach(({ piece }) => {
       const position = new THREE.Vector3();
@@ -133,6 +134,7 @@ export class RubikCubeRotationImplementation<
       piece.position.set(position.x, position.y, position.z);
       rotatingThreeJSGroup.getWorldQuaternion(quaternion);
       piece.applyQuaternion(quaternion);
+      if (!updateVisibleFaces) return;
       piece.pieceVisibleFaces.forEach((face) => {
         face.applyQuaternionToNormal(quaternion);
       });
