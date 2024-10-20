@@ -16,6 +16,7 @@ import type {
 } from './data';
 import type {
   IRubikCubeBuilder,
+  IRubikCubeFacesBuilder,
   IRubikCubePieceBuilder,
   IRubikCubePiecesBuilder,
   IRubikCubeRotationGroupsBuilder,
@@ -70,9 +71,12 @@ export interface IRubikCubeFactory<
   >;
   createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder;
 
+  createRubikCubeFacesBuilder(): IRubikCubeFacesBuilder<TCubeFacesNames>;
+
   createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>;
 
   createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
+    TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
     TCubeShellPieces
@@ -88,6 +92,7 @@ export interface IRubikCubeFactory<
     camera: THREE.PerspectiveCamera,
   ): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
+    TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
     TCubeShellPieces
@@ -98,5 +103,7 @@ export interface IRubikCubeFactory<
     camera: THREE.PerspectiveCamera,
     mouseTouchTracker: MouseTouchTracker,
     orbitControls: OrbitControls,
-  ): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>>;
+  ): Promise<
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  >;
 }
