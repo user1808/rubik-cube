@@ -5,7 +5,7 @@ type TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames extends string>
   geometry: THREE.BufferGeometry;
   material: THREE.MeshBasicMaterial;
   color: number;
-  cubeFacesNormals: Record<TCubeFacesNames, THREE.Vector3>;
+  cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>;
 };
 
 /**

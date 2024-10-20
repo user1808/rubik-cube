@@ -9,4 +9,5 @@ export interface IRubikCubePiecesData<
 > {
   readonly piecesFilenames: Array<TCubePiecesFilenames>;
   readonly piecesInitData: Array<TPieceData<TCubePiecesFilenamesWithFaces, TCubeFacesNames>>;
+  readonly facesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>;
 }

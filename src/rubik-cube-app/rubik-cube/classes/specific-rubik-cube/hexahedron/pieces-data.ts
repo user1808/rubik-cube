@@ -15,6 +15,15 @@ export abstract class AbstractRubikHexahedronPiecesData
 {
   public readonly piecesFilenames: Array<THexahedronPiecesFilenames> = ['RubikCubePiece.glb'];
 
+  public readonly facesNormalVectors: Record<THexahedronFaces, THREE.Vector3> = {
+    Front: new THREE.Vector3(0, 0, 1),
+    Back: new THREE.Vector3(0, 0, -1),
+    Right: new THREE.Vector3(1, 0, 0),
+    Left: new THREE.Vector3(-1, 0, 0),
+    Up: new THREE.Vector3(0, 1, 0),
+    Down: new THREE.Vector3(0, -1, 0),
+  };
+
   /**
    * The size of the cube. For example, 2 means cube 2x2x2, 3 means 3x3x3, 4 means 4x4x4, etc.
    */

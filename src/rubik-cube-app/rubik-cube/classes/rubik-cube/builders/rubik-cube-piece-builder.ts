@@ -35,13 +35,19 @@ export class RubikCubePieceBuilder<
     loadedGLTFPieces: Map<TPiecesFilenames, GLTF>,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
+    cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>,
   ): RubikCubePiece<TCubeFacesNames> {
     const { id, position, rotation, filename } = pieceData;
 
     const gltfPiece = loadedGLTFPieces.get(filename)?.scene;
     if (!gltfPiece) throw new Error(`${filename} piece was not found`);
 
-    const pieceFaces = this.transformGLTFPieceFaces(gltfPiece, pieceData, materials);
+    const pieceFaces = this.transformGLTFPieceFaces(
+      gltfPiece,
+      pieceData,
+      materials,
+      cubeFacesNormalVectors,
+    );
     const newPiece = new RubikCubePiece(id, pieceFaces.allFaces, pieceFaces.visibleFaces);
 
     this.setPieceInWorld(newPiece, position, rotation);
@@ -60,12 +66,13 @@ export class RubikCubePieceBuilder<
     gltfPiece: THREE.Group,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
+    cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>,
   ): TTransformGLTFPieceFacesReturn<TCubeFacesNames> {
     const allFaces: Array<RubikCubePieceFace> = [];
     const visibleFaces: Array<RubikCubePieceVisibleFace<TCubeFacesNames>> = [];
 
     gltfPiece.children.forEach((pieceFace) => {
-      const piece = this.createPiece(pieceFace, pieceData, materials);
+      const piece = this.createPiece(pieceFace, pieceData, materials, cubeFacesNormalVectors);
       allFaces.push(piece);
 
       if (piece instanceof RubikCubePieceVisibleFace) {
@@ -87,6 +94,7 @@ export class RubikCubePieceBuilder<
     pieceFace: THREE.Object3D,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
+    cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>,
   ): RubikCubePieceFace | RubikCubePieceVisibleFace<TCubeFacesNames> {
     if (!TypeGuards.isT(pieceFace, THREE.Mesh))
       throw new Error('Loaded Piece Face is not a three.js Mesh');
@@ -104,6 +112,7 @@ export class RubikCubePieceBuilder<
           geometry,
           material: material.material,
           color: material.color,
+          cubeFacesNormalVectors,
         });
   }
 

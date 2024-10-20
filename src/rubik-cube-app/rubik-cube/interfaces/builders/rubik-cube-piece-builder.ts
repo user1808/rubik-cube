@@ -15,5 +15,6 @@ export interface IRubikCubePieceBuilder<
     loadedGLTFPieces: Map<TCubePiecesFilenames, GLTF>,
     pieceData: TPieceData<TCubePiecesFilenamesWithFaces, TCubeFacesNames, TCubePiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
+    cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>,
   ): IRubikCubePiece<TCubeFacesNames>;
 }

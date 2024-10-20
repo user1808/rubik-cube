@@ -42,7 +42,12 @@ export class RubikCubePiecesBuilder<
     return this.piecesData.piecesInitData.map(
       (pieceData) =>
         new RubikCubePieceWrapper(
-          this.pieceBuilder.buildPiece(loadedGLTFPieces, pieceData, this.materials),
+          this.pieceBuilder.buildPiece(
+            loadedGLTFPieces,
+            pieceData,
+            this.materials,
+            this.piecesData.facesNormalVectors,
+          ),
         ),
     );
   }
