@@ -1,7 +1,11 @@
 import * as THREE from 'three';
 import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
-// TODO: you can use this class to debug the raycaster and find the possible rotation vectors
+/**
+ * DebugRaycaster class is used to show debug information about raycasting in the scene.
+ * It is used to show possible rotation vectors and all intersected piece directions.
+ * You can use it to debug the rotation implementation.
+ */
 export class DebugRaycaster {
   constructor(private readonly scene: THREE.Scene) {}
 
@@ -33,7 +37,7 @@ export class DebugRaycaster {
       0xffff00, // yellow
     );
     this.scene.add(rotatedHelper);
-    console.log('rotatedVector', possibleNextVector);
+    // console.log('rotatedVector', possibleNextVector);
   }
 
   public showAllIntersectedPieceDirections(
