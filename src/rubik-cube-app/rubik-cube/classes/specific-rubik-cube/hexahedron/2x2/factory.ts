@@ -16,6 +16,7 @@ import { RubikHexahedron2x2PiecesData } from './pieces-data';
 import { AbstractRubikHexahedronFactory } from '../factory';
 import { RubikHexahedron2x2RotationGroupsData } from './rotation-groups-data';
 import { RubikHexahedron2x2ShellData } from './shell-data';
+import { RubikHexahedron2x2FacesData } from './faces-data';
 
 export class RubikHexahedron2x2Factory extends AbstractRubikHexahedronFactory<
   THexahedron2x2RotationGroups,
@@ -32,7 +33,7 @@ export class RubikHexahedron2x2Factory extends AbstractRubikHexahedronFactory<
     return new RubikHexahedron2x2PiecesData();
   }
   public override createRubikCubeFacesData(): IRubikCubeFacesData<THexahedronFaces> {
-    throw new Error('Method not implemented.');
+    return new RubikHexahedron2x2FacesData();
   }
   public override createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<THexahedron2x2RotationGroups> {
     return new RubikHexahedron2x2RotationGroupsData();
