@@ -37,8 +37,8 @@ import { RubikCubeRotationRaycaster } from './rubik-cube-rotation-raycaster';
 
 export abstract class AbstractRubikCubeFactory<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
-  TCubeFaces extends string,
-  TCubeEdgeFaces extends string,
+  TCubeFacesNames extends string,
+  TCubeEdgeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
   TCubeShellFilename extends string,
@@ -49,8 +49,8 @@ export abstract class AbstractRubikCubeFactory<
 > implements
     IRubikCubeFactory<
       TCubePiecesFilenamesWithFaces,
-      TCubeFaces,
-      TCubeEdgeFaces,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellFilename,
@@ -66,7 +66,7 @@ export abstract class AbstractRubikCubeFactory<
 
   public abstract createRubikCubePiecesData(): IRubikCubePiecesData<
     TCubePiecesFilenamesWithFaces,
-    TCubeFaces,
+    TCubeFacesNames,
     TCubePiecesFilenames
   >;
   public abstract createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TCubeRotationGroups>;
@@ -80,7 +80,7 @@ export abstract class AbstractRubikCubeFactory<
     TCubeShellFilename,
     TCubeShellPieces
   >;
-  public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
+  public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>;
 
   public createRubikCubeShellMaterial(): THREE.MeshBasicMaterial {
     return new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
@@ -117,8 +117,8 @@ export abstract class AbstractRubikCubeFactory<
 
   public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
     TCubePiecesFilenamesWithFaces,
-    TCubeFaces,
-    TCubeEdgeFaces
+    TCubeFacesNames,
+    TCubeEdgeFacesNames
   > {
     return new RubikCubePieceBuilder();
   }

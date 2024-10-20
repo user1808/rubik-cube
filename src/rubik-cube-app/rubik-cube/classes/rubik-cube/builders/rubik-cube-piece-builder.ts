@@ -18,18 +18,23 @@ type TTransformGLTFPieceFacesReturn = {
  */
 export class RubikCubePieceBuilder<
   TPiecesFilenamesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
-  TCubeFaces extends string,
-  TCubeEdgeFaces extends string,
+  TCubeFacesNames extends string,
+  TCubeEdgeFacesNames extends string,
   TPiecesFilenames extends
     ExtractStringKeys<TPiecesFilenamesWithFaces> = ExtractStringKeys<TPiecesFilenamesWithFaces>,
   TPiecesFaces extends string = TPiecesFilenamesWithFaces[TPiecesFilenames],
 > implements
-    IRubikCubePieceBuilder<TPiecesFilenamesWithFaces, TCubeFaces, TCubeEdgeFaces, TPiecesFilenames>
+    IRubikCubePieceBuilder<
+      TPiecesFilenamesWithFaces,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
+      TPiecesFilenames
+    >
 {
   public buildPiece(
     loadedGLTFPieces: Map<TPiecesFilenames, GLTF>,
-    pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
-    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
+    pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
+    materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
   ): RubikCubePiece {
     const { id, position, rotation, filename } = pieceData;
 
@@ -53,8 +58,8 @@ export class RubikCubePieceBuilder<
    */
   private transformGLTFPieceFaces(
     gltfPiece: THREE.Group,
-    pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
-    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
+    pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
+    materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
   ): TTransformGLTFPieceFacesReturn {
     const allFaces: Array<RubikCubePieceFace> = [];
     const visibleFaces: Array<RubikCubePieceVisibleFace> = [];
@@ -80,8 +85,8 @@ export class RubikCubePieceBuilder<
    */
   private createPiece(
     pieceFace: THREE.Object3D,
-    pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
-    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
+    pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
+    materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
   ): RubikCubePieceFace | RubikCubePieceVisibleFace {
     if (!TypeGuards.isT(pieceFace, THREE.Mesh))
       throw new Error('Loaded Piece Face is not a three.js Mesh');
@@ -111,8 +116,8 @@ export class RubikCubePieceBuilder<
    */
   private chooseRightMaterial(
     pieceFaceName: string,
-    pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
-    materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
+    pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
+    materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
   ): TCubeFaceMaterial | THREE.MeshBasicMaterial {
     const { pieceFacesToCubeFaces } = pieceData;
     let material: TCubeFaceMaterial | THREE.MeshBasicMaterial =

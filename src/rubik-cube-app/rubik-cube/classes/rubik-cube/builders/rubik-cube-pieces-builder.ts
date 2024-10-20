@@ -12,8 +12,8 @@ import { RubikCubePieceWrapper } from '../structure/piece/rubik-cube-piece-wrapp
 
 export class RubikCubePiecesBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
-  TCubeFaces extends string,
-  TCubeEdgeFaces extends string,
+  TCubeFacesNames extends string,
+  TCubeEdgeFacesNames extends string,
   TCubeShellFilename extends string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
@@ -22,15 +22,15 @@ export class RubikCubePiecesBuilder<
 {
   constructor(
     private readonly gltfLoader: IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>,
-    private readonly materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
+    private readonly materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
     private readonly pieceBuilder: IRubikCubePieceBuilder<
       TCubePiecesFilenamesWithFaces,
-      TCubeFaces,
-      TCubeEdgeFaces
+      TCubeFacesNames,
+      TCubeEdgeFacesNames
     >,
     private readonly piecesData: IRubikCubePiecesData<
       TCubePiecesFilenamesWithFaces,
-      TCubeFaces,
+      TCubeFacesNames,
       TCubePiecesFilenames
     >,
   ) {}
