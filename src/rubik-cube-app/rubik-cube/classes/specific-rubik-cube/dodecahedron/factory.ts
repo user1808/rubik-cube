@@ -13,6 +13,7 @@ import type {
   IRubikCubePiecesData,
   IRubikCubeMaterials,
   IRubikCubeRotationGroupsData,
+  IRubikCubeFacesData,
 } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
 import { RubikDodecahedronRotationData } from './rotation-data';
@@ -38,6 +39,9 @@ export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
     TDodecahedronFaces
   > {
     return new RubikDodecahedronPiecesData();
+  }
+  public override createRubikCubeFacesData(): IRubikCubeFacesData<TDodecahedronFaces> {
+    throw new Error('Method not implemented.');
   }
   public override createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TDodecahedronRotationGroups> {
     return new RubikDodecahedronRotationGroupsData();

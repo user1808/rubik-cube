@@ -3,6 +3,7 @@ import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik
 import type { THexahedron3x3RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/3x3/rotation-groups';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import type {
+  IRubikCubeFacesData,
   IRubikCubePiecesData,
   IRubikCubeRotationData,
   IRubikCubeRotationGroupsData,
@@ -29,6 +30,9 @@ export class RubikHexahedron3x3Factory extends AbstractRubikHexahedronFactory<
     THexahedronFaces
   > {
     return new RubikHexahedron3x3PiecesData();
+  }
+  public override createRubikCubeFacesData(): IRubikCubeFacesData<THexahedronFaces> {
+    throw new Error('Method not implemented.');
   }
   public override createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<THexahedron3x3RotationGroups> {
     return new RubikHexahedron3x3RotationGroupsData();

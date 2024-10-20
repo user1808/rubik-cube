@@ -5,6 +5,7 @@ import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types
 import type { THexahedron2x2ShellFilename } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/shell-filename';
 import type { THexahedron2x2ShellPieces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/shell-pieces';
 import type {
+  IRubikCubeFacesData,
   IRubikCubePiecesData,
   IRubikCubeRotationData,
   IRubikCubeRotationGroupsData,
@@ -29,6 +30,9 @@ export class RubikHexahedron2x2Factory extends AbstractRubikHexahedronFactory<
     THexahedronFaces
   > {
     return new RubikHexahedron2x2PiecesData();
+  }
+  public override createRubikCubeFacesData(): IRubikCubeFacesData<THexahedronFaces> {
+    throw new Error('Method not implemented.');
   }
   public override createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<THexahedron2x2RotationGroups> {
     return new RubikHexahedron2x2RotationGroupsData();
