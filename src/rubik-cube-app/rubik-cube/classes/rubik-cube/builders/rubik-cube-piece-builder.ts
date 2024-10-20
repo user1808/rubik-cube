@@ -6,6 +6,12 @@ import type { IRubikCubePieceBuilder } from '@/rubik-cube-app/rubik-cube/interfa
 import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import { RubikCubePiece } from '../structure/piece/rubik-cube-piece';
 import { RubikCubePieceFace } from '../structure/piece/rubik-cube-piece-face';
+import { RubikCubePieceVisibleFace } from '../structure/piece/rubik-cube-piece-visible-face';
+
+type TTransformGLTFPieceFacesReturn = {
+  allFaces: Array<RubikCubePieceFace>;
+  visibleFaces: Array<RubikCubePieceVisibleFace>;
+};
 
 /**
  * The Rubik's Cube Piece Builder class. It is responsible for creating the Rubik's Cube pieces. It is universal to any Rubik's Cube that I made so far.
@@ -31,7 +37,7 @@ export class RubikCubePieceBuilder<
     if (!gltfPiece) throw new Error(`${filename} piece was not found`);
 
     const pieceFaces = this.transformGLTFPieceFaces(gltfPiece, pieceData, materials);
-    const newPiece = new RubikCubePiece(id, pieceFaces);
+    const newPiece = new RubikCubePiece(id, pieceFaces.allFaces, pieceFaces.visibleFaces);
 
     this.setPieceInWorld(newPiece, position, rotation);
 
@@ -49,10 +55,20 @@ export class RubikCubePieceBuilder<
     gltfPiece: THREE.Group,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
-  ): Array<RubikCubePieceFace> {
-    return gltfPiece.children.map((pieceFace) =>
-      this.createPieceCallback(pieceFace, pieceData, materials),
-    );
+  ): TTransformGLTFPieceFacesReturn {
+    const allFaces: Array<RubikCubePieceFace> = [];
+    const visibleFaces: Array<RubikCubePieceVisibleFace> = [];
+
+    gltfPiece.children.forEach((pieceFace) => {
+      const piece = this.createPiece(pieceFace, pieceData, materials);
+      allFaces.push(piece);
+
+      if (piece instanceof RubikCubePieceVisibleFace) {
+        visibleFaces.push(piece);
+      }
+    });
+
+    return { allFaces, visibleFaces };
   }
 
   /**
@@ -62,18 +78,28 @@ export class RubikCubePieceBuilder<
    * @param materials The materials of the Rubik's Cube.
    * @returns The created piece face.
    */
-  private createPieceCallback(
+  private createPiece(
     pieceFace: THREE.Object3D,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
-  ): RubikCubePieceFace {
+  ): RubikCubePieceFace | RubikCubePieceVisibleFace {
     if (!TypeGuards.isT(pieceFace, THREE.Mesh))
       throw new Error('Loaded Piece Face is not a three.js Mesh');
 
     const geometry: THREE.BufferGeometry = pieceFace.geometry;
-    const material = this.chooseRightMaterial(pieceFace.name, pieceData, materials);
+    const material: TCubeFaceMaterial | THREE.MeshBasicMaterial = this.chooseRightMaterial(
+      pieceFace.name,
+      pieceData,
+      materials,
+    );
 
-    return new RubikCubePieceFace({ geometry, material: material.material, color: material.color });
+    return material instanceof THREE.MeshBasicMaterial
+      ? new RubikCubePieceFace({ geometry, material })
+      : new RubikCubePieceVisibleFace({
+          geometry,
+          material: material.material,
+          color: material.color,
+        });
   }
 
   /**
@@ -87,9 +113,10 @@ export class RubikCubePieceBuilder<
     pieceFaceName: string,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFaces, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
-  ): TCubeFaceMaterial {
+  ): TCubeFaceMaterial | THREE.MeshBasicMaterial {
     const { pieceFacesToCubeFaces } = pieceData;
-    let material: TCubeFaceMaterial = materials.cubeInvisibleFacesMaterials;
+    let material: TCubeFaceMaterial | THREE.MeshBasicMaterial =
+      materials.cubeInvisibleFacesMaterials;
 
     if (TypeGuards.isObjectKey(pieceFaceName, pieceFacesToCubeFaces)) {
       const cubeFace = pieceFacesToCubeFaces[pieceFaceName];

@@ -4,7 +4,7 @@ import type { TPieceId } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export interface IRubikCubePiece extends THREE.Group {
   readonly pieceId: TPieceId;
-  readonly pieceFaces: Array<IRubikCubePieceFace>;
+  readonly pieceAllFaces: Array<IRubikCubePieceFace>;
 
   dispose(): void;
 }
