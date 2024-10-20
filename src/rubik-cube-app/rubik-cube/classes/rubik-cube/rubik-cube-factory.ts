@@ -10,6 +10,7 @@ import type {
   IRubikCubeRotationRaycaster,
 } from '../../interfaces';
 import type {
+  IRubikCubeFacesData,
   IRubikCubeMaterials,
   IRubikCubePiecesData,
   IRubikCubeRotationData,
@@ -72,6 +73,7 @@ export abstract class AbstractRubikCubeFactory<
     TCubeFacesNames,
     TCubePiecesFilenames
   >;
+  public abstract createRubikCubeFacesData(): IRubikCubeFacesData<TCubeFacesNames>;
   public abstract createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TCubeRotationGroups>;
   public abstract createRubikCubeRotationData(): IRubikCubeRotationData<
     TCubeRotationGroups,
@@ -137,7 +139,8 @@ export abstract class AbstractRubikCubeFactory<
   }
 
   public createRubikCubeFacesBuilder(): IRubikCubeFacesBuilder<TCubeFacesNames> {
-    return new RubikCubeFacesBuilder();
+    const facesData = this.createRubikCubeFacesData();
+    return new RubikCubeFacesBuilder(facesData);
   }
 
   public createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<TCubeRotationGroups> {

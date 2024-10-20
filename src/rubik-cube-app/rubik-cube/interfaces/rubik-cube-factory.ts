@@ -8,6 +8,7 @@ import type {
   IRubikCubeRotationRaycaster,
 } from '@/rubik-cube-app/rubik-cube/interfaces';
 import type {
+  IRubikCubeFacesData,
   IRubikCubeMaterials,
   IRubikCubePiecesData,
   IRubikCubeRotationData,
@@ -39,6 +40,7 @@ export interface IRubikCubeFactory<
   get commonName(): string;
 
   createRubikCubePiecesData(): IRubikCubePiecesData<TCubePiecesFilenamesWithFaces, TCubeFacesNames>;
+  createRubikCubeFacesData(): IRubikCubeFacesData<TCubeFacesNames>;
   createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TCubeRotationGroups>;
   createRubikCubeRotationData(): IRubikCubeRotationData<TCubeRotationGroups, TCubeRotationTypes>;
   createRubikCubeShellData(): IRubikCubeShellData<
