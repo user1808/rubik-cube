@@ -18,7 +18,7 @@ export class RubikCubePiecesBuilder<
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
-> implements IRubikCubePiecesBuilder
+> implements IRubikCubePiecesBuilder<TCubeFacesNames>
 {
   constructor(
     private readonly gltfLoader: IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>,
@@ -35,7 +35,7 @@ export class RubikCubePiecesBuilder<
     >,
   ) {}
 
-  public async buildPieces(): Promise<TCubePieces> {
+  public async buildPieces(): Promise<TCubePieces<TCubeFacesNames>> {
     const loadedGLTFPieces = await this.gltfLoader.loadGLTFCubePieces(
       this.piecesData.piecesFilenames,
     );

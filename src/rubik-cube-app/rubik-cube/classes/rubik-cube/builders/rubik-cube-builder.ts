@@ -37,9 +37,12 @@ export class RubikCubeBuilder<
       TCubeRotationTypes,
       TCubeShellPieces
     >,
-    private readonly cubePiecesBuilder: IRubikCubePiecesBuilder,
+    private readonly cubePiecesBuilder: IRubikCubePiecesBuilder<TCubeFacesNames>,
     private readonly cubeFacesBuilder: IRubikCubeFacesBuilder<TCubeFacesNames>,
-    private readonly cubeRotationGroupsBuilder: IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>,
+    private readonly cubeRotationGroupsBuilder: IRubikCubeRotationGroupsBuilder<
+      TCubeFacesNames,
+      TCubeRotationGroups
+    >,
     private readonly rotationImplementation: IRubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,

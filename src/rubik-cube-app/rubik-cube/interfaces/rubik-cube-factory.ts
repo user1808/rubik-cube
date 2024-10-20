@@ -71,11 +71,14 @@ export interface IRubikCubeFactory<
     TCubeFacesNames,
     TCubeEdgeFacesNames
   >;
-  createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder;
+  createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<TCubeFacesNames>;
 
   createRubikCubeFacesBuilder(): IRubikCubeFacesBuilder<TCubeFacesNames>;
 
-  createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>;
+  createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<
+    TCubeFacesNames,
+    TCubeRotationGroups
+  >;
 
   createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
     TCubeFacesNames,

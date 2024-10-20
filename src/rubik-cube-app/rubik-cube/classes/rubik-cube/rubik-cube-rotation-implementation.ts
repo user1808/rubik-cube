@@ -54,7 +54,7 @@ export class RubikCubeRotationImplementation<
   }
 
   private rotateGroupAsync(
-    rotatingGroup: Array<IRubikCubePieceWrapper>,
+    rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
     rotatingThreeJSGroup: THREE.Group,
     rotatingGroupNewIdxs: Array<number>,
     rotationTypeData: TRotationTypeData,
@@ -95,7 +95,7 @@ export class RubikCubeRotationImplementation<
       TCubeRotationTypes,
       TCubeShellPieces
     >,
-    rotatingGroup: Array<IRubikCubePieceWrapper>,
+    rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
   ): THREE.Group {
     const rotatingThreeJSGroup = new THREE.Group();
     rubikCube.scene.add(rotatingThreeJSGroup);
@@ -123,7 +123,7 @@ export class RubikCubeRotationImplementation<
   }
 
   private updateRotatedGroupPresentation(
-    rotatingGroup: Array<IRubikCubePieceWrapper>,
+    rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
     rotatingThreeJSGroup: THREE.Group,
   ): void {
     rotatingGroup.forEach(({ piece }) => {
@@ -140,11 +140,11 @@ export class RubikCubeRotationImplementation<
   }
 
   private updateRotatedGroupData(
-    rotatingGroup: Array<IRubikCubePieceWrapper>,
+    rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
     rotatingGroupNewIdxs: Array<number>,
   ): void {
-    const rotatedGroupCopy: Array<IRubikCubePieceWrapper> = rotatingGroup.map((pieceWrapper) =>
-      Object.assign({}, pieceWrapper),
+    const rotatedGroupCopy: Array<IRubikCubePieceWrapper<TCubeFacesNames>> = rotatingGroup.map(
+      (pieceWrapper) => Object.assign({}, pieceWrapper),
     );
     rotatingGroupNewIdxs.forEach((newIdx, idx) => {
       Object.assign(rotatingGroup[idx], rotatedGroupCopy[newIdx]);

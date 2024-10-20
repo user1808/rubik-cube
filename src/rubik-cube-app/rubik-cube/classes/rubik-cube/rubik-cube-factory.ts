@@ -130,7 +130,7 @@ export abstract class AbstractRubikCubeFactory<
   > {
     return new RubikCubePieceBuilder();
   }
-  public createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder {
+  public createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<TCubeFacesNames> {
     const gltfLoader = this.createRubikCubeGLTFLoader();
     const pieceBuilder = this.createRubikCubePieceBuilder();
     const materials = this.createRubikCubeMaterials();
@@ -143,7 +143,10 @@ export abstract class AbstractRubikCubeFactory<
     return new RubikCubeFacesBuilder(facesData);
   }
 
-  public createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<TCubeRotationGroups> {
+  public createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<
+    TCubeFacesNames,
+    TCubeRotationGroups
+  > {
     const rotationGroupsData = this.createRubikCubeRotationGroupsData();
     return new RubikCubeRotationGroupsBuidler(rotationGroupsData);
   }

@@ -1,3 +1,5 @@
 import type { IRubikCubePieceWrapper } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 
-export type TCubePieces = Array<IRubikCubePieceWrapper>;
+export type TCubePieces<TCubeFacesNames extends string> = Array<
+  IRubikCubePieceWrapper<TCubeFacesNames>
+>;

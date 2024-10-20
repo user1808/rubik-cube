@@ -4,11 +4,14 @@ import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/str
 import type { TPieceId } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { RubikCubePieceVisibleFace } from './rubik-cube-piece-visible-face';
 
-export class RubikCubePiece extends THREE.Group implements IRubikCubePiece {
+export class RubikCubePiece<TCubeFacesNames extends string>
+  extends THREE.Group
+  implements IRubikCubePiece<TCubeFacesNames>
+{
   constructor(
     public readonly pieceId: TPieceId,
     public readonly pieceAllFaces: Array<RubikCubePieceFace>,
-    public readonly pieceVisibleFaces: Array<RubikCubePieceVisibleFace>,
+    public readonly pieceVisibleFaces: Array<RubikCubePieceVisibleFace<TCubeFacesNames>>,
   ) {
     super();
     this.add(...pieceAllFaces);

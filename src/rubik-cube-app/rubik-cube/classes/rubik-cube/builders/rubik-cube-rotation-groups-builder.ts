@@ -4,25 +4,31 @@ import type { TCubePieces, TRotationGroups } from '@/rubik-cube-app/rubik-cube/t
 
 export class RubikCubeRotationGroupsBuidler<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
+  TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
-> implements IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>
+> implements IRubikCubeRotationGroupsBuilder<TCubeFacesNames, TCubeRotationGroups>
 {
   constructor(
     private readonly rotationGroupsData: IRubikCubeRotationGroupsData<TCubeRotationGroups>,
   ) {}
 
-  public buildRotationGroups(cubePieces: TCubePieces): TRotationGroups<TCubeRotationGroups> {
+  public buildRotationGroups(
+    cubePieces: TCubePieces<TCubeFacesNames>,
+  ): TRotationGroups<TCubeFacesNames, TCubeRotationGroups> {
     const { rotationGroupsPiecesIdxs } = this.rotationGroupsData;
     return Object.entries<(typeof rotationGroupsPiecesIdxs)[TCubeRotationGroups]>(
       rotationGroupsPiecesIdxs,
-    ).reduce((rotationGroups, [rotationGroupName, rotationGroupPiecesIdxs]) => {
-      rotationGroups[rotationGroupName as TCubeRotationGroups] = rotationGroupPiecesIdxs.map(
-        (idx) => cubePieces[idx],
-      );
-      return rotationGroups;
-    }, {} as TRotationGroups<TCubeRotationGroups>);
+    ).reduce(
+      (rotationGroups, [rotationGroupName, rotationGroupPiecesIdxs]) => {
+        rotationGroups[rotationGroupName as TCubeRotationGroups] = rotationGroupPiecesIdxs.map(
+          (idx) => cubePieces[idx],
+        );
+        return rotationGroups;
+      },
+      {} as TRotationGroups<TCubeFacesNames, TCubeRotationGroups>,
+    );
   }
 }

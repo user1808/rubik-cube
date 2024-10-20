@@ -15,5 +15,5 @@ export interface IRubikCubePieceBuilder<
     loadedGLTFPieces: Map<TCubePiecesFilenames, GLTF>,
     pieceData: TPieceData<TCubePiecesFilenamesWithFaces, TCubeFacesNames, TCubePiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
-  ): IRubikCubePiece;
+  ): IRubikCubePiece<TCubeFacesNames>;
 }

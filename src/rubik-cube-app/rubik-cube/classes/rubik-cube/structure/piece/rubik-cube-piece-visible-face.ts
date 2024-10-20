@@ -1,22 +1,23 @@
 import * as THREE from 'three';
 import { RubikCubePieceFace } from './rubik-cube-piece-face';
 
-type TRubikCubePieceVisibleFaceConstructorParams = {
+type TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames extends string> = {
   geometry: THREE.BufferGeometry;
   material: THREE.MeshBasicMaterial;
   color: number;
+  cubeFacesNormals: Record<TCubeFacesNames, THREE.Vector3>;
 };
 
 /**
  * Class for the RubikCubePieceVisibleFace class. Extends the RubikCubePieceFace class.
  * Represents a visible face of a Rubik's Cube piece.
  */
-export class RubikCubePieceVisibleFace extends RubikCubePieceFace {
+export class RubikCubePieceVisibleFace<TCubeFacesNames extends string> extends RubikCubePieceFace {
   public readonly color: number;
 
   private readonly normal: THREE.Vector3;
 
-  constructor(params: TRubikCubePieceVisibleFaceConstructorParams) {
+  constructor(params: TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames>) {
     super(params);
     this.color = params.color;
     this.normal = new THREE.Vector3().fromBufferAttribute(this.geometry.attributes.normal, 0);

@@ -7,7 +7,7 @@ export class RubikCubeFacesBuilder<TCubeFacesNames extends string>
 {
   constructor(private readonly facesData: IRubikCubeFacesData<TCubeFacesNames>) {}
 
-  public buildFaces(cubePieces: TCubePieces): TCubeFaces<TCubeFacesNames> {
+  public buildFaces(cubePieces: TCubePieces<TCubeFacesNames>): TCubeFaces<TCubeFacesNames> {
     const { facesPiecesIdxs } = this.facesData;
     return Object.entries<(typeof facesPiecesIdxs)[TCubeFacesNames]>(facesPiecesIdxs).reduce(
       (faces, [faceName, facesPiecesIdxs]) => {
