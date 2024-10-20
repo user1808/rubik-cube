@@ -8,9 +8,11 @@ import type {
   IRubikCubeShellBuilder,
 } from '../../../interfaces/builders';
 import { RubikCube } from '../structure/cube/rubik-cube';
+import type { IRubikCubeFacesBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-faces-builder';
 
 export class RubikCubeBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
+  TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
   TCubeShellPieces extends string,
@@ -20,6 +22,7 @@ export class RubikCubeBuilder<
 > implements
     IRubikCubeBuilder<
       TCubePiecesFilenamesWithFaces,
+      TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellPieces,
@@ -35,8 +38,10 @@ export class RubikCubeBuilder<
       TCubeShellPieces
     >,
     private readonly cubePiecesBuilder: IRubikCubePiecesBuilder,
+    private readonly cubeFacesBuilder: IRubikCubeFacesBuilder<TCubeFacesNames>,
     private readonly cubeRotationGroupsBuilder: IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>,
     private readonly rotationImplementation: IRubikCubeRotationImplementation<
+      TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellPieces
@@ -44,10 +49,11 @@ export class RubikCubeBuilder<
   ) {}
 
   public async buildCube(): Promise<
-    IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
   > {
     const cubeShell = await this.cubeShellBuilder.buildShell();
     const cubePieces = await this.cubePiecesBuilder.buildPieces();
+    const cubeFaces = this.cubeFacesBuilder.buildFaces(cubePieces);
     const cubeRotationGroups = this.cubeRotationGroupsBuilder.buildRotationGroups(cubePieces);
 
     return new RubikCube(
@@ -55,6 +61,7 @@ export class RubikCubeBuilder<
       this.camera,
       cubeShell,
       cubePieces,
+      cubeFaces,
       cubeRotationGroups,
       this.rotationImplementation,
     );
