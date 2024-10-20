@@ -133,6 +133,9 @@ export class RubikCubeRotationImplementation<
       piece.position.set(position.x, position.y, position.z);
       rotatingThreeJSGroup.getWorldQuaternion(quaternion);
       piece.applyQuaternion(quaternion);
+      piece.pieceVisibleFaces.forEach((face) => {
+        face.applyQuaternionToNormal(quaternion);
+      });
     });
   }
 
