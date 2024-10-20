@@ -4,10 +4,7 @@ import type {
   TTetrahedronFaces,
   TTetrahedronEdgeFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
-import type {
-  TCubeFaceMaterial,
-  TCubeInsignificantFaceMaterial,
-} from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { TCubeFaceMaterial } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export class RubikTetrahedronMaterials
   implements IRubikCubeMaterials<TTetrahedronFaces, TTetrahedronEdgeFaces>
@@ -19,23 +16,18 @@ export class RubikTetrahedronMaterials
     Down: { material: new THREE.MeshBasicMaterial({ color: 0xffff00 }), color: 3 },
   };
   private readonly _cubeEdgeFacesMaterials: typeof this.cubeEdgeFacesMaterials = {
-    EdgeFace: { material: new THREE.MeshBasicMaterial({ color: 0x454545 }), color: -1 },
+    EdgeFace: new THREE.MeshBasicMaterial({ color: 0x454545 }),
   };
-  private readonly _cubeInvisibleFacesMaterials: typeof this.cubeInvisibleFacesMaterials = {
-    material: new THREE.MeshBasicMaterial({ color: 0x2b2b2b }),
-    color: -1,
-  };
+  private readonly _cubeInvisibleFacesMaterials: typeof this.cubeInvisibleFacesMaterials =
+    new THREE.MeshBasicMaterial({ color: 0x2b2b2b });
 
   public get cubeFacesMaterials(): Record<TTetrahedronFaces, TCubeFaceMaterial> {
     return this._cubeFacesMaterials;
   }
-  public get cubeEdgeFacesMaterials(): Record<
-    TTetrahedronEdgeFaces,
-    TCubeInsignificantFaceMaterial
-  > {
+  public get cubeEdgeFacesMaterials(): Record<TTetrahedronEdgeFaces, THREE.MeshBasicMaterial> {
     return this._cubeEdgeFacesMaterials;
   }
-  public get cubeInvisibleFacesMaterials(): TCubeInsignificantFaceMaterial {
+  public get cubeInvisibleFacesMaterials(): THREE.MeshBasicMaterial {
     return this._cubeInvisibleFacesMaterials;
   }
 }
