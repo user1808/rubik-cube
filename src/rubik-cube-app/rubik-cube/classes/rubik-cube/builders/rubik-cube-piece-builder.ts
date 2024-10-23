@@ -162,9 +162,10 @@ export class RubikCubePieceBuilder<
   /**
    * This method should set the rotation of the piece. The rotation is made like this because in Blender the rotation is made some kind of different, so we need to rotate the piece in the world axis.
    */
-  private setRotation(newPiece: RubikCubePiece<TCubeFacesNames>, { x, y, z }: THREE.Euler) {
-    newPiece.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), x);
-    newPiece.rotateOnWorldAxis(new THREE.Vector3(0, 0, -1), z);
-    newPiece.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), y);
+  private setRotation(newPiece: RubikCubePiece<TCubeFacesNames>, euler: THREE.Euler) {
+    newPiece.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), euler.x);
+    newPiece.rotateOnWorldAxis(new THREE.Vector3(0, 0, -1), euler.z);
+    newPiece.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), euler.y);
+    newPiece.pieceVisibleFaces.forEach((face) => face.applyQuaternionToNormal(newPiece.quaternion));
   }
 }
