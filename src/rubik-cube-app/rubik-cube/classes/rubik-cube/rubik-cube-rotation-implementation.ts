@@ -6,6 +6,11 @@ import type { IRubikCube, IRubikCubePieceWrapper } from '../../interfaces/struct
 import type { IRubikCubeRotationData } from '../../interfaces/data';
 import type { IRubikCubeRotationImplementation } from '../../interfaces';
 
+type TRotationEulers = {
+  singleRotationEuler: THREE.Euler;
+  entireRotationEuler: THREE.Euler;
+};
+
 export class RubikCubeRotationImplementation<
   TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
@@ -62,7 +67,11 @@ export class RubikCubeRotationImplementation<
   ): Promise<void> {
     const { angle, durationInSeconds, stepsCount } = rotationTypeData;
 
-    const singleRotationEuler = this.createSingleRotationEuler(rotationNormal, angle / stepsCount);
+    const { singleRotationEuler, entireRotationEuler } = this.createRotationEulers(
+      rotationNormal,
+      angle,
+      stepsCount,
+    );
 
     return new Promise((resolve) => {
       const timeline = gsap.timeline({
@@ -72,8 +81,12 @@ export class RubikCubeRotationImplementation<
         },
         onComplete: () => {
           timeline.kill();
-          this.updateRotatedGroupPresentation(rotatingGroup, rotatingThreeJSGroup, true);
-          this.updateRotatedGroupData(rotatingGroup, rotatingGroupNewIdxs);
+          this.updateRotatedGroupPresentation(rotatingGroup, rotatingThreeJSGroup);
+          this.updateRotatedGroupData(
+            rotatingGroup,
+            rotatingGroupNewIdxs,
+            new THREE.Quaternion().setFromEuler(entireRotationEuler),
+          );
           resolve();
         },
       });
@@ -116,16 +129,25 @@ export class RubikCubeRotationImplementation<
     rubikCube.add(...rubikCube.pieces.map((pieceWrapper) => pieceWrapper.piece));
   }
 
-  private createSingleRotationEuler(rotationNormal: THREE.Vector3, angle: number): THREE.Euler {
-    const rotationEuler = new THREE.Euler();
-    rotationEuler.setFromQuaternion(new THREE.Quaternion().setFromAxisAngle(rotationNormal, angle));
-    return rotationEuler;
+  private createRotationEulers(
+    rotationNormal: THREE.Vector3,
+    angle: number,
+    stepsCount: number,
+  ): TRotationEulers {
+    const singleRotationEuler = new THREE.Euler();
+    const entireRotationEuler = new THREE.Euler();
+    singleRotationEuler.setFromQuaternion(
+      new THREE.Quaternion().setFromAxisAngle(rotationNormal, angle / stepsCount),
+    );
+    entireRotationEuler.setFromQuaternion(
+      new THREE.Quaternion().setFromAxisAngle(rotationNormal, angle),
+    );
+    return { singleRotationEuler, entireRotationEuler };
   }
 
   private updateRotatedGroupPresentation(
     rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
     rotatingThreeJSGroup: THREE.Group,
-    updateVisibleFaces: boolean = false,
   ): void {
     rotatingGroup.forEach(({ piece }) => {
       const position = new THREE.Vector3();
@@ -134,17 +156,19 @@ export class RubikCubeRotationImplementation<
       piece.position.set(position.x, position.y, position.z);
       rotatingThreeJSGroup.getWorldQuaternion(quaternion);
       piece.applyQuaternion(quaternion);
-      if (!updateVisibleFaces) return;
-      piece.pieceVisibleFaces.forEach((face) => {
-        face.applyQuaternionToNormal(quaternion);
-      });
     });
   }
 
   private updateRotatedGroupData(
     rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
     rotatingGroupNewIdxs: Array<number>,
+    entireRotationQuaternion: THREE.Quaternion,
   ): void {
+    rotatingGroup.forEach(({ piece }) => {
+      piece.pieceVisibleFaces.forEach((face) => {
+        face.applyQuaternionToNormal(entireRotationQuaternion);
+      });
+    });
     const rotatedGroupCopy: Array<IRubikCubePieceWrapper<TCubeFacesNames>> = rotatingGroup.map(
       (pieceWrapper) => Object.assign({}, pieceWrapper),
     );

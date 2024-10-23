@@ -25,7 +25,9 @@ export class RubikCubePieceVisibleFace<TCubeFacesNames extends string> extends R
     super(params);
     this.color = params.color;
     this.cubeFacesNormalVectors = params.cubeFacesNormalVectors;
-    this.normal = new THREE.Vector3().fromBufferAttribute(this.geometry.attributes.normal, 0);
+    this.normal = new THREE.Vector3()
+      .fromBufferAttribute(this.geometry.attributes.normal, 0)
+      .normalize();
     this.roundNormal();
     this.setCubeFace();
   }
