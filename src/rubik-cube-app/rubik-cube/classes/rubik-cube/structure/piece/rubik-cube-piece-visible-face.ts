@@ -8,8 +8,6 @@ type TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames extends string>
   cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>;
 };
 
-// TODO: Problem with dodecahedron, pieces rotate during creation, normal vectors are not updated correctly
-
 /**
  * Class for the RubikCubePieceVisibleFace class. Extends the RubikCubePieceFace class.
  * Represents a visible face of a Rubik's Cube piece.
