@@ -8,6 +8,7 @@ import type {
   IRubikCubeRotationRaycaster,
 } from '@/rubik-cube-app/rubik-cube/interfaces';
 import type {
+  IRubikCubeFacesData,
   IRubikCubeMaterials,
   IRubikCubePiecesData,
   IRubikCubeRotationData,
@@ -16,6 +17,7 @@ import type {
 } from './data';
 import type {
   IRubikCubeBuilder,
+  IRubikCubeFacesBuilder,
   IRubikCubePieceBuilder,
   IRubikCubePiecesBuilder,
   IRubikCubeRotationGroupsBuilder,
@@ -25,8 +27,8 @@ import type {
 
 export interface IRubikCubeFactory<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
-  TCubeFaces extends string = string,
-  TCubeEdgeFaces extends string = string,
+  TCubeFacesNames extends string = string,
+  TCubeEdgeFacesNames extends string = string,
   TCubeRotationGroups extends string = string,
   TCubeRotationTypes extends string = string,
   TCubeShellFilename extends string = string,
@@ -37,7 +39,8 @@ export interface IRubikCubeFactory<
 > {
   get commonName(): string;
 
-  createRubikCubePiecesData(): IRubikCubePiecesData<TCubePiecesFilenamesWithFaces, TCubeFaces>;
+  createRubikCubePiecesData(): IRubikCubePiecesData<TCubePiecesFilenamesWithFaces, TCubeFacesNames>;
+  createRubikCubeFacesData(): IRubikCubeFacesData<TCubeFacesNames>;
   createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TCubeRotationGroups>;
   createRubikCubeRotationData(): IRubikCubeRotationData<TCubeRotationGroups, TCubeRotationTypes>;
   createRubikCubeShellData(): IRubikCubeShellData<
@@ -48,7 +51,7 @@ export interface IRubikCubeFactory<
   >;
 
   createRubikCubeShellMaterial(): THREE.MeshBasicMaterial;
-  createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
+  createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>;
 
   createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>;
 
@@ -65,14 +68,20 @@ export interface IRubikCubeFactory<
 
   createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
     TCubePiecesFilenamesWithFaces,
-    TCubeFaces,
-    TCubeEdgeFaces
+    TCubeFacesNames,
+    TCubeEdgeFacesNames
   >;
-  createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder;
+  createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<TCubeFacesNames>;
 
-  createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<TCubeRotationGroups>;
+  createRubikCubeFacesBuilder(): IRubikCubeFacesBuilder<TCubeFacesNames>;
+
+  createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<
+    TCubeFacesNames,
+    TCubeRotationGroups
+  >;
 
   createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
+    TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
     TCubeShellPieces
@@ -88,6 +97,7 @@ export interface IRubikCubeFactory<
     camera: THREE.PerspectiveCamera,
   ): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
+    TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
     TCubeShellPieces
@@ -98,5 +108,7 @@ export interface IRubikCubeFactory<
     camera: THREE.PerspectiveCamera,
     mouseTouchTracker: MouseTouchTracker,
     orbitControls: OrbitControls,
-  ): Promise<IRubikCube<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>>;
+  ): Promise<
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  >;
 }

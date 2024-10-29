@@ -1,18 +1,24 @@
 import * as THREE from 'three';
 import type { RubikCubePieceFace } from './rubik-cube-piece-face';
 import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
-import type { TPieceId } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { TCubeFaceColor, TPieceId } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { RubikCubePieceVisibleFace } from './rubik-cube-piece-visible-face';
 
-export class RubikCubePiece extends THREE.Group implements IRubikCubePiece {
+export class RubikCubePiece<TCubeFacesNames extends string>
+  extends THREE.Group
+  implements IRubikCubePiece<TCubeFacesNames>
+{
   constructor(
     public readonly pieceId: TPieceId,
-    public readonly pieceFaces: Array<RubikCubePieceFace>,
+    public readonly pieceAllFaces: Array<RubikCubePieceFace>,
+    public readonly pieceVisibleFaces: Array<RubikCubePieceVisibleFace<TCubeFacesNames>>,
+    public readonly pieceCubeFacesColors: Record<TCubeFacesNames, Nullable<TCubeFaceColor>>,
   ) {
     super();
-    this.add(...pieceFaces);
+    this.add(...pieceAllFaces);
   }
 
   public dispose() {
-    this.pieceFaces.forEach((face) => face.dispose());
+    this.pieceAllFaces.forEach((face) => face.dispose());
   }
 }

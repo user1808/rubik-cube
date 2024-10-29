@@ -1,5 +1,10 @@
 import type { TCubePieces, TRotationGroups } from '../../types/rubik-cube';
 
-export interface IRubikCubeRotationGroupsBuilder<TCubeRotationGroups extends string> {
-  buildRotationGroups(cubePieces: TCubePieces): TRotationGroups<TCubeRotationGroups>;
+export interface IRubikCubeRotationGroupsBuilder<
+  TCubeFacesNames extends string,
+  TCubeRotationGroups extends string,
+> {
+  buildRotationGroups(
+    cubePieces: TCubePieces<TCubeFacesNames>,
+  ): TRotationGroups<TCubeFacesNames, TCubeRotationGroups>;
 }

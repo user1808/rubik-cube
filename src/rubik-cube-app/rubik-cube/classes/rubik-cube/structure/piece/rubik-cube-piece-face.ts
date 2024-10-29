@@ -8,6 +8,7 @@ type TRubikCubePieceFaceConstructorParams = {
 
 /**
  * Class for the RubikCubePieceFace class. Extends the THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> class, because it implements the IRubikCubePieceFace interface, which extends the THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> class.
+ * Represents a face of a Rubik's Cube piece.
  */
 export class RubikCubePieceFace
   extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>

@@ -1,9 +1,14 @@
 import * as THREE from 'three';
 import type { IRubikCubeShell } from '../shell/rubik-cube-shell';
-import type { TCubePieces, TRotationGroups } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { IRubikCubeRotationRaycaster } from '../../rubik-cube-rotation-raycaster';
+import type {
+  TCubeFaces,
+  TCubePieces,
+  TRotationGroups,
+} from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export interface IRubikCube<
+  TCubeFacesNames extends string = string,
   TCubeRotationGroups extends string = string,
   TCubeRotationTypes extends string = string,
   TCubeShellPieces extends string = string,
@@ -14,8 +19,9 @@ export interface IRubikCube<
   readonly camera: THREE.PerspectiveCamera;
 
   readonly shell: IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
-  readonly pieces: TCubePieces;
-  readonly rotationGroups: TRotationGroups<TCubeRotationGroups>;
+  readonly pieces: TCubePieces<TCubeFacesNames>;
+  readonly faces: TCubeFaces<TCubeFacesNames>;
+  readonly rotationGroups: TRotationGroups<TCubeFacesNames, TCubeRotationGroups>;
 
   setRotationRaycaster(raycaster: IRubikCubeRotationRaycaster): void;
   rotate(rotationGroup: TCubeRotationGroups, rotationType: TCubeRotationTypes): Promise<void>;

@@ -12,37 +12,42 @@ import { RubikCubePieceWrapper } from '../structure/piece/rubik-cube-piece-wrapp
 
 export class RubikCubePiecesBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
-  TCubeFaces extends string,
-  TCubeEdgeFaces extends string,
+  TCubeFacesNames extends string,
+  TCubeEdgeFacesNames extends string,
   TCubeShellFilename extends string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
-> implements IRubikCubePiecesBuilder
+> implements IRubikCubePiecesBuilder<TCubeFacesNames>
 {
   constructor(
     private readonly gltfLoader: IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>,
-    private readonly materials: IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>,
+    private readonly materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
     private readonly pieceBuilder: IRubikCubePieceBuilder<
       TCubePiecesFilenamesWithFaces,
-      TCubeFaces,
-      TCubeEdgeFaces
+      TCubeFacesNames,
+      TCubeEdgeFacesNames
     >,
     private readonly piecesData: IRubikCubePiecesData<
       TCubePiecesFilenamesWithFaces,
-      TCubeFaces,
+      TCubeFacesNames,
       TCubePiecesFilenames
     >,
   ) {}
 
-  public async buildPieces(): Promise<TCubePieces> {
+  public async buildPieces(): Promise<TCubePieces<TCubeFacesNames>> {
     const loadedGLTFPieces = await this.gltfLoader.loadGLTFCubePieces(
       this.piecesData.piecesFilenames,
     );
     return this.piecesData.piecesInitData.map(
       (pieceData) =>
         new RubikCubePieceWrapper(
-          this.pieceBuilder.buildPiece(loadedGLTFPieces, pieceData, this.materials),
+          this.pieceBuilder.buildPiece(
+            loadedGLTFPieces,
+            pieceData,
+            this.materials,
+            this.piecesData.facesNormalVectors,
+          ),
         ),
     );
   }
