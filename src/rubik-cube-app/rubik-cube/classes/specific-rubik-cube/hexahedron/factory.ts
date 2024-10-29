@@ -1,18 +1,30 @@
-import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
+import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
+import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
+import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type {
   THexahedronEdgeFaces,
   THexahedronFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
-import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 import { RubikHexahedronMaterials } from './materials';
-import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
+import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
 
-export abstract class ARubikHexahedronFactory extends AbstractRubikCubeFactory<
+export abstract class AbstractRubikHexahedronFactory<
+  THexahedronRotationGroups extends string,
+  THexahedronShellFilename extends string,
+  THexahedronShellPieces extends string,
+> extends AbstractRubikCubeFactory<
   THexahedronPiecesFilenamesWithFaces,
   THexahedronFaces,
-  THexahedronEdgeFaces
+  THexahedronEdgeFaces,
+  THexahedronRotationGroups,
+  THexahedronRotationTypes,
+  THexahedronShellFilename,
+  THexahedronShellPieces
 > {
-  public createRubikCubeMaterials(): IRubikCubeMaterials<THexahedronFaces, THexahedronEdgeFaces> {
+  public override createRubikCubeMaterials(): IRubikCubeMaterials<
+    THexahedronFaces,
+    THexahedronEdgeFaces
+  > {
     return new RubikHexahedronMaterials();
   }
 }

@@ -1,14 +1,15 @@
-import { RubikHexahedronPiecesData } from '../pieces-data';
+import {
+  AbstractRubikHexahedronPiecesData,
+  type THexahedronPositionValues,
+  type THexahedronSize,
+} from '../pieces-data';
 
-export class RubikHexahedron5x5PiecesData extends RubikHexahedronPiecesData {
-  protected override get size(): number {
-    return 5;
-  }
-  protected override get positionValues(): Record<'x' | 'y' | 'z', number[]> {
-    return {
-      x: [-2, -1, 0, 1, 2],
-      y: [2, 1, 0, -1, -2],
-      z: [-2, -1, 0, 1, 2],
-    };
-  }
+export class RubikHexahedron5x5PiecesData extends AbstractRubikHexahedronPiecesData {
+  protected override readonly size: THexahedronSize = 5;
+
+  protected override readonly positionValues: THexahedronPositionValues = {
+    x: [-2, -1, 0, 1, 2],
+    y: [2, 1, 0, -1, -2],
+    z: [-2, -1, 0, 1, 2],
+  };
 }

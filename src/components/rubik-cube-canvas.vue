@@ -4,11 +4,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
+import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces';
 import { RubikCubeApp } from '@/rubik-cube-app/rubik-cube-app';
-import type { TUniversalRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
 
 const props = defineProps<{
-  factory: TUniversalRubikCubeFactory;
+  factory: IRubikCubeFactory<Record<string, string>>;
 }>();
 
 const canvas = ref<Nullable<HTMLCanvasElement>>(null);

@@ -1,31 +1,24 @@
 import * as THREE from 'three';
 import type { RubikCubePieceFace } from './rubik-cube-piece-face';
-import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure/rubik-cube-piece';
+import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
+import type { TCubeFaceColor, TPieceId } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { RubikCubePieceVisibleFace } from './rubik-cube-piece-visible-face';
 
-/**
- * Class for the RubikCubePiece class. Extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>, because it implements the IRubikCubePiece interface, which extends the THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> class.
- */
-export class RubikCubePiece
-  extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>
-  implements IRubikCubePiece
+export class RubikCubePiece<TCubeFacesNames extends string>
+  extends THREE.Group
+  implements IRubikCubePiece<TCubeFacesNames>
 {
   constructor(
-    private readonly _pieceId: number,
-    private readonly _pieceFaces: Array<RubikCubePieceFace>,
+    public readonly pieceId: TPieceId,
+    public readonly pieceAllFaces: Array<RubikCubePieceFace>,
+    public readonly pieceVisibleFaces: Array<RubikCubePieceVisibleFace<TCubeFacesNames>>,
+    public readonly pieceCubeFacesColors: Record<TCubeFacesNames, Nullable<TCubeFaceColor>>,
   ) {
     super();
-    this.add(..._pieceFaces);
-  }
-
-  public get pieceId(): number {
-    return this._pieceId;
-  }
-
-  public get pieceFaces(): Array<RubikCubePieceFace> {
-    return this._pieceFaces;
+    this.add(...pieceAllFaces);
   }
 
   public dispose() {
-    this._pieceFaces.forEach((face) => face.dispose());
+    this.pieceAllFaces.forEach((face) => face.dispose());
   }
 }

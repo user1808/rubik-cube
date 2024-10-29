@@ -1,40 +1,46 @@
 import * as THREE from 'three';
-import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 import type {
   TDodecahedronEdgeFaces,
   TDodecahedronFaces,
-} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron';
+import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { TCubeFaceMaterial } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export class RubikDodecahedronMaterials
   implements IRubikCubeMaterials<TDodecahedronFaces, TDodecahedronEdgeFaces>
 {
-  private readonly _cubeFacesMaterials: typeof this.cubeFacesMaterials = {
-    Up: new THREE.MeshBasicMaterial({ color: 0x0062ff }),
-    Down: new THREE.MeshBasicMaterial({ color: 0x00fbff }),
-    Right: new THREE.MeshBasicMaterial({ color: 0xff00f2 }),
-    BackLeft: new THREE.MeshBasicMaterial({ color: 0x7d48b8 }),
-    Front: new THREE.MeshBasicMaterial({ color: 0xff0000 }),
-    Back: new THREE.MeshBasicMaterial({ color: 0xff7700 }),
-    Left: new THREE.MeshBasicMaterial({ color: 0xffffff }),
-    BackRight: new THREE.MeshBasicMaterial({ color: 0x888888 }),
-    UpLeft: new THREE.MeshBasicMaterial({ color: 0xfff200 }),
-    DownRight: new THREE.MeshBasicMaterial({ color: 0xbfff00 }),
-    UpRight: new THREE.MeshBasicMaterial({ color: 0x7bff00 }),
-    DownLeft: new THREE.MeshBasicMaterial({ color: 0x00ff8c }),
+  public readonly cubeFacesMaterials: Record<TDodecahedronFaces, TCubeFaceMaterial> = {
+    Up: { material: new THREE.MeshBasicMaterial({ color: 0x0062ff }), color: 0 },
+    Down: { material: new THREE.MeshBasicMaterial({ color: 0x00fbff }), color: 1 },
+    Right: { material: new THREE.MeshBasicMaterial({ color: 0xff00f2 }), color: 2 },
+    BackLeft: { material: new THREE.MeshBasicMaterial({ color: 0x7d48b8 }), color: 3 },
+    Front: { material: new THREE.MeshBasicMaterial({ color: 0xff0000 }), color: 4 },
+    Back: { material: new THREE.MeshBasicMaterial({ color: 0xff7700 }), color: 5 },
+    Left: { material: new THREE.MeshBasicMaterial({ color: 0xffffff }), color: 6 },
+    BackRight: { material: new THREE.MeshBasicMaterial({ color: 0x888888 }), color: 7 },
+    UpLeft: { material: new THREE.MeshBasicMaterial({ color: 0xfff200 }), color: 8 },
+    DownRight: { material: new THREE.MeshBasicMaterial({ color: 0xbfff00 }), color: 9 },
+    UpRight: { material: new THREE.MeshBasicMaterial({ color: 0x7bff00 }), color: 10 },
+    DownLeft: { material: new THREE.MeshBasicMaterial({ color: 0x00ff8c }), color: 11 },
   };
-  private readonly _cubeEdgeFacesMaterials: typeof this.cubeEdgeFacesMaterials = {
-    EdgeFace: new THREE.MeshBasicMaterial({ color: 0x454545 }),
-  };
-  private readonly _cubeInvisibleFacesMaterials: typeof this.cubeInvisibleFacesMaterials =
+  public readonly cubeEdgeFacesMaterials: Record<TDodecahedronEdgeFaces, THREE.MeshBasicMaterial> =
+    {
+      EdgeFace: new THREE.MeshBasicMaterial({ color: 0x454545 }),
+    };
+  public readonly cubeInvisibleFacesMaterials: THREE.MeshBasicMaterial =
     new THREE.MeshBasicMaterial({ color: 0x2b2b2b });
-
-  public get cubeFacesMaterials(): Record<TDodecahedronFaces, THREE.MeshBasicMaterial> {
-    return this._cubeFacesMaterials;
-  }
-  public get cubeEdgeFacesMaterials(): Record<TDodecahedronEdgeFaces, THREE.MeshBasicMaterial> {
-    return this._cubeEdgeFacesMaterials;
-  }
-  public get cubeInvisibleFacesMaterials(): THREE.MeshBasicMaterial {
-    return this._cubeInvisibleFacesMaterials;
-  }
+  public readonly initCubeFacesColors: Record<TDodecahedronFaces, null> = {
+    Up: null,
+    Down: null,
+    Right: null,
+    BackLeft: null,
+    Front: null,
+    Back: null,
+    Left: null,
+    BackRight: null,
+    UpLeft: null,
+    DownRight: null,
+    UpRight: null,
+    DownLeft: null,
+  };
 }

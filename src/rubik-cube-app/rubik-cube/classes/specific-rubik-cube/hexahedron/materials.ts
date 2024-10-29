@@ -1,34 +1,33 @@
 import * as THREE from 'three';
-import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
 import type {
   THexahedronEdgeFaces,
   THexahedronFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
+import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { TCubeFaceMaterial } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export class RubikHexahedronMaterials
   implements IRubikCubeMaterials<THexahedronFaces, THexahedronEdgeFaces>
 {
-  private readonly _cubeFacesMaterials: typeof this.cubeFacesMaterials = {
-    Front: new THREE.MeshBasicMaterial({ color: 0xff0000 }),
-    Back: new THREE.MeshBasicMaterial({ color: 0xff8800 }),
-    Right: new THREE.MeshBasicMaterial({ color: 0xffffff }),
-    Left: new THREE.MeshBasicMaterial({ color: 0xffff00 }),
-    Up: new THREE.MeshBasicMaterial({ color: 0x00ff00 }),
-    Down: new THREE.MeshBasicMaterial({ color: 0x0000ff }),
+  public readonly cubeFacesMaterials: Record<THexahedronFaces, TCubeFaceMaterial> = {
+    Front: { material: new THREE.MeshBasicMaterial({ color: 0xff0000 }), color: 0 },
+    Back: { material: new THREE.MeshBasicMaterial({ color: 0xff8800 }), color: 1 },
+    Right: { material: new THREE.MeshBasicMaterial({ color: 0xffffff }), color: 2 },
+    Left: { material: new THREE.MeshBasicMaterial({ color: 0xffff00 }), color: 3 },
+    Up: { material: new THREE.MeshBasicMaterial({ color: 0x00ff00 }), color: 4 },
+    Down: { material: new THREE.MeshBasicMaterial({ color: 0x0000ff }), color: 5 },
   };
-  private readonly _cubeEdgeFacesMaterials: typeof this.cubeEdgeFacesMaterials = {
+  public readonly cubeEdgeFacesMaterials: Record<THexahedronEdgeFaces, THREE.MeshBasicMaterial> = {
     EdgeFace: new THREE.MeshBasicMaterial({ color: 0x454545 }),
   };
-  private readonly _cubeInvisibleFacesMaterials: typeof this.cubeInvisibleFacesMaterials =
+  public readonly cubeInvisibleFacesMaterials: THREE.MeshBasicMaterial =
     new THREE.MeshBasicMaterial({ color: 0x2b2b2b });
-
-  public get cubeFacesMaterials(): Record<THexahedronFaces, THREE.MeshBasicMaterial> {
-    return this._cubeFacesMaterials;
-  }
-  public get cubeEdgeFacesMaterials(): Record<THexahedronEdgeFaces, THREE.MeshBasicMaterial> {
-    return this._cubeEdgeFacesMaterials;
-  }
-  public get cubeInvisibleFacesMaterials(): THREE.MeshBasicMaterial {
-    return this._cubeInvisibleFacesMaterials;
-  }
+  public readonly initCubeFacesColors: Record<THexahedronFaces, null> = {
+    Front: null,
+    Back: null,
+    Right: null,
+    Left: null,
+    Up: null,
+    Down: null,
+  };
 }

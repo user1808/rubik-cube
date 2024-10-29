@@ -1,55 +1,114 @@
-import type { IRubikCube } from './structure/rubik-cube';
-import type { IRubikCubeMaterials } from './rubik-cube-materials';
-import type { IRubikCubePieceBuilder } from './rubik-cube-piece-builder';
-import type { IRubikCubePiecesData } from './rubik-cube-pieces-data';
-import type { IRubikCubePiecesLoader } from './rubik-cube-pieces-loader';
+import * as THREE from 'three';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import type { MouseTouchTracker } from '@/rubik-cube-app/common';
+import type { IRubikCube } from './structure';
+import type {
+  IRubikCubeGLTFLoader,
+  IRubikCubeRotationImplementation,
+  IRubikCubeRotationRaycaster,
+} from '@/rubik-cube-app/rubik-cube/interfaces';
+import type {
+  IRubikCubeFacesData,
+  IRubikCubeMaterials,
+  IRubikCubePiecesData,
+  IRubikCubeRotationData,
+  IRubikCubeRotationGroupsData,
+  IRubikCubeShellData,
+} from './data';
+import type {
+  IRubikCubeBuilder,
+  IRubikCubeFacesBuilder,
+  IRubikCubePieceBuilder,
+  IRubikCubePiecesBuilder,
+  IRubikCubeRotationGroupsBuilder,
+  IRubikCubeShellBuilder,
+  IRubikCubeShellPiecesBuilder,
+} from './builders';
 
-/**
- * Alias for the Rubik's Cube Factory that is universal to any Rubik's Cube.
- */
-export type TUniversalRubikCubeFactory = IRubikCubeFactory<Record<string, string>, string, string>;
-
-/**
- * Represents a factory of the Rubik's Cube. It is used to create the Rubik's Cube.
- *
- * For more informations about the types, see the {@link IRubikCubePiecesData}, {@link IRubikCubePiecesLoader}, {@link IRubikCubePieceBuilder} and {@link IRubikCubeMaterials} types.
- */
 export interface IRubikCubeFactory<
-  TPiecesFilenamesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
-  TCubeFaces extends string,
-  TCubeEdgeFaces extends string,
-  TPiecesFilenames extends
-    ExtractStringKeys<TPiecesFilenamesWithFaces> = ExtractStringKeys<TPiecesFilenamesWithFaces>,
-  TPiecesFaces extends string = TPiecesFilenamesWithFaces[TPiecesFilenames],
+  TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
+  TCubeFacesNames extends string = string,
+  TCubeEdgeFacesNames extends string = string,
+  TCubeRotationGroups extends string = string,
+  TCubeRotationTypes extends string = string,
+  TCubeShellFilename extends string = string,
+  TCubeShellPieces extends string = string,
+  TCubePiecesFilenames extends
+    ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
+  TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
-  /**
-   * The common name of the Rubik's Cube.
-   */
   get commonName(): string;
 
-  /**
-   * Creates the data of the Rubik's Cube pieces.
-   */
-  createRubikCubePiecesData(): IRubikCubePiecesData<TPiecesFilenamesWithFaces, TCubeFaces>;
-  /**
-   * Creates the loader of the Rubik's Cube pieces.
-   */
-  createRubikCubePiecesLoader(): IRubikCubePiecesLoader<TPiecesFilenames>;
-  /**
-   * Creates the builder of the Rubik's Cube pieces.
-   */
-  createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
-    TPiecesFilenamesWithFaces,
-    TCubeFaces,
-    TCubeEdgeFaces
+  createRubikCubePiecesData(): IRubikCubePiecesData<TCubePiecesFilenamesWithFaces, TCubeFacesNames>;
+  createRubikCubeFacesData(): IRubikCubeFacesData<TCubeFacesNames>;
+  createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TCubeRotationGroups>;
+  createRubikCubeRotationData(): IRubikCubeRotationData<TCubeRotationGroups, TCubeRotationTypes>;
+  createRubikCubeShellData(): IRubikCubeShellData<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellFilename,
+    TCubeShellPieces
   >;
-  /**
-   * Creates the materials of the Rubik's Cube.
-   */
-  createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
 
-  /**
-   * Creates the Rubik's Cube.
-   */
-  createRubikCube(): Promise<IRubikCube>;
+  createRubikCubeShellMaterial(): THREE.MeshBasicMaterial;
+  createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>;
+
+  createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>;
+
+  createRubikCubeShellPiecesBuilder(): IRubikCubeShellPiecesBuilder<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  >;
+  createRubikCubeShellBuilder(): IRubikCubeShellBuilder<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  >;
+
+  createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
+    TCubePiecesFilenamesWithFaces,
+    TCubeFacesNames,
+    TCubeEdgeFacesNames
+  >;
+  createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<TCubeFacesNames>;
+
+  createRubikCubeFacesBuilder(): IRubikCubeFacesBuilder<TCubeFacesNames>;
+
+  createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<
+    TCubeFacesNames,
+    TCubeRotationGroups
+  >;
+
+  createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
+    TCubeFacesNames,
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  >;
+
+  createRubikCubeRotationRaycaster(
+    mouseTouchTracker: MouseTouchTracker,
+    orbitControls: OrbitControls,
+  ): IRubikCubeRotationRaycaster;
+
+  createRubikCubeBuilder(
+    scene: THREE.Scene,
+    camera: THREE.PerspectiveCamera,
+  ): IRubikCubeBuilder<
+    TCubePiecesFilenamesWithFaces,
+    TCubeFacesNames,
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  >;
+
+  createRubikCube(
+    scene: THREE.Scene,
+    camera: THREE.PerspectiveCamera,
+    mouseTouchTracker: MouseTouchTracker,
+    orbitControls: OrbitControls,
+  ): Promise<
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  >;
 }

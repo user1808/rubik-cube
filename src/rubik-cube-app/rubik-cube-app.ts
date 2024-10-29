@@ -1,67 +1,77 @@
 import * as THREE from 'three';
-import { ScreenSize, ScreenSizeTracker } from './common';
+import { toRaw } from 'vue';
+import type { IRubikCube } from './rubik-cube/interfaces/structure';
+import type { IRubikCubeFactory } from './rubik-cube/interfaces';
+import { MouseTouchTracker, ScreenSize, ScreenSizeTracker } from './common';
 import { CustomPersepctiveCamera, CustomRenderer, CustomOrbitControls } from './common/custom';
-import { toRaw, isProxy } from 'vue';
-import type { TUniversalRubikCubeFactory } from './rubik-cube/interfaces/rubik-cube-factory';
-import Stats from 'three/examples/jsm/libs/stats.module.js';
-import type { IRubikCube } from './rubik-cube/interfaces/structure/rubik-cube';
+import { DebugModeCoordinator } from './rubik-cube/classes/debug/debug-mode-coordinator';
+import { DebugAxes, DebugStats, DebugCubeUI } from './rubik-cube/classes/debug/subscribers';
 
 export class RubikCubeApp {
   private readonly scene: THREE.Scene = new THREE.Scene();
 
   private readonly screenSize: ScreenSize = new ScreenSize();
   private readonly screenSizeTracker: ScreenSizeTracker = new ScreenSizeTracker();
+  private readonly mouseTouchTracker: MouseTouchTracker = new MouseTouchTracker(this.screenSize);
 
-  private readonly camera: CustomPersepctiveCamera;
+  private readonly camera: CustomPersepctiveCamera = new CustomPersepctiveCamera(this.screenSize);
   private readonly renderer: CustomRenderer;
-  private readonly controls: CustomOrbitControls;
-  private readonly stats = new Stats();
+  private readonly orbitControls: CustomOrbitControls;
 
+  private cubeFactory: Nullable<IRubikCubeFactory<Record<string, string>>> = null;
   private cube: Nullable<IRubikCube> = null;
 
+  private readonly debugModeCoordinator = new DebugModeCoordinator({
+    DebugStats: new DebugStats(),
+    DebugAxes: new DebugAxes(this.scene),
+    DebugCubeUI: new DebugCubeUI(),
+  });
+
   constructor(canvas: HTMLCanvasElement) {
-    this.camera = new CustomPersepctiveCamera(this.screenSize);
     this.renderer = new CustomRenderer(canvas, this.screenSize);
     this.screenSizeTracker.startTrack(this.screenSize, this.camera, this.renderer);
-    this.controls = new CustomOrbitControls(this.camera, canvas);
-
-    this.stats.showPanel(0);
-    document.body.appendChild(this.stats.dom);
+    this.orbitControls = new CustomOrbitControls(this.camera, canvas);
   }
 
-  public async start(factory: TUniversalRubikCubeFactory): Promise<void> {
-    await this.setUpCube(factory);
-    this.setUpCamera();
-    this.setUpTick();
+  public async start(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
+    await this.changeCube(factory);
+    this.prepareCamera();
+    this.prepareTickMethod();
   }
 
-  public async changeCube(factory: TUniversalRubikCubeFactory): Promise<void> {
+  public async changeCube(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
+    this.cubeFactory = factory;
     this.removeCube();
-    await this.setUpCube(factory);
+    await this.prepareCube();
   }
 
   private removeCube() {
-    if (this.cube) {
-      this.cube.dispose();
-      this.scene.remove(this.cube);
-    }
+    if (!this.cube) return;
+    this.cube.removeFromScene();
   }
 
-  private async setUpCube(factory: TUniversalRubikCubeFactory): Promise<void> {
-    this.cube = await factory.createRubikCube();
-    this.scene.add(this.cube);
+  private async prepareCube(): Promise<void> {
+    if (!this.cubeFactory) return;
+    this.cube = await this.cubeFactory.createRubikCube(
+      this.scene,
+      this.camera,
+      this.mouseTouchTracker,
+      this.orbitControls,
+    );
+    this.cube.addToScene();
+    this.debugModeCoordinator.getSubscriber('DebugCubeUI').setCube(this.cube, this.cubeFactory);
   }
 
-  private setUpCamera(): void {
+  private prepareCamera(): void {
     this.scene.add(this.camera);
   }
 
-  private setUpTick(): void {
+  private prepareTickMethod(): void {
     const tick = () => {
-      this.stats.begin();
-      this.controls.update();
-      this.renderer.render(isProxy(this.scene) ? toRaw(this.scene) : this.scene, this.camera);
-      this.stats.end();
+      this.debugModeCoordinator.getSubscriber('DebugStats').start();
+      this.orbitControls.update();
+      this.renderer.render(toRaw(this.scene), toRaw(this.camera));
+      this.debugModeCoordinator.getSubscriber('DebugStats').end();
 
       window.requestAnimationFrame(tick);
     };

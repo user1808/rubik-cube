@@ -1,68 +1,218 @@
-import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
-import type { IRubikCubePieceBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-piece-builder';
-import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-data';
-import type { IRubikCubePiecesLoader } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-loader';
-import { RubikCube } from './structure/cube/rubik-cube';
-import { RubikCubePiecesLoader } from './rubik-cube-pieces-loader';
-import { RubikCubePieceBuilder } from './rubik-cube-piece-builder';
-import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-materials';
-import type { IRubikCubePiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure/rubik-cube-piece';
+import * as THREE from 'three';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import type { MouseTouchTracker } from '@/rubik-cube-app/common';
+import type { IRubikCubeShellData } from '../../interfaces/data/rubik-cube-shell-data';
+import type { IRubikCube } from '../../interfaces/structure';
+import type {
+  IRubikCubeFactory,
+  IRubikCubeGLTFLoader,
+  IRubikCubeRotationImplementation,
+  IRubikCubeRotationRaycaster,
+} from '../../interfaces';
+import type {
+  IRubikCubeFacesData,
+  IRubikCubeMaterials,
+  IRubikCubePiecesData,
+  IRubikCubeRotationData,
+  IRubikCubeRotationGroupsData,
+} from '../../interfaces/data';
+import type {
+  IRubikCubeBuilder,
+  IRubikCubeFacesBuilder,
+  IRubikCubePieceBuilder,
+  IRubikCubePiecesBuilder,
+  IRubikCubeRotationGroupsBuilder,
+  IRubikCubeShellBuilder,
+  IRubikCubeShellPiecesBuilder,
+} from '../../interfaces/builders';
+import {
+  RubikCubeFacesBuilder,
+  RubikCubePieceBuilder,
+  RubikCubePiecesBuilder,
+  RubikCubeRotationGroupsBuidler,
+  RubikCubeShellBuilder,
+  RubikCubeShellPiecesBuilder,
+} from './builders';
+import { RubikCubeGLTFLoader } from './rubik-cube-gltf-loader';
+import { RubikCubeBuilder } from './builders/rubik-cube-builder';
+import { RubikCubeRotationImplementation } from './rubik-cube-rotation-implementation';
+import { RubikCubeRotationRaycaster } from './rubik-cube-rotation-raycaster';
 
-/**
- * The abstract Rubik's Cube Factory class. It is responsible for creating the Rubik's Cube. It is universal to any Rubik's Cube that I made so far. It have to be extended by a concrete Rubik's Cube Factory class.
- */
 export abstract class AbstractRubikCubeFactory<
-  TPiecesFilenamesWithFaces extends Record<TPiecesFilenames, TPiecesFaces>,
-  TCubeFaces extends string,
-  TCubeEdgeFaces extends string,
-  TPiecesFilenames extends
-    ExtractStringKeys<TPiecesFilenamesWithFaces> = ExtractStringKeys<TPiecesFilenamesWithFaces>,
-  TPiecesFaces extends string = TPiecesFilenamesWithFaces[TPiecesFilenames],
-> implements IRubikCubeFactory<TPiecesFilenamesWithFaces, TCubeFaces, TCubeEdgeFaces>
+  TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
+  TCubeFacesNames extends string,
+  TCubeEdgeFacesNames extends string,
+  TCubeRotationGroups extends string,
+  TCubeRotationTypes extends string,
+  TCubeShellFilename extends string,
+  TCubeShellPieces extends string,
+  TCubePiecesFilenames extends
+    ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
+  TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
+> implements
+    IRubikCubeFactory<
+      TCubePiecesFilenamesWithFaces,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilename,
+      TCubeShellPieces
+    >
 {
-  /**
-   * The Rubik's Cube instance. It is created only once. I implemented this to prevent creating multiple Rubik's Cube instances when it is not necessary.
-   */
-  private cube: Nullable<RubikCube> = null;
+  private cube: Nullable<
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  > = null;
+  private gltfLoader: Nullable<IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>> =
+    null;
 
   public abstract get commonName(): string;
 
   public abstract createRubikCubePiecesData(): IRubikCubePiecesData<
-    TPiecesFilenamesWithFaces,
-    TCubeFaces,
-    TPiecesFilenames
+    TCubePiecesFilenamesWithFaces,
+    TCubeFacesNames,
+    TCubePiecesFilenames
   >;
-  public abstract createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFaces, TCubeEdgeFaces>;
+  public abstract createRubikCubeFacesData(): IRubikCubeFacesData<TCubeFacesNames>;
+  public abstract createRubikCubeRotationGroupsData(): IRubikCubeRotationGroupsData<TCubeRotationGroups>;
+  public abstract createRubikCubeRotationData(): IRubikCubeRotationData<
+    TCubeRotationGroups,
+    TCubeRotationTypes
+  >;
+  public abstract createRubikCubeShellData(): IRubikCubeShellData<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellFilename,
+    TCubeShellPieces
+  >;
+  public abstract createRubikCubeMaterials(): IRubikCubeMaterials<
+    TCubeFacesNames,
+    TCubeEdgeFacesNames
+  >;
 
-  public createRubikCubePiecesLoader(): IRubikCubePiecesLoader<TPiecesFilenames> {
-    return new RubikCubePiecesLoader();
+  public createRubikCubeShellMaterial(): THREE.MeshBasicMaterial {
+    return new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
   }
+
+  public createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<
+    TCubeShellFilename,
+    TCubePiecesFilenames
+  > {
+    if (this.gltfLoader) return this.gltfLoader;
+
+    this.gltfLoader = new RubikCubeGLTFLoader();
+    return this.gltfLoader;
+  }
+
+  public createRubikCubeShellPiecesBuilder(): IRubikCubeShellPiecesBuilder<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  > {
+    const gltfLoader = this.createRubikCubeGLTFLoader();
+    const material = this.createRubikCubeShellMaterial();
+    const shellData = this.createRubikCubeShellData();
+    return new RubikCubeShellPiecesBuilder(gltfLoader, material, shellData);
+  }
+  public createRubikCubeShellBuilder(): IRubikCubeShellBuilder<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  > {
+    const shellPiecesBuilder = this.createRubikCubeShellPiecesBuilder();
+    return new RubikCubeShellBuilder(shellPiecesBuilder);
+  }
+
   public createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
-    TPiecesFilenamesWithFaces,
-    TCubeFaces,
-    TCubeEdgeFaces
+    TCubePiecesFilenamesWithFaces,
+    TCubeFacesNames,
+    TCubeEdgeFacesNames
   > {
     return new RubikCubePieceBuilder();
   }
+  public createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<TCubeFacesNames> {
+    const gltfLoader = this.createRubikCubeGLTFLoader();
+    const pieceBuilder = this.createRubikCubePieceBuilder();
+    const materials = this.createRubikCubeMaterials();
+    const piecesData = this.createRubikCubePiecesData();
+    return new RubikCubePiecesBuilder(gltfLoader, materials, pieceBuilder, piecesData);
+  }
 
-  public async createRubikCube(): Promise<RubikCube> {
+  public createRubikCubeFacesBuilder(): IRubikCubeFacesBuilder<TCubeFacesNames> {
+    const facesData = this.createRubikCubeFacesData();
+    return new RubikCubeFacesBuilder(facesData);
+  }
+
+  public createRubikCubeRotationGroupsBuilder(): IRubikCubeRotationGroupsBuilder<
+    TCubeFacesNames,
+    TCubeRotationGroups
+  > {
+    const rotationGroupsData = this.createRubikCubeRotationGroupsData();
+    return new RubikCubeRotationGroupsBuidler(rotationGroupsData);
+  }
+
+  public createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
+    TCubeFacesNames,
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  > {
+    const rotationData = this.createRubikCubeRotationData();
+    return new RubikCubeRotationImplementation(rotationData);
+  }
+
+  public createRubikCubeRotationRaycaster(
+    mouseTouchTracker: MouseTouchTracker,
+    orbitControls: OrbitControls,
+  ): IRubikCubeRotationRaycaster {
+    if (!this.cube) throw new Error('Cube is not created yet');
+    return new RubikCubeRotationRaycaster(this.cube, mouseTouchTracker, orbitControls);
+  }
+
+  public createRubikCubeBuilder(
+    scene: THREE.Scene,
+    camera: THREE.PerspectiveCamera,
+  ): IRubikCubeBuilder<
+    TCubePiecesFilenamesWithFaces,
+    TCubeFacesNames,
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellPieces
+  > {
+    const shellBuilder = this.createRubikCubeShellBuilder();
+    const piecesBuilder = this.createRubikCubePiecesBuilder();
+    const facesBuilder = this.createRubikCubeFacesBuilder();
+    const rotationGroupsBuilder = this.createRubikCubeRotationGroupsBuilder();
+
+    const rotationImplementation = this.createRubikCubeRotationImplementation();
+
+    return new RubikCubeBuilder(
+      scene,
+      camera,
+      shellBuilder,
+      piecesBuilder,
+      facesBuilder,
+      rotationGroupsBuilder,
+      rotationImplementation,
+    );
+  }
+
+  public async createRubikCube(
+    scene: THREE.Scene,
+    camera: THREE.PerspectiveCamera,
+    mouseTouchTracker: MouseTouchTracker,
+    orbitControls: OrbitControls,
+  ): Promise<
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  > {
     if (this.cube) return this.cube;
 
-    const data = this.createRubikCubePiecesData();
-    const materials = this.createRubikCubeMaterials();
+    const cubeBuilder = this.createRubikCubeBuilder(scene, camera);
 
-    const loader = this.createRubikCubePiecesLoader();
-    const builder = this.createRubikCubePieceBuilder();
-
-    const loadedGltfPieces = await loader.loadGltfPieces(data.piecesFilenames);
-
-    const cubePieces: Array<IRubikCubePiece> = [];
-
-    data.piecesData.forEach((pieceData) => {
-      cubePieces.push(builder.createPiece(loadedGltfPieces, pieceData, materials));
-    });
-
-    this.cube = new RubikCube(cubePieces);
+    this.cube = await cubeBuilder.buildCube();
+    this.cube.setRotationRaycaster(
+      this.createRubikCubeRotationRaycaster(mouseTouchTracker, orbitControls),
+    );
     return this.cube;
   }
 }

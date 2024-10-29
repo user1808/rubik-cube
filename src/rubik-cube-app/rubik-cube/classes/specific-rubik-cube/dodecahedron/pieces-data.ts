@@ -1,12 +1,12 @@
 import * as THREE from 'three';
-import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-pieces-data';
-import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube/piece-data';
-import { Radians } from '@/utils/radians';
 import type {
   TDodecahedronPiecesFilenames,
   TDodecahedronPiecesFilenamesWithFaces,
-} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/pieces-faces';
-import type { TDodecahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
+  TDodecahedronFaces,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron';
+import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import { Radians } from '@/utils/radians';
 
 type TCreateGroupOfPiecesDataParams = {
   [TDodecahedronPieceFilename in TDodecahedronPiecesFilenames]: {
@@ -16,7 +16,12 @@ type TCreateGroupOfPiecesDataParams = {
     positionData: Record<'x' | 'y' | 'z', Array<number>>;
     filename: TDodecahedronPieceFilename;
     pieceFacesToCubeFaces: Array<
-      Partial<Record<TDodecahedronPiecesFilenamesWithFaces[TDodecahedronPieceFilename], TDodecahedronFaces>>
+      Partial<
+        Record<
+          TDodecahedronPiecesFilenamesWithFaces[TDodecahedronPieceFilename],
+          TDodecahedronFaces
+        >
+      >
     >;
   };
 }[TDodecahedronPiecesFilenames];
@@ -24,32 +29,46 @@ type TCreateGroupOfPiecesDataParams = {
 export class RubikDodecahedronPiecesData
   implements IRubikCubePiecesData<TDodecahedronPiecesFilenamesWithFaces, TDodecahedronFaces>
 {
-  public get piecesFilenames(): Array<TDodecahedronPiecesFilenames> {
-    return [
-      'RubikDodecahedronEdgePiece.glb',
-      'RubikDodecahedronFacePiece.glb',
-      'RubikDodecahedronVertexPiece.glb',
-    ];
-  }
-  public get piecesData(): Array<TPieceData<TDodecahedronPiecesFilenamesWithFaces, TDodecahedronFaces>> {
-    return [
-      ...this.createTopLayerEdgePiecesData(),
-      ...this.createTopLayerVertexPiecesData(),
-      ...this.createTopLayerFacePieceData(),
-      ...this.createTopEdgePiecesData(),
-      ...this.createTopFacePiecesData(),
-      ...this.createTopVertexPiecesData(),
-      ...this.createMiddleEdgePiecesData(),
-      ...this.createBottomVertexPiecesData(),
-      ...this.createBottomFacePiecesData(),
-      ...this.createBottomEdgePiecesData(),
-      ...this.createBottomLayerEdgePiecesData(),
-      ...this.createBottomLayerVertexPiecesData(),
-      ...this.createBottomLayerFacePieceData(),
-    ];
-  }
+  public readonly piecesFilenames: Array<TDodecahedronPiecesFilenames> = [
+    'RubikDodecahedronEdgePiece.glb',
+    'RubikDodecahedronFacePiece.glb',
+    'RubikDodecahedronVertexPiece.glb',
+  ];
 
-  private createTopLayerEdgePiecesData(): typeof this.piecesData {
+  public readonly facesNormalVectors: Record<TDodecahedronFaces, THREE.Vector3> = {
+    Up: new THREE.Vector3(0, 1, 0),
+    Down: new THREE.Vector3(0, -1, 0),
+    Right: new THREE.Vector3(0.85065, 0.4472, 0.2764),
+    BackLeft: new THREE.Vector3(-0.85065, -0.4472, -0.2764),
+    Front: new THREE.Vector3(0, 0.4472, 0.8944),
+    Back: new THREE.Vector3(0, -0.4472, -0.8944),
+    Left: new THREE.Vector3(-0.85065, 0.4472, 0.2764),
+    BackRight: new THREE.Vector3(0.85065, -0.4472, -0.2764),
+    UpLeft: new THREE.Vector3(-0.5257, 0.4472, -0.7236),
+    DownRight: new THREE.Vector3(0.5257, -0.4472, 0.7236),
+    UpRight: new THREE.Vector3(0.5257, 0.4472, -0.7236),
+    DownLeft: new THREE.Vector3(-0.5257, -0.4472, 0.7236),
+  };
+
+  public readonly piecesInitData: Array<
+    TPieceData<TDodecahedronPiecesFilenamesWithFaces, TDodecahedronFaces>
+  > = [
+    ...this.createTopLayerEdgePiecesData(),
+    ...this.createTopLayerVertexPiecesData(),
+    ...this.createTopLayerFacePieceData(),
+    ...this.createTopEdgePiecesData(),
+    ...this.createTopFacePiecesData(),
+    ...this.createTopVertexPiecesData(),
+    ...this.createMiddleEdgePiecesData(),
+    ...this.createBottomVertexPiecesData(),
+    ...this.createBottomFacePiecesData(),
+    ...this.createBottomEdgePiecesData(),
+    ...this.createBottomLayerEdgePiecesData(),
+    ...this.createBottomLayerVertexPiecesData(),
+    ...this.createBottomLayerFacePieceData(),
+  ];
+
+  private createTopLayerEdgePiecesData(): typeof this.piecesInitData {
     const rotY = Radians['72deg'];
     return this.createGroupOfPiecesData({
       startIdx: 0,
@@ -74,7 +93,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createTopLayerVertexPiecesData(): typeof this.piecesData {
+  private createTopLayerVertexPiecesData(): typeof this.piecesInitData {
     const rotY = Radians['18deg'];
     return this.createGroupOfPiecesData({
       startIdx: 5,
@@ -99,7 +118,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createTopLayerFacePieceData(): typeof this.piecesData {
+  private createTopLayerFacePieceData(): typeof this.piecesInitData {
     return [
       {
         id: 10,
@@ -110,7 +129,7 @@ export class RubikDodecahedronPiecesData
       },
     ];
   }
-  private createTopEdgePiecesData(): typeof this.piecesData {
+  private createTopEdgePiecesData(): typeof this.piecesInitData {
     const rotY = Radians['18deg'];
     return this.createGroupOfPiecesData({
       startIdx: 11,
@@ -135,7 +154,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createTopFacePiecesData(): typeof this.piecesData {
+  private createTopFacePiecesData(): typeof this.piecesInitData {
     const rotY = Radians['72deg'];
     return this.createGroupOfPiecesData({
       startIdx: 16,
@@ -160,7 +179,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createTopVertexPiecesData(): typeof this.piecesData {
+  private createTopVertexPiecesData(): typeof this.piecesInitData {
     const rotY = Radians['72deg'];
     return this.createGroupOfPiecesData({
       startIdx: 21,
@@ -185,7 +204,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createMiddleEdgePiecesData(): typeof this.piecesData {
+  private createMiddleEdgePiecesData(): typeof this.piecesInitData {
     const rotY = Radians['18deg'];
     const evenRotZ = Radians.angleToRadians(328.3);
     const oddRotZ = Radians.angleToRadians(31.7);
@@ -221,7 +240,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createBottomVertexPiecesData(): typeof this.piecesData {
+  private createBottomVertexPiecesData(): typeof this.piecesInitData {
     const rotY = Radians['72deg'];
     return this.createGroupOfPiecesData({
       startIdx: 36,
@@ -248,7 +267,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createBottomFacePiecesData(): typeof this.piecesData {
+  private createBottomFacePiecesData(): typeof this.piecesInitData {
     const rotY = Radians['72deg'];
     return this.createGroupOfPiecesData({
       startIdx: 41,
@@ -275,7 +294,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createBottomEdgePiecesData(): typeof this.piecesData {
+  private createBottomEdgePiecesData(): typeof this.piecesInitData {
     const rotY = Radians['18deg'];
     return this.createGroupOfPiecesData({
       startIdx: 46,
@@ -302,7 +321,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createBottomLayerEdgePiecesData(): typeof this.piecesData {
+  private createBottomLayerEdgePiecesData(): typeof this.piecesInitData {
     const rotY = Radians['18deg'];
     return this.createGroupOfPiecesData({
       startIdx: 51,
@@ -329,7 +348,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createBottomLayerVertexPiecesData(): typeof this.piecesData {
+  private createBottomLayerVertexPiecesData(): typeof this.piecesInitData {
     const rotY = Radians['18deg'];
     return this.createGroupOfPiecesData({
       startIdx: 56,
@@ -356,7 +375,7 @@ export class RubikDodecahedronPiecesData
       ],
     });
   }
-  private createBottomLayerFacePieceData(): typeof this.piecesData {
+  private createBottomLayerFacePieceData(): typeof this.piecesInitData {
     return [
       {
         id: 61,
@@ -368,9 +387,11 @@ export class RubikDodecahedronPiecesData
     ];
   }
 
-  private createGroupOfPiecesData(params: TCreateGroupOfPiecesDataParams): typeof this.piecesData {
+  private createGroupOfPiecesData(
+    params: TCreateGroupOfPiecesDataParams,
+  ): typeof this.piecesInitData {
     const { startIdx, count, rotationData, positionData, filename, pieceFacesToCubeFaces } = params;
-    const piecesData: typeof this.piecesData = [];
+    const piecesData: typeof this.piecesInitData = [];
 
     for (let i = 0; i < count; i++) {
       const position = new THREE.Vector3(positionData.x[i], positionData.y[i], positionData.z[i]);
