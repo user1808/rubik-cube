@@ -72,6 +72,7 @@ export class RubikCubeApp {
       this.orbitControls.update();
       this.renderer.render(toRaw(this.scene), toRaw(this.camera));
       this.debugModeCoordinator.getSubscriber('DebugStats').end();
+      this.debugModeCoordinator.getSubscriber('DebugStats').update();
 
       window.requestAnimationFrame(tick);
     };

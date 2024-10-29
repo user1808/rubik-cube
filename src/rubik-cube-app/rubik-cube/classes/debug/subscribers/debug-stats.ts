@@ -1,12 +1,14 @@
-import Stats from 'three/examples/jsm/libs/stats.module.js';
+import Stats from 'stats-gl';
 import type { IDebugModeSubscriber } from '../../../interfaces/debug';
 
 export class DebugStats implements IDebugModeSubscriber {
-  private stats: Stats = new Stats();
+  private stats: Stats = new Stats({
+    horizontal: false,
+    minimal: false,
+  });
 
   public onDebugModeChange(isDebugMode: boolean): void {
     if (isDebugMode) {
-      this.stats.showPanel(0);
       document.body.appendChild(this.stats.dom);
     } else {
       this.stats.dom.remove();
@@ -19,5 +21,9 @@ export class DebugStats implements IDebugModeSubscriber {
 
   public end(): void {
     this.stats.end();
+  }
+
+  public update(): void {
+    this.stats.update();
   }
 }
