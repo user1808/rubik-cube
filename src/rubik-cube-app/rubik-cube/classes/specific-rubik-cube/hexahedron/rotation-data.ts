@@ -19,17 +19,17 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
     Clockwise: {
       angle: -Radians['90deg'],
       durationInSeconds: 0.5,
-      stepsCount: 10,
+      stepsCount: 1,
     },
     CounterClockwise: {
       angle: Radians['90deg'],
       durationInSeconds: 0.5,
-      stepsCount: 10,
+      stepsCount: 1,
     },
     Double: {
       angle: Radians['180deg'],
       durationInSeconds: 0.5,
-      stepsCount: 10,
+      stepsCount: 1,
     },
   };
 }
