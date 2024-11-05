@@ -15,13 +15,13 @@ export class RubikCubeRotationImplementation<
   TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPieces extends string,
+  TCubeShellFilenames extends string,
 > implements
     IRubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >
 {
   constructor(
@@ -33,7 +33,7 @@ export class RubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
@@ -106,7 +106,7 @@ export class RubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
   ): THREE.Group {
@@ -121,7 +121,7 @@ export class RubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     rotatedThreeJSGroup: THREE.Group,
   ): void {

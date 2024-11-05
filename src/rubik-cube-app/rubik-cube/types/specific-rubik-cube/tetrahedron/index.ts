@@ -6,8 +6,7 @@ import type {
 import type { TTetrahedronRotationGroups } from './rotation-groups';
 import type { TTetrahedronRotationTypes } from './rotation-types';
 import type { TTetrahedronShellDirections } from './shell-directions';
-import type { TTetrahedronShellFilename } from './shell-filename';
-import type { TTetrahedronShellPieces } from './shell-pieces';
+import type { TTetrahedronShellFilenames } from './shell-filenames';
 
 export type {
   TTetrahedronFaces,
@@ -17,6 +16,5 @@ export type {
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
   TTetrahedronShellDirections,
-  TTetrahedronShellFilename,
-  TTetrahedronShellPieces,
+  TTetrahedronShellFilenames,
 };

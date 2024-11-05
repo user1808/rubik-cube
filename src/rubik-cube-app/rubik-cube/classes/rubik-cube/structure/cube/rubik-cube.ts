@@ -14,10 +14,11 @@ export class RubikCube<
     TCubeFacesNames extends string,
     TCubeRotationGroups extends string,
     TCubeRotationTypes extends string,
-    TCubeShellPieces extends string,
+    TCubeShellFilenames extends string,
   >
   extends THREE.Group
-  implements IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  implements
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
 {
   private _rotationRaycaster: Nullable<IRubikCubeRotationRaycaster> = null;
   private _rotationPending = false;
@@ -30,7 +31,7 @@ export class RubikCube<
     public readonly shell: IRubikCubeShell<
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     public readonly pieces: TCubePieces<TCubeFacesNames>,
     public readonly faces: TCubeFaces<TCubeFacesNames>,
@@ -39,12 +40,12 @@ export class RubikCube<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
   ) {
     super();
     this.add(...pieces.map((piece) => piece.piece));
-    this.add(...shell.children);
+    this.add(shell);
   }
 
   public setRotationRaycaster(raycaster: IRubikCubeRotationRaycaster) {
@@ -71,7 +72,7 @@ export class RubikCube<
   }
 
   public removeFromScene(): void {
-    this.pieces.forEach((piece) => piece.piece.dispose());
+    this.pieces.forEach(({ piece }) => piece.dispose());
     this.shell.children.forEach((child) => {
       if (child instanceof THREE.Mesh) {
         child.geometry.dispose();

@@ -1,10 +1,12 @@
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export interface IRubikCubeGLTFLoader<
-  TCubeShellFilename extends string,
+  TCubeShellFilenames extends string,
   TCubePiecesFilenames extends string,
 > {
-  loadGLTFCubeShell(filename: TCubeShellFilename): Promise<GLTF>;
   loadGLTFCubePieces(
     filenames: Array<TCubePiecesFilenames>,
   ): Promise<Map<TCubePiecesFilenames, GLTF>>;
+  loadGLTFCubeShellPieces(
+    filename: Array<TCubeShellFilenames>,
+  ): Promise<Map<TCubeShellFilenames, GLTF>>;
 }

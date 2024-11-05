@@ -19,8 +19,7 @@ import type {
   TTetrahedronEdgeFaces,
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
-  TTetrahedronShellPieces,
-  TTetrahedronShellFilename,
+  TTetrahedronShellFilenames,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
 
 export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
@@ -29,8 +28,7 @@ export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronEdgeFaces,
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
-  TTetrahedronShellFilename,
-  TTetrahedronShellPieces
+  TTetrahedronShellFilenames
 > {
   public override get commonName(): string {
     return 'Pyraminx';
@@ -56,8 +54,7 @@ export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   public override createRubikCubeShellData(): IRubikCubeShellData<
     TTetrahedronRotationGroups,
     TTetrahedronRotationTypes,
-    TTetrahedronShellFilename,
-    TTetrahedronShellPieces
+    TTetrahedronShellFilenames
   > {
     return new RubikTetrahedronShellData();
   }

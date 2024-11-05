@@ -14,12 +14,12 @@ export class RubikTetrahedronRotationData
     Clockwise: {
       angle: -2 * Radians['60deg'],
       durationInSeconds: 0.5,
-      stepsCount: 2,
+      stepsCount: 4,
     },
     CounterClockwise: {
       angle: 2 * Radians['60deg'],
       durationInSeconds: 0.5,
-      stepsCount: 2,
+      stepsCount: 8,
     },
   };
   private readonly _rotationGroupsNormalVectors: typeof this.rotationGroupsNormalVectors = {

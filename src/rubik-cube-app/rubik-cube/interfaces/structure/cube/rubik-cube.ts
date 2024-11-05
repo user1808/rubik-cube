@@ -11,14 +11,14 @@ export interface IRubikCube<
   TCubeFacesNames extends string = string,
   TCubeRotationGroups extends string = string,
   TCubeRotationTypes extends string = string,
-  TCubeShellPieces extends string = string,
+  TCubeShellFilenames extends string = string,
 > extends THREE.Group {
   isOnScene: boolean;
 
   readonly scene: THREE.Scene;
   readonly camera: THREE.PerspectiveCamera;
 
-  readonly shell: IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
+  readonly shell: IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>;
   readonly pieces: TCubePieces<TCubeFacesNames>;
   readonly faces: TCubeFaces<TCubeFacesNames>;
   readonly rotationGroups: TRotationGroups<TCubeFacesNames, TCubeRotationGroups>;

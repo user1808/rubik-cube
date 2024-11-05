@@ -3,8 +3,11 @@ import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cu
 export interface IRubikCubeShellPiece<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPiece extends string,
+  TCubeShellFilename extends string,
 > extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> {
-  readonly name: TCubeShellPiece;
-  readonly data: TShellPieceData<TCubeRotationGroups, TCubeRotationTypes>;
+  readonly data: TShellPieceData<
+    TCubeRotationGroups,
+    TCubeRotationTypes,
+    TCubeShellFilename
+  >['rotations'];
 }
