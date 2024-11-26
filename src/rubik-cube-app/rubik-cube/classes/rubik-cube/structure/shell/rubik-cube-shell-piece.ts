@@ -5,14 +5,17 @@ import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cu
 export class RubikCubeShellPiece<
     TCubeRotationGroups extends string,
     TCubeRotationTypes extends string,
-    TCubeShellPiece extends string,
+    TCubeShellFilename extends string,
   >
   extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>
-  implements IRubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPiece>
+  implements IRubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilename>
 {
   constructor(
-    public override readonly name: TCubeShellPiece,
-    public readonly data: TShellPieceData<TCubeRotationGroups, TCubeRotationTypes>,
+    public readonly data: TShellPieceData<
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilename
+    >['rotations'],
     geometry: THREE.BufferGeometry,
     material: THREE.MeshBasicMaterial,
   ) {

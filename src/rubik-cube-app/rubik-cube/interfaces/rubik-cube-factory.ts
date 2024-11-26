@@ -31,8 +31,7 @@ export interface IRubikCubeFactory<
   TCubeEdgeFacesNames extends string = string,
   TCubeRotationGroups extends string = string,
   TCubeRotationTypes extends string = string,
-  TCubeShellFilename extends string = string,
-  TCubeShellPieces extends string = string,
+  TCubeShellFilenames extends string = string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
@@ -46,24 +45,23 @@ export interface IRubikCubeFactory<
   createRubikCubeShellData(): IRubikCubeShellData<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellFilename,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
 
   createRubikCubeShellMaterial(): THREE.MeshBasicMaterial;
   createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>;
 
-  createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>;
+  createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilenames, TCubePiecesFilenames>;
 
   createRubikCubeShellPiecesBuilder(): IRubikCubeShellPiecesBuilder<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
   createRubikCubeShellBuilder(): IRubikCubeShellBuilder<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
 
   createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
@@ -84,7 +82,7 @@ export interface IRubikCubeFactory<
     TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
 
   createRubikCubeRotationRaycaster(
@@ -100,7 +98,7 @@ export interface IRubikCubeFactory<
     TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
 
   createRubikCube(
@@ -109,6 +107,6 @@ export interface IRubikCubeFactory<
     mouseTouchTracker: MouseTouchTracker,
     orbitControls: OrbitControls,
   ): Promise<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   >;
 }

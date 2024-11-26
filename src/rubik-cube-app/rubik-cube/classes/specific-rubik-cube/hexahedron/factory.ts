@@ -11,15 +11,13 @@ import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
 export abstract class AbstractRubikHexahedronFactory<
   THexahedronRotationGroups extends string,
   THexahedronShellFilename extends string,
-  THexahedronShellPieces extends string,
 > extends AbstractRubikCubeFactory<
   THexahedronPiecesFilenamesWithFaces,
   THexahedronFaces,
   THexahedronEdgeFaces,
   THexahedronRotationGroups,
   THexahedronRotationTypes,
-  THexahedronShellFilename,
-  THexahedronShellPieces
+  THexahedronShellFilename
 > {
   public override createRubikCubeMaterials(): IRubikCubeMaterials<
     THexahedronFaces,

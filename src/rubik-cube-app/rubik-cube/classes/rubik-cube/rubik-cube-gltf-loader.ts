@@ -1,8 +1,8 @@
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { IRubikCubeGLTFLoader } from '../../interfaces';
 
-export class RubikCubeGLTFLoader<TShellFilename extends string, TPiecesFilenames extends string>
-  implements IRubikCubeGLTFLoader<TShellFilename, TPiecesFilenames>
+export class RubikCubeGLTFLoader<TShellFilenames extends string, TPiecesFilenames extends string>
+  implements IRubikCubeGLTFLoader<TShellFilenames, TPiecesFilenames>
 {
   private readonly FOLDER_WITH_MODELS: string = 'models';
   private readonly gltfLoader: GLTFLoader = new GLTFLoader();
@@ -24,7 +24,20 @@ export class RubikCubeGLTFLoader<TShellFilename extends string, TPiecesFilenames
     return gltfPiecesMap;
   }
 
-  public async loadGLTFCubeShell(filename: TShellFilename): Promise<GLTF> {
-    return await this.gltfLoader.loadAsync(`${this.FOLDER_WITH_MODELS}/${filename}`);
+  public async loadGLTFCubeShellPieces(
+    filenames: Array<TShellFilenames>,
+  ): Promise<Map<TShellFilenames, GLTF>> {
+    const gltfShellMap: Map<TShellFilenames, GLTF> = new Map();
+
+    for (const filename of filenames) {
+      const gltfShell = await this.gltfLoader.loadAsync(`${this.FOLDER_WITH_MODELS}/${filename}`);
+      gltfShellMap.set(filename, gltfShell);
+    }
+
+    if (filenames.length != gltfShellMap.size) {
+      throw new Error('Not all files was loaded!');
+    }
+
+    return gltfShellMap;
   }
 }

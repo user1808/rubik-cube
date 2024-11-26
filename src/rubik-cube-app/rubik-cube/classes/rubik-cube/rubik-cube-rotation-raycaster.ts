@@ -5,19 +5,34 @@ import type { IRubikCube } from '../../interfaces/structure';
 import { TypeGuards } from '@/utils/type-guards';
 import { MouseButtonEnum } from '@/utils/mouse_button_enum';
 import type { IRubikCubeRotationRaycaster } from '../../interfaces';
+import { RubikCubeShellPiece } from './structure/shell/rubik-cube-shell-piece';
+
+type TPoints = 'FirstPoint' | 'SecondPoint';
+type TRotationIntersectionData<
+  TCubeRotationGroups extends string,
+  TCubeRotationTypes extends string,
+  TCubeShellFilename extends string,
+> = Nullable<
+  Pick<
+    THREE.Intersection<
+      RubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilename>
+    >,
+    'object' | 'point'
+  >
+>;
 
 export class RubikCubeRotationRaycaster<
     TCubeFacesNames extends string,
     TCubeRotationGroups extends string,
     TCubeRotationTypes extends string,
-    TCubeShellPieces extends string,
+    TCubeShellFilenames extends string,
   >
   extends THREE.Raycaster
   implements IRubikCubeRotationRaycaster
 {
   private readonly intersectionData: Record<
-    'FirstPoint' | 'SecondPoint',
-    Nullable<[point: THREE.Vector3, shellPieceName: TCubeShellPieces]>
+    TPoints,
+    TRotationIntersectionData<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   > = { FirstPoint: null, SecondPoint: null };
 
   private readonly mouseMoveLimit = 4;
@@ -28,7 +43,7 @@ export class RubikCubeRotationRaycaster<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     private readonly mouseTouchTracker: MouseTouchTracker,
     private readonly orbitControls: OrbitControls,
@@ -97,9 +112,9 @@ export class RubikCubeRotationRaycaster<
   private calculateDirectionVector(): Nullable<THREE.Vector3> {
     this.intersectionData.SecondPoint = this.getIntersectionData();
     if (!this.intersectionData.SecondPoint || !this.intersectionData.FirstPoint) return null;
-    const calculatedDirection = this.intersectionData.SecondPoint[0]
+    const calculatedDirection = this.intersectionData.SecondPoint.point
       .clone()
-      .sub(this.intersectionData.FirstPoint[0])
+      .sub(this.intersectionData.FirstPoint.point)
       .normalize();
     return calculatedDirection;
   }
@@ -108,7 +123,7 @@ export class RubikCubeRotationRaycaster<
     calculatedDirection: THREE.Vector3,
   ): Nullable<[TCubeRotationGroups, TCubeRotationTypes]> {
     if (!this.intersectionData.SecondPoint || !this.intersectionData.FirstPoint) return null;
-    const rotationData = this.cube.shell.pieces[this.intersectionData.FirstPoint[1]].data;
+    const rotationData = this.intersectionData.FirstPoint.object.data;
     rotationData.sort((a, b) => {
       return b.direction.dot(calculatedDirection) - a.direction.dot(calculatedDirection);
     });
@@ -118,12 +133,20 @@ export class RubikCubeRotationRaycaster<
       : null;
   }
 
-  private getIntersectionData(): (typeof this.intersectionData)[keyof typeof this.intersectionData] {
+  private getIntersectionData(): Nullable<
+    TRotationIntersectionData<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
+  > {
     this.setFromCamera(this.mouseTouchTracker.pointerPosition, this.camera);
     const intersections = this.intersectObject(this.cube);
     const intersection = intersections.length > 0 ? intersections[0] : null;
-    if (intersection && TypeGuards.isObjectKey(intersection.object.name, this.cube.shell.pieces)) {
-      return [intersection.point, intersection.object.name];
+    if (
+      intersection &&
+      TypeGuards.isT(
+        intersection.object,
+        RubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>,
+      )
+    ) {
+      return { object: intersection.object, point: intersection.point };
     }
     return null;
   }

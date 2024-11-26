@@ -44,8 +44,7 @@ export abstract class AbstractRubikCubeFactory<
   TCubeEdgeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellFilename extends string,
-  TCubeShellPieces extends string,
+  TCubeShellFilenames extends string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
@@ -56,14 +55,13 @@ export abstract class AbstractRubikCubeFactory<
       TCubeEdgeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellFilename,
-      TCubeShellPieces
+      TCubeShellFilenames
     >
 {
   private cube: Nullable<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   > = null;
-  private gltfLoader: Nullable<IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>> =
+  private gltfLoader: Nullable<IRubikCubeGLTFLoader<TCubeShellFilenames, TCubePiecesFilenames>> =
     null;
 
   public abstract get commonName(): string;
@@ -82,8 +80,7 @@ export abstract class AbstractRubikCubeFactory<
   public abstract createRubikCubeShellData(): IRubikCubeShellData<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellFilename,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
   public abstract createRubikCubeMaterials(): IRubikCubeMaterials<
     TCubeFacesNames,
@@ -95,7 +92,7 @@ export abstract class AbstractRubikCubeFactory<
   }
 
   public createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<
-    TCubeShellFilename,
+    TCubeShellFilenames,
     TCubePiecesFilenames
   > {
     if (this.gltfLoader) return this.gltfLoader;
@@ -107,7 +104,7 @@ export abstract class AbstractRubikCubeFactory<
   public createRubikCubeShellPiecesBuilder(): IRubikCubeShellPiecesBuilder<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   > {
     const gltfLoader = this.createRubikCubeGLTFLoader();
     const material = this.createRubikCubeShellMaterial();
@@ -117,7 +114,7 @@ export abstract class AbstractRubikCubeFactory<
   public createRubikCubeShellBuilder(): IRubikCubeShellBuilder<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   > {
     const shellPiecesBuilder = this.createRubikCubeShellPiecesBuilder();
     return new RubikCubeShellBuilder(shellPiecesBuilder);
@@ -155,7 +152,7 @@ export abstract class AbstractRubikCubeFactory<
     TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   > {
     const rotationData = this.createRubikCubeRotationData();
     return new RubikCubeRotationImplementation(rotationData);
@@ -177,7 +174,7 @@ export abstract class AbstractRubikCubeFactory<
     TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   > {
     const shellBuilder = this.createRubikCubeShellBuilder();
     const piecesBuilder = this.createRubikCubePiecesBuilder();
@@ -203,7 +200,7 @@ export abstract class AbstractRubikCubeFactory<
     mouseTouchTracker: MouseTouchTracker,
     orbitControls: OrbitControls,
   ): Promise<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   > {
     if (this.cube) return this.cube;
 

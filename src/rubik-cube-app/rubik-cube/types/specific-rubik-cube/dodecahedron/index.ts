@@ -6,8 +6,7 @@ import type {
 import type { TDodecahedronRotationGroups } from './rotation-groups';
 import type { TDodecahedronRotationTypes } from './rotation-types';
 import type { TDodecahedronShellDirections } from './shell-directions';
-import type { TDodecahedronShellFilename } from './shell-filename';
-import type { TDodecahedronShellPieces } from './shell-pieces';
+import type { TDodecahedronShellFilenames } from './shell-filenames';
 
 export type {
   TDodecahedronFaces,
@@ -17,6 +16,5 @@ export type {
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
   TDodecahedronShellDirections,
-  TDodecahedronShellFilename,
-  TDodecahedronShellPieces,
+  TDodecahedronShellFilenames,
 };

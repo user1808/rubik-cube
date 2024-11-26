@@ -13,22 +13,22 @@ export class RubikDodecahedronRotationData
     Clockwise: {
       angle: -Radians['72deg'],
       durationInSeconds: 0.5,
-      stepsCount: 3,
+      stepsCount: 5,
     },
     CounterClockwise: {
       angle: Radians['72deg'],
       durationInSeconds: 0.5,
-      stepsCount: 3,
+      stepsCount: 5,
     },
     DoubleClockwise: {
       angle: -2 * Radians['72deg'],
       durationInSeconds: 0.5,
-      stepsCount: 6,
+      stepsCount: 10,
     },
     DoubleCounterClockwise: {
       angle: 2 * Radians['72deg'],
       durationInSeconds: 0.5,
-      stepsCount: 6,
+      stepsCount: 10,
     },
   };
   public readonly rotationGroupsNormalVectors: Record<TDodecahedronRotationGroups, THREE.Vector3> =

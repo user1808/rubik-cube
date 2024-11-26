@@ -4,14 +4,14 @@ export interface IRubikCubeRotationImplementation<
   TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPieces extends string,
+  TCubeShellFilenames extends string,
 > {
   rotateRubikCubeGroup(
     rubikCube: IRubikCube<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,

@@ -15,7 +15,7 @@ export class RubikCubeBuilder<
   TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPieces extends string,
+  TCubeShellFilenames extends string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
@@ -25,7 +25,7 @@ export class RubikCubeBuilder<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces,
+      TCubeShellFilenames,
       TCubePiecesFilenames
     >
 {
@@ -35,7 +35,7 @@ export class RubikCubeBuilder<
     private readonly cubeShellBuilder: IRubikCubeShellBuilder<
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     private readonly cubePiecesBuilder: IRubikCubePiecesBuilder<TCubeFacesNames>,
     private readonly cubeFacesBuilder: IRubikCubeFacesBuilder<TCubeFacesNames>,
@@ -47,12 +47,12 @@ export class RubikCubeBuilder<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
   ) {}
 
   public async buildCube(): Promise<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   > {
     const cubeShell = await this.cubeShellBuilder.buildShell();
     const cubePieces = await this.cubePiecesBuilder.buildPieces();

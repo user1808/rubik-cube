@@ -41,7 +41,7 @@ export class DebugRaycaster {
   }
 
   public showAllIntersectedPieceDirections(
-    rotationData: TShellPieceData<string, string>,
+    rotationData: TShellPieceData<string, string, string>['rotations'],
     intersectionPoint: THREE.Vector3,
   ) {
     rotationData.forEach((rotation) => {
