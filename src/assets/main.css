@@ -1,6 +1,12 @@
+@import 'primeicons/primeicons.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: 'JetBrains Mono', monospace, Verdana , Arial, sans-serif !important;
+}
 
 .lil-gui {
   --font-size: 12px;

@@ -3,6 +3,7 @@ import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik
 import type { THexahedron5x5RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/rotation-groups';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
+import type { TCubeCommonName } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import type {
   IRubikCubeFacesData,
   IRubikCubePiecesData,
@@ -21,7 +22,7 @@ export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<
   THexahedron5x5RotationGroups,
   THexahedronShellFilenames
 > {
-  public override get commonName(): string {
+  public override get commonName(): TCubeCommonName {
     return '5x5 Cube';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<

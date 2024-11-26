@@ -20,4 +20,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  rules: {
+    'tailwindcss/no-custom-classname': ['warn', {
+      whitelist: ['pi'],
+    }],
+  },
 };
