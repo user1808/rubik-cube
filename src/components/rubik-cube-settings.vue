@@ -1,12 +1,12 @@
 <template>
   <UseDraggable
-    class="fixed z-50 select-none resize overflow-auto rounded-md bg-white p-2"
+    class="fixed z-50 select-none resize overflow-auto rounded-md bg-black/50 p-2 border border-gray-800"
     v-slot="{ x, y }"
     :initial-value="{ x: 10, y: 10 }"
     :prevent-default="true"
     :handle="handle"
   >
-    <div ref="handle" class="flex flex-col">
+    <div ref="handle" class="flex flex-col text-white">
       <span>Settings {{ x }} {{ y }}</span>
     </div>
     <div class="h-5" />
