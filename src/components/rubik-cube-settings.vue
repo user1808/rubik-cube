@@ -5,15 +5,19 @@
     :prevent-default="true"
     :handle="handle"
   >
-    <div ref="handle" class="flex cursor-move flex-col bg-gray-800 p-2 text-white">
-      <span class="ml-2 text-2xl font-bold leading-tight tracking-tight">Settings</span>
-      <i class="pi pi-check text-white"></i>
+    <div
+      ref="handle"
+      class="flex cursor-move flex-row items-center justify-between bg-gray-800 px-4 py-2 text-white"
+    >
+      <span class="text-2xl font-bold leading-tight tracking-tight">Settings</span>
+      <CloseIcon />
     </div>
     <div class="h-5" />
   </UseDraggable>
 </template>
 
 <script setup lang="ts">
+import CloseIcon from './common/close-icon.vue';
 import { useWindowSize } from '@vueuse/core';
 import { UseDraggable } from '@vueuse/components';
 import { ref } from 'vue';
