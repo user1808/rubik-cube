@@ -1,6 +1,6 @@
 <template>
   <UseDraggable
-    class="fixed z-50 size-1/2 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-800 bg-black/60 p-2"
+    class="fixed z-50 size-1/2 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-700 bg-black/75 p-2"
     v-slot="{ x, y }"
     :initial-value="{ x: windowWidth / 4, y: windowHeight / 4 }"
     :prevent-default="true"
