@@ -19,6 +19,7 @@
     "@vueuse/core": "^11.3.0",
     "gsap": "^3.12.2",
     "lil-gui": "^0.19.2",
+    "primeicons": "^7.0.0",
     "stats-gl": "^2.2.8",
     "stats.js": "^0.17.0",
     "three": "^0.157.0",

@@ -1,18 +1,13 @@
 <template>
   <UseDraggable
-    class="fixed z-50 size-1/2 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-700 bg-black/75 p-2"
-    v-slot="{ x, y }"
+    class="fixed z-50 size-1/2 min-h-16 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-700 bg-black/75"
     :initial-value="{ x: windowWidth / 4, y: windowHeight / 4 }"
     :prevent-default="true"
     :handle="handle"
   >
-    <div ref="handle" class="flex flex-col text-white">
-      <span>Settings {{ x }} {{ y }}</span>
-      <div class="flex gap-4">
-        <div v-for="i in 10" :key="i" class="size-5 bg-green-500">
-          {{ i }}
-        </div>
-      </div>
+    <div ref="handle" class="flex cursor-move flex-col bg-gray-800 p-2 text-white">
+      <span class="ml-2 text-2xl font-bold leading-tight tracking-tight">Settings</span>
+      <i class="pi pi-check text-white"></i>
     </div>
     <div class="h-5" />
   </UseDraggable>
