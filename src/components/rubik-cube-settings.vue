@@ -9,18 +9,28 @@
       ref="handle"
       class="flex cursor-move flex-row items-center justify-between bg-gray-800 px-4 py-2 text-white"
     >
-      <span class="text-2xl font-bold leading-tight tracking-tight">Settings</span>
-      <CloseIcon />
+      <span class="text-2xl font-bold leading-tight tracking-tight"> {{ title }} </span>
+      <BaseIconClose @click="$emit('closeWindow')" />
     </div>
     <div class="h-5" />
   </UseDraggable>
 </template>
 
 <script setup lang="ts">
-import CloseIcon from './common/close-icon.vue';
+import BaseIconClose from './base/icon/base-icon-close.vue';
 import { useWindowSize } from '@vueuse/core';
 import { UseDraggable } from '@vueuse/components';
 import { ref } from 'vue';
+
+type RubikCubeSettingsProps = {
+  title: string;
+};
+defineProps<RubikCubeSettingsProps>();
+
+type RubikCubeSettingsEmits = {
+  closeWindow: [];
+};
+defineEmits<RubikCubeSettingsEmits>();
 
 const { width: windowWidth, height: windowHeight } = useWindowSize();
 const handle = ref<HTMLElement | null>(null);
