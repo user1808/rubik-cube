@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import BaseIconClose from './base/icon/base-icon-close.vue';
+import BaseIconClose from './icon/base-icon-close.vue';
 import { useWindowSize } from '@vueuse/core';
 import { UseDraggable } from '@vueuse/components';
 import { ref } from 'vue';

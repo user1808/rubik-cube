@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RubikCubeSettings />
+    <BaseDraggableWindow title="Select" />
     <RubikCubeCanvas class="fixed left-0 top-0" :factory="selectedFactory" />
     <RubikCubeStepsSelect class="fixed inset-x-0 top-0" />
     <RubikCubeTypeSelect
@@ -23,7 +23,7 @@ import { RubikHexahedron3x3Factory } from '@/rubik-cube-app/rubik-cube/classes/s
 import { RubikHexahedron4x4Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/4x4/factory';
 import { RubikHexahedron5x5Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/5x5/factory';
 import { RubikTetrahedronFactory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/tetrahedron/factory';
-import RubikCubeSettings from '@/components/rubik-cube-settings.vue';
+import BaseDraggableWindow from '@/components/base/base-draggable-window.vue';
 
 const selectedFactoryIdx = ref<number>(5);
 const selectedFactory = computed(() => rubikFactories[selectedFactoryIdx.value]);
