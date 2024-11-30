@@ -1,18 +1,28 @@
 <template>
   <UseDraggable
-    class="fixed z-50 size-1/2 min-h-16 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-700 bg-black/75"
+    class="fixed z-50 size-1/2 min-h-24 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-700 bg-black/75"
     :initial-value="{ x: windowWidth / 4, y: windowHeight / 4 }"
     :prevent-default="true"
     :handle="handle"
+    @mousemove.stop
+    @mousedown.stop
+    @touchmove.stop
+    @touchstart.stop
   >
     <div
       ref="handle"
-      class="flex cursor-move flex-row items-center justify-between bg-gray-800 px-4 py-2 text-white"
+      class="flex cursor-move flex-row items-center justify-between gap-x-4 bg-gray-800 px-4 py-2 text-white"
     >
-      <span class="text-2xl font-bold leading-tight tracking-tight"> {{ title }} </span>
-      <BaseIconClose @click="$emit('closeWindow')" />
+      <slot name="header">
+        <span class="text-nowrap text-2xl font-bold leading-tight tracking-tight">
+          {{ title }}
+        </span>
+        <BaseIconClose @click="$emit('closeWindow')" />
+      </slot>
     </div>
-    <div class="h-5" />
+    <div>
+      <slot name="content" />
+    </div>
   </UseDraggable>
 </template>
 

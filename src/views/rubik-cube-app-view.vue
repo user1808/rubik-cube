@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseDraggableWindow title="Select" />
+    <BaseDraggableWindow title="Cube Settings" />
     <RubikCubeCanvas class="fixed left-0 top-0" :factory="selectedFactory" />
     <RubikCubeStepsSelect class="fixed inset-x-0 top-0" />
     <RubikCubeTypeSelect
