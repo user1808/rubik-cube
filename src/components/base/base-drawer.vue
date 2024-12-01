@@ -44,6 +44,9 @@
               <BaseIconClose @click="close" />
             </slot>
           </div>
+          <div>
+            <slot name="content" />
+          </div>
         </div>
       </PopoverPanel>
     </Transition>
