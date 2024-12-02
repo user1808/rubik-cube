@@ -1,9 +1,14 @@
 <template>
-  <BaseDrawer :title="title"></BaseDrawer>
-  <BaseDraggableWindow :title="title"></BaseDraggableWindow>
+  <BaseDrawer :title="title" @minimize="openWindow"></BaseDrawer>
+  <BaseDraggableWindow
+    v-if="isWindowOpened"
+    :title="title"
+    @close-window="closeWindow"
+  ></BaseDraggableWindow>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import BaseDraggableWindow from './base-draggable-window.vue';
 import BaseDrawer from './base-drawer.vue';
 
@@ -11,4 +16,10 @@ type BaseSettingsSectionProps = {
   title: string;
 };
 defineProps<BaseSettingsSectionProps>();
+
+type IsWindowOpened = boolean;
+const isWindowOpened = ref<IsWindowOpened>(false);
+
+const openWindow = () => (isWindowOpened.value = true);
+const closeWindow = () => (isWindowOpened.value = false);
 </script>

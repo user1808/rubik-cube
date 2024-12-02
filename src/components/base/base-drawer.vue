@@ -1,6 +1,9 @@
 <template>
   <Popover class="relative">
-    <PopoverButton class="fixed top-0 z-50 text-white"> Popover </PopoverButton>
+    <PopoverButton class="fixed left-0 z-50 flex items-center gap-x-4 bg-gray-800 px-6 py-2">
+      <BaseIconCube class="size-12" />
+      <span class="font-semibold uppercase tracking-wide text-white">{{ title }}</span>
+    </PopoverButton>
     <Transition
       enter-active-class="transition duration-200 ease-out"
       enter-from-class="opacity-0"
@@ -41,7 +44,10 @@
               <span class="text-nowrap text-2xl font-bold leading-tight tracking-tight">
                 {{ title }}
               </span>
-              <BaseIconClose @click="close" />
+              <div class="flex gap-x-3">
+                <BaseIconMinimize class="max-md:hidden" @click="onMinimize(close)" />
+                <BaseIconClose @click="close" />
+              </div>
             </slot>
           </div>
           <div>
@@ -56,9 +62,21 @@
 <script setup lang="ts">
 import { Popover, PopoverButton, PopoverPanel, PopoverOverlay } from '@headlessui/vue';
 import BaseIconClose from './icon/base-icon-close.vue';
+import BaseIconCube from './icon/base-icon-cube.vue';
+import BaseIconMinimize from './icon/base-icon-minimize.vue';
 
 type BaseDrawerProps = {
   title: string;
 };
 defineProps<BaseDrawerProps>();
+
+type BaseDrawerEmits = {
+  minimize: [];
+};
+const emits = defineEmits<BaseDrawerEmits>();
+
+const onMinimize = (closePanelCallback: () => void) => {
+  closePanelCallback();
+  emits('minimize');
+};
 </script>
