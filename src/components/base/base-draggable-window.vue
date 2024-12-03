@@ -12,6 +12,10 @@
     <div
       ref="handle"
       class="flex cursor-move flex-row items-center justify-between gap-x-4 bg-gray-800 px-4 py-2 text-white"
+      v-element-visibility="onElementVisibility"
+      @mousedown="console.log('onMouseDown')"
+      @mouseup="onDragEnd"
+      @touchend="onDragEnd"
     >
       <slot name="header">
         <span class="text-nowrap text-2xl font-bold leading-tight tracking-tight">
@@ -29,7 +33,7 @@
 <script setup lang="ts">
 import BaseIconClose from './icon/base-icon-close.vue';
 import { useWindowSize } from '@vueuse/core';
-import { UseDraggable } from '@vueuse/components';
+import { UseDraggable, vElementVisibility } from '@vueuse/components';
 import { ref } from 'vue';
 
 type BaseDraggableWindowProps = {
@@ -39,11 +43,20 @@ defineProps<BaseDraggableWindowProps>();
 
 type BaseDraggableWindowEmits = {
   closeWindow: [];
+  lostVisibility: [];
 };
-defineEmits<BaseDraggableWindowEmits>();
+const emits = defineEmits<BaseDraggableWindowEmits>();
 
 const { width: windowWidth, height: windowHeight } = useWindowSize();
 const handle = ref<HTMLElement | null>(null);
+
+const isVisible = ref<boolean>(false);
+const onElementVisibility = (state: boolean) => (isVisible.value = state);
+
+const onDragEnd = () => {
+  console.log('onDragEnd');
+  if (!isVisible.value) emits('lostVisibility');
+};
 </script>
 
 <style lang="css" scoped></style>

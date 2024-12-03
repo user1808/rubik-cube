@@ -1,10 +1,12 @@
 <template>
-  <BaseDrawer :title="title" @minimize="openWindow"></BaseDrawer>
+  <BaseDrawer :title="title" :disabled="isWindowOpened" @minimize="openWindow" />
   <BaseDraggableWindow
     v-if="isWindowOpened"
     :title="title"
     @close-window="closeWindow"
-  ></BaseDraggableWindow>
+    @lost-visibility="closeWindow"
+    class="max-md:hidden"
+  />
 </template>
 
 <script setup lang="ts">

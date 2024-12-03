@@ -17,7 +17,7 @@ import { RubikHexahedron5x5Factory } from '@/rubik-cube-app/rubik-cube/classes/s
 import { RubikTetrahedronFactory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/tetrahedron/factory';
 import BaseSettingsSection from '@/components/base/base-settings-section.vue';
 
-const selectedFactoryIdx = ref<number>(5);
+const selectedFactoryIdx = ref<number>(1);
 const selectedFactory = computed(() => rubikFactories[selectedFactoryIdx.value]);
 
 const rubikFactories: Array<IRubikCubeFactory<Record<string, string>>> = [
