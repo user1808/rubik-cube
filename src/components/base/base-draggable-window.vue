@@ -4,6 +4,7 @@
     :initial-value="{ x: windowWidth / 4, y: windowHeight / 4 }"
     :prevent-default="true"
     :handle="handle"
+    @end="onDragEnd"
     @mousemove.stop
     @mousedown.stop
     @touchmove.stop
@@ -13,9 +14,6 @@
       ref="handle"
       class="flex cursor-move flex-row items-center justify-between gap-x-4 bg-gray-800 px-4 py-2 text-white"
       v-element-visibility="onElementVisibility"
-      @mousedown="console.log('onMouseDown')"
-      @mouseup="onDragEnd"
-      @touchend="onDragEnd"
     >
       <slot name="header">
         <span class="text-nowrap text-2xl font-bold leading-tight tracking-tight">
@@ -26,6 +24,7 @@
     </div>
     <div>
       <slot name="content" />
+      <span class="text-4xl text-white">{{ isVisible }}</span>
     </div>
   </UseDraggable>
 </template>
@@ -43,7 +42,7 @@ defineProps<BaseDraggableWindowProps>();
 
 type BaseDraggableWindowEmits = {
   closeWindow: [];
-  lostVisibility: [];
+  lostHandleVisibility: [];
 };
 const emits = defineEmits<BaseDraggableWindowEmits>();
 
@@ -60,8 +59,7 @@ const isVisible = ref<boolean>(false);
 const onElementVisibility = (state: boolean) => (isVisible.value = state);
 
 const onDragEnd = () => {
-  console.log('onDragEnd');
-  if (!isVisible.value) emits('lostVisibility');
+  if (!isVisible.value) emits('lostHandleVisibility');
 };
 </script>
 

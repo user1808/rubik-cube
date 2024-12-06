@@ -8,7 +8,7 @@
     v-if="isWindowOpened"
     :title="title"
     @close-window="closeWindow"
-    @lost-visibility="closeWindow"
+    @lost-handle-visibility="closeWindow"
     class="max-md:hidden"
   >
     <template #content>
