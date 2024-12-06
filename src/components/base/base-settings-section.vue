@@ -1,5 +1,5 @@
 <template>
-  <BaseDrawer :title="title" :disabled="isWindowOpened" @minimize="openWindow" />
+  <BaseSideDrawer :title="title" :disabled="isWindowOpened" @minimize="openWindow" />
   <BaseDraggableWindow
     v-if="isWindowOpened"
     :title="title"
@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import BaseDraggableWindow from './base-draggable-window.vue';
-import BaseDrawer from './base-drawer.vue';
+import BaseSideDrawer from './base-side-drawer.vue';
 
 type BaseSettingsSectionProps = {
   title: string;
