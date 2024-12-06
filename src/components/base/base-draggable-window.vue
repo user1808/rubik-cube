@@ -1,6 +1,6 @@
 <template>
   <UseDraggable
-    class="fixed z-40 size-1/2 min-h-24 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-700 bg-black/75"
+    class="fixed z-40 size-1/2 max-h-full min-h-24 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-700 bg-black/75"
     :initial-value="{ x: windowWidth / 4, y: windowHeight / 4 }"
     :prevent-default="true"
     :handle="handle"
