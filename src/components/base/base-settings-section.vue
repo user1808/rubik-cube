@@ -1,12 +1,20 @@
 <template>
-  <BaseSideDrawer :title="title" :disabled="isWindowOpened" @minimize="openWindow" />
+  <BaseSideDrawer :title="title" :disabled="isWindowOpened" @minimize="openWindow">
+    <template #content>
+      <slot name="content" />
+    </template>
+  </BaseSideDrawer>
   <BaseDraggableWindow
     v-if="isWindowOpened"
     :title="title"
     @close-window="closeWindow"
     @lost-visibility="closeWindow"
     class="max-md:hidden"
-  />
+  >
+    <template #content>
+      <slot name="content" />
+    </template>
+  </BaseDraggableWindow>
 </template>
 
 <script setup lang="ts">
@@ -18,6 +26,11 @@ type BaseSettingsSectionProps = {
   title: string;
 };
 defineProps<BaseSettingsSectionProps>();
+
+type BaseSettingsSectionSlots = {
+  content(): any;
+};
+defineSlots<BaseSettingsSectionSlots>();
 
 type IsWindowOpened = boolean;
 const isWindowOpened = ref<IsWindowOpened>(false);

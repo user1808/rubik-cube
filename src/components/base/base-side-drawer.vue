@@ -72,16 +72,22 @@ import BaseIconClose from './icon/base-icon-close.vue';
 import BaseIconCube from './icon/base-icon-cube.vue';
 import BaseIconMinimize from './icon/base-icon-minimize.vue';
 
-type BaseDrawerProps = {
+type BaseSideDrawerProps = {
   title: string;
   disabled?: boolean;
 };
-defineProps<BaseDrawerProps>();
+defineProps<BaseSideDrawerProps>();
 
-type BaseDrawerEmits = {
+type BaseSideDrawerEmits = {
   minimize: [];
 };
-const emits = defineEmits<BaseDrawerEmits>();
+const emits = defineEmits<BaseSideDrawerEmits>();
+
+type BaseSideDrawerSlots = {
+  header(): any;
+  content(): any;
+};
+defineSlots<BaseSideDrawerSlots>();
 
 const onMinimize = (closePanelCallback: () => void) => {
   closePanelCallback();

@@ -47,6 +47,12 @@ type BaseDraggableWindowEmits = {
 };
 const emits = defineEmits<BaseDraggableWindowEmits>();
 
+type BaseDraggableWindowSlots = {
+  header(): any;
+  content(): any;
+};
+defineSlots<BaseDraggableWindowSlots>();
+
 const { width: windowWidth, height: windowHeight } = useWindowSize();
 const handle = ref<HTMLElement | null>(null);
 
