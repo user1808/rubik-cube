@@ -19,7 +19,10 @@
         <span class="text-nowrap text-2xl font-bold leading-tight tracking-tight">
           {{ title }}
         </span>
-        <BaseIconClose @click="$emit('closeWindow')" />
+        <div class="flex gap-x-3">
+          <BaseIconMaximize @click="$emit('maximize')" />
+          <BaseIconClose @click="$emit('closeWindow')" />
+        </div>
       </slot>
     </div>
     <div>
@@ -34,6 +37,7 @@ import BaseIconClose from './icon/base-icon-close.vue';
 import { useWindowSize } from '@vueuse/core';
 import { UseDraggable, vElementVisibility } from '@vueuse/components';
 import { ref } from 'vue';
+import BaseIconMaximize from './icon/base-icon-maximize.vue';
 
 type BaseDraggableWindowProps = {
   title: string;
@@ -43,6 +47,7 @@ defineProps<BaseDraggableWindowProps>();
 type BaseDraggableWindowEmits = {
   closeWindow: [];
   lostHandleVisibility: [];
+  maximize: [];
 };
 const emits = defineEmits<BaseDraggableWindowEmits>();
 

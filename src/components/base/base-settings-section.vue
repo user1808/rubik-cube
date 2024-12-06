@@ -9,6 +9,7 @@
     :title="title"
     @close-window="closeWindow"
     @lost-handle-visibility="closeWindow"
+    @maximize="closeWindow"
     class="max-md:hidden"
   >
     <template #content>
@@ -37,4 +38,8 @@ const isWindowOpened = ref<IsWindowOpened>(false);
 
 const openWindow = () => (isWindowOpened.value = true);
 const closeWindow = () => (isWindowOpened.value = false);
+
+const onMaximize = () => {
+  closeWindow();
+};
 </script>
