@@ -1,16 +1,19 @@
 <template>
-  <BaseSideDrawer :title="title" :disabled="isWindowOpened" @minimize="openWindow">
+  <BaseSideDrawer
+    :title="title"
+    :disabled="isSectionOpened && isMinimized"
+    v-model:open="isSectionOpened"
+    v-model:minimize="isMinimized"
+  >
     <template #content>
       <slot name="content" />
     </template>
   </BaseSideDrawer>
   <BaseDraggableWindow
-    v-if="isWindowOpened"
     :title="title"
-    @close-window="closeWindow"
-    @lost-handle-visibility="closeWindow"
-    @maximize="closeWindow"
     class="max-md:hidden"
+    v-model:open="isSectionOpened"
+    v-model:minimize="isMinimized"
   >
     <template #content>
       <slot name="content" />
@@ -33,13 +36,9 @@ type BaseSettingsSectionSlots = {
 };
 defineSlots<BaseSettingsSectionSlots>();
 
-type IsWindowOpened = boolean;
-const isWindowOpened = ref<IsWindowOpened>(false);
+type IsSectionOpened = boolean;
+const isSectionOpened = ref<IsSectionOpened>(false);
 
-const openWindow = () => (isWindowOpened.value = true);
-const closeWindow = () => (isWindowOpened.value = false);
-
-const onMaximize = () => {
-  closeWindow();
-};
+type IsMinimized = boolean;
+const isMinimized = ref<IsMinimized>(false);
 </script>

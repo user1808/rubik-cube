@@ -1,5 +1,6 @@
 <template>
   <UseDraggable
+    v-if="open && minimize"
     class="fixed z-40 size-1/2 max-h-full min-h-24 min-w-min max-w-full select-none resize overflow-auto rounded-md border border-gray-700 bg-black/75"
     :initial-value="{ x: windowWidth / 4, y: windowHeight / 4 }"
     :prevent-default="true"
@@ -20,8 +21,8 @@
           {{ title }}
         </span>
         <div class="flex gap-x-3">
-          <BaseIconMaximize @click="$emit('maximize')" />
-          <BaseIconClose @click="$emit('closeWindow')" />
+          <BaseIconMaximize @click="onMaximize" />
+          <BaseIconClose @click="onSwitchOpen" />
         </div>
       </slot>
     </div>
@@ -39,17 +40,16 @@ import { UseDraggable, vElementVisibility } from '@vueuse/components';
 import { ref } from 'vue';
 import BaseIconMaximize from './icon/base-icon-maximize.vue';
 
+type BaseDraggableWindowOpenModel = boolean;
+const open = defineModel<BaseDraggableWindowOpenModel>('open', { required: true });
+
+type BaseDraggableWindowMinimizeModel = boolean;
+const minimize = defineModel<BaseDraggableWindowMinimizeModel>('minimize');
+
 type BaseDraggableWindowProps = {
   title: string;
 };
 defineProps<BaseDraggableWindowProps>();
-
-type BaseDraggableWindowEmits = {
-  closeWindow: [];
-  lostHandleVisibility: [];
-  maximize: [];
-};
-const emits = defineEmits<BaseDraggableWindowEmits>();
 
 type BaseDraggableWindowSlots = {
   header(): any;
@@ -64,8 +64,11 @@ const isVisible = ref<boolean>(false);
 const onElementVisibility = (state: boolean) => (isVisible.value = state);
 
 const onDragEnd = () => {
-  if (!isVisible.value) emits('lostHandleVisibility');
+  if (!isVisible.value) onSwitchOpen();
 };
+
+const onSwitchOpen = () => (open.value = !open.value);
+const onMaximize = () => (minimize.value = false);
 </script>
 
 <style lang="css" scoped></style>
