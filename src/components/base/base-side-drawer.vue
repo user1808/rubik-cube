@@ -5,7 +5,7 @@
       :class="[
         { 'opacity-75': darkened || disabled },
         { 'cursor-not-allowed opacity-40': disabled },
-        { 'animate-rotation-shake': holdCompleted },
+        { 'animate-rotation-shake': isHoldCompleted },
         buttonTopClass,
         buttonLeftClass,
       ]"
@@ -134,41 +134,45 @@ const onSwitchOpen = () => (open.value = !open.value);
 const onMinimize = () => (minimize.value = true);
 
 const holdTween = ref<gsap.core.Tween>();
-const holdCompleted = ref(false);
+const isHolding = ref(false);
+const isHoldCompleted = ref(false);
 
 const progressBar = ref<HTMLElement | null>(null);
 
 const startHold = () => {
   if (!props.enableButtonHold || !progressBar.value) return;
 
-  holdCompleted.value = false;
+  isHoldCompleted.value = false;
+  isHolding.value = true;
 
   holdTween.value = gsap.to(progressBar.value, {
     background: 'linear-gradient(to right, #1f2937 100%, transparent 100%)',
     duration: props.holdDuration,
     ease: 'linear',
     onComplete: () => {
-      holdCompleted.value = true;
+      isHolding.value = false;
+      isHoldCompleted.value = true;
     },
   });
 };
 
-const cancelHold = (leaveEvent: boolean) => {
+const cancelHold = (isLeaveEvent: boolean) => {
   if (!holdTween.value || !progressBar.value) return;
 
   holdTween.value.kill();
   holdTween.value = undefined;
 
-  if (holdCompleted.value && !leaveEvent) {
+  if (isHoldCompleted.value && !isLeaveEvent) {
     invokeFunction1();
   }
 
   gsap.to(progressBar.value, {
     background: 'linear-gradient(to right, #1f2937 0%, transparent 0%)',
-    duration: holdCompleted.value && !leaveEvent ? 0 : 0.3,
+    duration: isHoldCompleted.value && !isLeaveEvent ? 0 : 0.3,
     ease: 'power1.out',
   });
-  holdCompleted.value = false;
+  isHolding.value = false;
+  isHoldCompleted.value = false;
 };
 
 const invokeFunction1 = () => {
