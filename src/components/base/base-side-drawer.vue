@@ -1,34 +1,44 @@
 <template>
   <Popover class="relative">
-    <PopoverButton
-      class="fixed z-40 flex items-center gap-x-4 rounded-lg bg-gray-800 transition-opacity duration-200 ease-out sm:left-8 sm:top-8"
-      :class="[
-        { 'opacity-75': darkened || disabled },
-        { 'cursor-not-allowed opacity-40': disabled },
-        { 'animate-rotation-shake': isHoldCompleted },
-        buttonTopClass,
-        buttonLeftClass,
-      ]"
-      :disabled="disabled"
-      @click="onButtonClick"
-      @mousedown="startHold"
-      @mouseup="cancelHold(false)"
-      @mouseleave="cancelHold(true)"
+    <Transition
+      enter-active-class="transition duration-200 ease-out"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition duration-150 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
     >
-      <div class="relative size-full p-2.5">
-        <div
-          ref="progressBar"
-          class="absolute inset-0 size-full rounded-lg"
-          style="background: linear-gradient(to right, #1f2937 0%, transparent 0%)"
-        />
-        <div class="relative z-10 flex items-center gap-x-4">
-          <BaseIconCube class="size-14" />
-          <span class="text-nowrap text-lg font-bold leading-tight tracking-tight text-white">
-            {{ title }}
-          </span>
+      <PopoverButton
+        v-if="minimize || !open"
+        class="fixed z-40 flex items-center gap-x-4 rounded-lg bg-gray-800 transition-opacity duration-200 ease-out sm:left-8 sm:top-8"
+        :class="[
+          { 'opacity-75': darkened || disabled },
+          { 'cursor-not-allowed opacity-40': disabled },
+          { 'animate-rotation-shake': isHoldCompleted },
+          buttonTopClass,
+          buttonLeftClass,
+        ]"
+        :disabled="disabled"
+        @click="onButtonClick"
+        @mousedown="startHold"
+        @mouseup="cancelHold(false)"
+        @mouseleave="cancelHold(true)"
+      >
+        <div class="relative size-full p-2.5">
+          <div
+            ref="progressBar"
+            class="absolute inset-0 size-full rounded-lg"
+            style="background: linear-gradient(to right, #1f2937 0%, transparent 0%)"
+          />
+          <div class="relative z-10 flex items-center gap-x-4">
+            <BaseIconCube class="size-14" />
+            <span class="text-nowrap text-lg font-bold leading-tight tracking-tight text-white">
+              {{ title }}
+            </span>
+          </div>
         </div>
-      </div>
-    </PopoverButton>
+      </PopoverButton>
+    </Transition>
     <Transition
       enter-active-class="transition duration-200 ease-out"
       enter-from-class="opacity-0"
