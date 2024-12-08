@@ -1,7 +1,8 @@
 <template>
   <BaseSideDrawer
     :title="title"
-    :disabled="isSectionOpened && isMinimized"
+    :darkened="isSectionOpened && isMinimized"
+    :enable-button-hold="isSectionOpened && isMinimized"
     v-model:open="isSectionOpened"
     v-model:minimize="isMinimized"
   >
