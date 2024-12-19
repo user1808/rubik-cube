@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseSettingsSection title="Cube Settings" />
+    <RubikCubeSettings />
     <RubikCubeCanvas class="fixed left-0 top-0" :factory="selectedFactory" />
   </div>
 </template>
@@ -15,7 +15,7 @@ import { RubikHexahedron3x3Factory } from '@/rubik-cube-app/rubik-cube/classes/s
 import { RubikHexahedron4x4Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/4x4/factory';
 import { RubikHexahedron5x5Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/5x5/factory';
 import { RubikTetrahedronFactory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/tetrahedron/factory';
-import BaseSettingsSection from '@/components/base/base-settings-section.vue';
+import RubikCubeSettings from '@/components/rubik-cube-settings.vue';
 
 const selectedFactoryIdx = ref<number>(1);
 const selectedFactory = computed(() => rubikFactories[selectedFactoryIdx.value]);
