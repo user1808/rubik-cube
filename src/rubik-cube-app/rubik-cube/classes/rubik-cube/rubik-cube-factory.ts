@@ -3,6 +3,7 @@ import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js
 import type { MouseTouchTracker } from '@/rubik-cube-app/common';
 import type { IRubikCubeShellData } from '../../interfaces/data/rubik-cube-shell-data';
 import type { IRubikCube } from '../../interfaces/structure';
+import type { TCubeCommonName } from '../../types/cube-common-name';
 import type {
   IRubikCubeFactory,
   IRubikCubeGLTFLoader,
@@ -64,7 +65,7 @@ export abstract class AbstractRubikCubeFactory<
   private gltfLoader: Nullable<IRubikCubeGLTFLoader<TCubeShellFilenames, TCubePiecesFilenames>> =
     null;
 
-  public abstract get commonName(): string;
+  public abstract get commonName(): TCubeCommonName;
 
   public abstract createRubikCubePiecesData(): IRubikCubePiecesData<
     TCubePiecesFilenamesWithFaces,

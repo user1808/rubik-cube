@@ -1,3 +1,5 @@
+import { useOrbitControlsDataStore } from '@/stores/useOrbitControlsDataStore';
+import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export class CustomOrbitControls extends OrbitControls {
@@ -5,4 +7,12 @@ export class CustomOrbitControls extends OrbitControls {
   override readonly minDistance: number = 2 * Math.SQRT2;
   override readonly maxDistance: number = 12;
   override readonly enableDamping: boolean = true;
+
+  private readonly store = useOrbitControlsDataStore();
+
+  constructor(camera: THREE.PerspectiveCamera, domElement: HTMLElement) {
+    super(camera, domElement);
+    this.store.init(this.maxDistance, this.getDistance());
+    this.addEventListener('end', () => this.store.setDistance(this.getDistance()));
+  }
 }

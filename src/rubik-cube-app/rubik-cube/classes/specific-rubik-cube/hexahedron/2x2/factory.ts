@@ -16,12 +16,13 @@ import { RubikHexahedron2x2RotationGroupsData } from './rotation-groups-data';
 import { RubikHexahedron2x2ShellData } from './shell-data';
 import { RubikHexahedron2x2FacesData } from './faces-data';
 import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
+import type { TCubeCommonName } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 
 export class RubikHexahedron2x2Factory extends AbstractRubikHexahedronFactory<
   THexahedron2x2RotationGroups,
   THexahedronShellFilenames
 > {
-  public override get commonName(): string {
+  public override get commonName(): TCubeCommonName {
     return '2x2 Cube';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
