@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { MouseTouchTracker } from '@/rubik-cube-app/common';
 import type { IRubikCube } from './structure';
-import type { TCubeCommonName } from '../types/cube-common-name';
+import type { TCubeCommonNames } from '../types/cube-common-name';
 import type {
   IRubikCubeGLTFLoader,
   IRubikCubeRotationImplementation,
@@ -26,8 +26,12 @@ import type {
   IRubikCubeShellPiecesBuilder,
 } from './builders';
 
+export type DefaultRubikCubeFactory<TCubeCommonName extends TCubeCommonNames = TCubeCommonNames> =
+  IRubikCubeFactory<Record<string, string>, TCubeCommonName>;
+
 export interface IRubikCubeFactory<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
+  TCubeCommonName extends TCubeCommonNames = TCubeCommonNames,
   TCubeFacesNames extends string = string,
   TCubeEdgeFacesNames extends string = string,
   TCubeRotationGroups extends string = string,

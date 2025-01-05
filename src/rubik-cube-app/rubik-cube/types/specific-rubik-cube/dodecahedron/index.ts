@@ -1,3 +1,4 @@
+import type { TDodecahedronCommonName } from './common-name';
 import type { TDodecahedronFaces, TDodecahedronEdgeFaces } from './cube-faces';
 import type {
   TDodecahedronPiecesFilenamesWithFaces,
@@ -9,6 +10,7 @@ import type { TDodecahedronShellDirections } from './shell-directions';
 import type { TDodecahedronShellFilenames } from './shell-filenames';
 
 export type {
+  TDodecahedronCommonName,
   TDodecahedronFaces,
   TDodecahedronEdgeFaces,
   TDodecahedronPiecesFilenamesWithFaces,

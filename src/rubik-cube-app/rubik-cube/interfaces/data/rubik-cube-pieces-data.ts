@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import type { TPieceData } from '../../types/rubik-cube';
 
 export interface IRubikCubePiecesData<

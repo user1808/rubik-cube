@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type { TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';

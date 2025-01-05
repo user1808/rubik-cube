@@ -45,7 +45,7 @@
         @touchstart.stop
       >
         <div class="flex h-full flex-col">
-          <div class="flex items-center justify-between gap-x-4 bg-gray-800 p-4 pr-0 text-white">
+          <div class="flex items-center justify-between gap-x-2 bg-gray-800 p-4 pr-0 text-white">
             <slot name="header">
               <div class="flex select-none items-center gap-x-2">
                 <component
@@ -62,12 +62,14 @@
               <div class="flex items-center gap-x-1">
                 <BasePrimeIcon
                   icon="pi-window-minimize"
-                  class="-scale-x-100 cursor-pointer text-[28px] hover:opacity-75 max-lg:hidden"
+                  class="-scale-x-100 cursor-pointer px-2 hover:opacity-75 max-lg:hidden"
+                  :size="28"
                   @click="minimizeSettings"
                 />
                 <BasePrimeIcon
                   icon="pi-times"
-                  class="cursor-pointer px-4 text-[40px] hover:opacity-75"
+                  class="cursor-pointer pl-2 pr-4 hover:opacity-75"
+                  :size="40"
                   @click="closeDrawer"
                 />
               </div>

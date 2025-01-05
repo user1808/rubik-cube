@@ -6,13 +6,21 @@
       v-model:selected-section="selectedSection"
       v-model:open="isSettingsOpen"
       v-model:minimized="isSettingsMinimized"
-    />
+    >
+      <template #content>
+        <slot />
+      </template>
+    </BaseSettingsSideDrawer>
     <BaseSettingsDraggableWindow
       :sections="settingsSections"
       v-model:selected-section="selectedSection"
       v-model:open="isSettingsOpen"
       v-model:minimized="isSettingsMinimized"
-    />
+    >
+      <template #content>
+        <slot />
+      </template>
+    </BaseSettingsDraggableWindow>
   </div>
 </template>
 
@@ -23,16 +31,18 @@ import type { BaseSettingsSection } from './base-settings-section.type';
 import BaseSettingsSideDrawer from './side-drawer/base-settings-side-drawer.vue';
 import BaseSettingsDraggableWindow from './draggable-window/base-settings-draggable-window.vue';
 
+type BaseSettingsModel = BaseSettingsSection;
+const selectedSection = defineModel<BaseSettingsModel>('selectedSection');
+
 type BaseSettingsProps = {
   settingsSections: Array<BaseSettingsSection>;
   mobileSection: BaseSettingsSection;
 };
-const props = defineProps<BaseSettingsProps>();
+defineProps<BaseSettingsProps>();
 
 type IsSettingsOpen = boolean;
 type IsSettingsMinimized = boolean;
 
-const selectedSection = ref<BaseSettingsSection>(props.settingsSections[0]);
 const isSettingsOpen = ref<IsSettingsOpen>(false);
 const isSettingsMinimized = ref<IsSettingsMinimized>(false);
 

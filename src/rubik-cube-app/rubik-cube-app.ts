@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { toRaw } from 'vue';
 import type { IRubikCube } from './rubik-cube/interfaces/structure';
-import type { IRubikCubeFactory } from './rubik-cube/interfaces';
+import type { DefaultRubikCubeFactory } from './rubik-cube/interfaces/rubik-cube-factory';
 import { MouseTouchTracker, ScreenSize, ScreenSizeTracker } from './common';
 import { CustomPersepctiveCamera, CustomRenderer, CustomOrbitControls } from './common/custom';
 import { DebugModeCoordinator } from './rubik-cube/classes/debug/debug-mode-coordinator';
@@ -18,7 +18,7 @@ export class RubikCubeApp {
   private readonly renderer: CustomRenderer;
   private readonly orbitControls: CustomOrbitControls;
 
-  private cubeFactory: Nullable<IRubikCubeFactory<Record<string, string>>> = null;
+  private cubeFactory: Nullable<DefaultRubikCubeFactory> = null;
   private cube: Nullable<IRubikCube> = null;
 
   private readonly debugModeCoordinator = new DebugModeCoordinator({
@@ -33,13 +33,13 @@ export class RubikCubeApp {
     this.orbitControls = new CustomOrbitControls(this.camera, canvas);
   }
 
-  public async start(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
+  public async start(factory: DefaultRubikCubeFactory): Promise<void> {
     await this.changeCube(factory);
     this.prepareCamera();
     this.prepareTickMethod();
   }
 
-  public async changeCube(factory: IRubikCubeFactory<Record<string, string>>): Promise<void> {
+  public async changeCube(factory: DefaultRubikCubeFactory): Promise<void> {
     this.cubeFactory = factory;
     this.removeCube();
     await this.prepareCube();

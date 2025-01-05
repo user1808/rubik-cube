@@ -3,7 +3,6 @@ import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik
 import type { THexahedron5x5RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/rotation-groups';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
-import type { TCubeCommonName } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import type {
   IRubikCubeFacesData,
   IRubikCubePiecesData,
@@ -17,12 +16,14 @@ import { AbstractRubikHexahedronFactory } from '../factory';
 import { RubikHexahedron5x5RotationGroupsData } from './rotation-groups-data';
 import { RubikHexahedron5x5ShellData } from './shell-data';
 import { RubikHexahedron5x5FacesData } from './faces-data';
+import type { THexahedron5x5CommonName } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/common-name';
 
 export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<
+  THexahedron5x5CommonName,
   THexahedron5x5RotationGroups,
   THexahedronShellFilenames
 > {
-  public override get commonName(): TCubeCommonName {
+  public override get commonName(): THexahedron5x5CommonName {
     return '5x5 Cube';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
