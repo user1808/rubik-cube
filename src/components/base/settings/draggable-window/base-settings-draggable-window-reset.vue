@@ -8,7 +8,7 @@
     ]"
     @click="$emit('resetWindowSize')"
   >
-    <BasePrimeIcon icon="pi-undo" class="p-[6px] text-[44px]" />
+    <BasePrimeIcon icon="pi-undo" class="p-[6px]" :size="44" />
     <span
       class="line-clamp-2 max-w-44 grow pr-2 text-center text-lg font-bold leading-tight tracking-tight text-white"
     >

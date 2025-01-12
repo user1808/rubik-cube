@@ -5,7 +5,6 @@ import { RubikTetrahedronRotationData } from './rotation-data';
 import { RubikTetrahedronShellData } from './shell-data';
 import { RubikTetrahedronRotationGroupsData } from './rotation-groups-data';
 import { RubikTetrahedronFacesData } from './faces-data';
-import type { TCubeCommonName } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import type {
   IRubikCubeFacesData,
   IRubikCubeMaterials,
@@ -21,17 +20,19 @@ import type {
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
   TTetrahedronShellFilenames,
+  TTetrahedronCommonName,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
 
 export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronPiecesFilenamesWithFaces,
+  TTetrahedronCommonName,
   TTetrahedronFaces,
   TTetrahedronEdgeFaces,
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
   TTetrahedronShellFilenames
 > {
-  public override get commonName(): TCubeCommonName {
+  public override get commonName(): TTetrahedronCommonName {
     return 'Pyraminx';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<

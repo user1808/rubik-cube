@@ -5,8 +5,8 @@ import { RubikDodecahedronMaterials } from './materials';
 import { RubikDodecahedronRotationGroupsData } from './rotation-groups-data';
 import { RubikDodecahedronShellData } from './shell-data';
 import { RubikDodecahedronFacesData } from './faces-data';
-import type { TCubeCommonName } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import type {
+  TDodecahedronCommonName,
   TDodecahedronEdgeFaces,
   TDodecahedronFaces,
   TDodecahedronPiecesFilenamesWithFaces,
@@ -25,13 +25,14 @@ import type {
 
 export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronPiecesFilenamesWithFaces,
+  TDodecahedronCommonName,
   TDodecahedronFaces,
   TDodecahedronEdgeFaces,
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
   TDodecahedronShellFilenames
 > {
-  public get commonName(): TCubeCommonName {
+  public get commonName(): TDodecahedronCommonName {
     return 'Megaminx';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<

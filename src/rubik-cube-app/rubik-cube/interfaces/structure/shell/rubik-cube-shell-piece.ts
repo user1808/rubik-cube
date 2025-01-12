@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export interface IRubikCubeShellPiece<

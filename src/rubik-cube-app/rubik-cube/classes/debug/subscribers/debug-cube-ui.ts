@@ -1,15 +1,13 @@
 import { toRaw } from 'vue';
-import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces';
+import type { DefaultRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
 import type { IDebugModeSubscriber } from '@/rubik-cube-app/rubik-cube/interfaces/debug';
 import type { IRubikCube } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import { CustomDebugGUI } from '@/rubik-cube-app/common/custom';
 
-type TCubeFactory = IRubikCubeFactory<Record<string, string>>;
-
 export class DebugCubeUI implements IDebugModeSubscriber {
   private debugGUI: Nullable<CustomDebugGUI> = null;
   private cube: Nullable<IRubikCube> = null;
-  private cubeFactory: Nullable<TCubeFactory> = null;
+  private cubeFactory: Nullable<DefaultRubikCubeFactory> = null;
 
   private isDebugMode: boolean = false;
 
@@ -22,7 +20,7 @@ export class DebugCubeUI implements IDebugModeSubscriber {
     }
   }
 
-  public setCube(cube: IRubikCube, cubeFactory: TCubeFactory): void {
+  public setCube(cube: IRubikCube, cubeFactory: DefaultRubikCubeFactory): void {
     this.cube = cube;
     this.cubeFactory = cubeFactory;
     if (this.isDebugMode) this.prepareCubeRotationDebugUI();

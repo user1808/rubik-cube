@@ -1,7 +1,7 @@
 <template>
   <BaseTransitionOpacity>
     <BaseSettingsDraggableWindowReset
-      v-if="open && minimized && isAnyBorderHidden && !isResetWindowPending && isWindowVisible"
+      v-if="open && minimized && isAnyBorderHidden && !isResetWindowPending"
       :borders-visibility="bordersVisibility"
       @reset-window-size="resetWindow"
     />
@@ -10,7 +10,7 @@
     <UseDraggable
       ref="window"
       v-if="selectedSection && open && minimized"
-      class="fixed z-40 flex max-h-[85%] max-w-[75%] select-none resize overflow-auto rounded-md bg-black/75 outline outline-1 outline-gray-700"
+      class="fixed z-40 flex max-h-[85%] max-w-[75%] select-none resize overflow-hidden rounded-md bg-black/75 outline outline-1 outline-gray-700"
       :prevent-default="true"
       :handle="handle"
       :storage-key="POSITION_STORAGE_KEY"
@@ -52,27 +52,29 @@
                 v-bind="selectedSection.iconBind"
               />
               <span
-                class="text-nowrap text-2xl font-bold leading-tight tracking-tight [word-spacing:-0.5rem]"
+                class="line-clamp-1 text-2xl font-bold leading-tight tracking-tight [word-spacing:-0.5rem]"
               >
                 {{ selectedSection.title }}
               </span>
             </div>
-            <div class="flex items-center gap-x-2">
+            <div class="flex min-w-fit items-center">
               <BasePrimeIcon
                 icon="pi-window-maximize"
-                class="-rotate-90 cursor-pointer text-[28px] hover:opacity-75"
+                class="mx-2.5 -rotate-90 cursor-pointer py-2.5 hover:opacity-75"
+                :size="28"
                 @click="maximize"
               />
               <BasePrimeIcon
                 icon="pi-times"
-                class="cursor-pointer px-3 py-2 text-[36px] hover:opacity-75"
+                class="cursor-pointer py-2 pl-2.5 pr-3 hover:opacity-75"
+                :size="36"
                 @click="switchOpen"
               />
             </div>
           </slot>
         </div>
-        <div class="flex grow">
-          <div class="grow">
+        <div class="flex grow justify-between overflow-y-auto">
+          <div class="flex grow overflow-y-auto">
             <slot name="content" />
           </div>
           <BaseSettingsSections
@@ -111,7 +113,7 @@ type BaseSettingsDraggableWindowProps = {
 };
 const props = defineProps<BaseSettingsDraggableWindowProps>();
 
-const MIN_WIDTH = 450;
+const MIN_WIDTH = 475;
 const MIN_HEIGHT = 72 + props.sections.length * 72 + 16;
 const POSITION_STORAGE_KEY = 'settings-window-position';
 

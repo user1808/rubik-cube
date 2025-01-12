@@ -1,5 +1,6 @@
 <template>
   <Transition
+    :mode="mode"
     enter-active-class="transition duration-200 ease-out"
     enter-from-class="opacity-0"
     enter-to-class="opacity-100"
@@ -10,3 +11,13 @@
     <slot />
   </Transition>
 </template>
+
+<script setup lang="ts">
+import { defineProps, type BaseTransitionProps } from 'vue';
+
+type BaseTransitionOpacityProps = {
+  mode?: BaseTransitionProps['mode'];
+};
+
+defineProps<BaseTransitionOpacityProps>();
+</script>

@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import type { ScreenSize } from './screen-size';
 
 export class ScreenSizeTracker {
