@@ -1,3 +1,4 @@
+import type { Vector3 } from 'three';
 import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type { TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
@@ -6,10 +7,7 @@ import { Radians } from '@/utils/radians';
 export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGroups extends string>
   implements IRubikCubeRotationData<THexahedronRotationGroups, THexahedronRotationTypes>
 {
-  public abstract readonly rotationGroupsNormalVectors: Record<
-    THexahedronRotationGroups,
-    THREE.Vector3
-  >;
+  public abstract readonly rotationGroupsNormalVectors: Record<THexahedronRotationGroups, Vector3>;
   public abstract readonly rotationPiecesChangesPatterns: Record<
     THexahedronRotationTypes,
     Record<THexahedronRotationGroups, Array<number>>
@@ -19,17 +17,17 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
     Clockwise: {
       angle: -Radians['90deg'],
       durationInSeconds: 0.5,
-      stepsCount: 10,
+      stepsCount: 1,
     },
     CounterClockwise: {
       angle: Radians['90deg'],
       durationInSeconds: 0.5,
-      stepsCount: 10,
+      stepsCount: 1,
     },
     Double: {
       angle: Radians['180deg'],
       durationInSeconds: 0.5,
-      stepsCount: 10,
+      stepsCount: 1,
     },
   };
 }

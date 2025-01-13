@@ -1,3 +1,4 @@
+import type { TDodecahedronCommonName } from './common-name';
 import type { TDodecahedronFaces, TDodecahedronEdgeFaces } from './cube-faces';
 import type {
   TDodecahedronPiecesFilenamesWithFaces,
@@ -6,10 +7,10 @@ import type {
 import type { TDodecahedronRotationGroups } from './rotation-groups';
 import type { TDodecahedronRotationTypes } from './rotation-types';
 import type { TDodecahedronShellDirections } from './shell-directions';
-import type { TDodecahedronShellFilename } from './shell-filename';
-import type { TDodecahedronShellPieces } from './shell-pieces';
+import type { TDodecahedronShellFilenames } from './shell-filenames';
 
 export type {
+  TDodecahedronCommonName,
   TDodecahedronFaces,
   TDodecahedronEdgeFaces,
   TDodecahedronPiecesFilenamesWithFaces,
@@ -17,6 +18,5 @@ export type {
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
   TDodecahedronShellDirections,
-  TDodecahedronShellFilename,
-  TDodecahedronShellPieces,
+  TDodecahedronShellFilenames,
 };

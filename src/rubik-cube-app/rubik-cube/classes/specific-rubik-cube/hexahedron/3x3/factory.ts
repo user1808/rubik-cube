@@ -2,6 +2,7 @@ import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specifi
 import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
 import type { THexahedron3x3RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/3x3/rotation-groups';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
+import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
 import type {
   IRubikCubeFacesData,
   IRubikCubePiecesData,
@@ -13,17 +14,16 @@ import { RubikHexahedron3x3RotationData } from './rotation-data';
 import { RubikHexahedron3x3PiecesData } from './pieces-data';
 import { AbstractRubikHexahedronFactory } from '../factory';
 import { RubikHexahedron3x3RotationGroupsData } from './rotation-groups-data';
-import type { THexahedron3x3ShellFilename } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/3x3/shell-filename';
-import type { THexahedron3x3ShellPieces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/3x3/shell-pieces';
 import { RubikHexahedron3x3ShellData } from './shell-data';
 import { RubikHexahedron3x3FacesData } from './faces-data';
+import type { THexahedron3x3CommonName } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/3x3/common-name';
 
 export class RubikHexahedron3x3Factory extends AbstractRubikHexahedronFactory<
+  THexahedron3x3CommonName,
   THexahedron3x3RotationGroups,
-  THexahedron3x3ShellFilename,
-  THexahedron3x3ShellPieces
+  THexahedronShellFilenames
 > {
-  public override get commonName(): string {
+  public override get commonName(): THexahedron3x3CommonName {
     return '3x3 Cube';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
@@ -47,8 +47,7 @@ export class RubikHexahedron3x3Factory extends AbstractRubikHexahedronFactory<
   public override createRubikCubeShellData(): IRubikCubeShellData<
     THexahedron3x3RotationGroups,
     THexahedronRotationTypes,
-    THexahedron3x3ShellFilename,
-    THexahedron3x3ShellPieces
+    THexahedronShellFilenames
   > {
     return new RubikHexahedron3x3ShellData();
   }

@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import type { Scene } from 'three';
+import { Vector3, ArrowHelper } from 'three';
 import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 /**
@@ -7,19 +8,19 @@ import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cu
  * You can use it to debug the rotation implementation.
  */
 export class DebugRaycaster {
-  constructor(private readonly scene: THREE.Scene) {}
+  constructor(private readonly scene: Scene) {}
 
-  public showPossibleRotationVectors(intersectionPoint: THREE.Vector3) {
-    const testDirectionVector = new THREE.Vector3(-0.5, -0.53, -0.69);
-    const pieceFaceVector = new THREE.Vector3(-0.5257, -0.4472, 0.7236);
-    const directionHelper = new THREE.ArrowHelper(
+  public showPossibleRotationVectors(intersectionPoint: Vector3) {
+    const testDirectionVector = new Vector3(-0.5, -0.53, -0.69);
+    const pieceFaceVector = new Vector3(-0.5257, -0.4472, 0.7236);
+    const directionHelper = new ArrowHelper(
       testDirectionVector,
       intersectionPoint,
       2,
       0x00fff0, // blue
     );
     this.scene.add(directionHelper);
-    const pieceFaceHelper = new THREE.ArrowHelper(
+    const pieceFaceHelper = new ArrowHelper(
       pieceFaceVector,
       intersectionPoint,
       2,
@@ -30,7 +31,7 @@ export class DebugRaycaster {
       pieceFaceVector.normalize(),
       (2 / 5) * Math.PI,
     );
-    const rotatedHelper = new THREE.ArrowHelper(
+    const rotatedHelper = new ArrowHelper(
       possibleNextVector,
       intersectionPoint,
       6,
@@ -41,16 +42,11 @@ export class DebugRaycaster {
   }
 
   public showAllIntersectedPieceDirections(
-    rotationData: TShellPieceData<string, string>,
-    intersectionPoint: THREE.Vector3,
+    rotationData: TShellPieceData<string, string, string>['rotations'],
+    intersectionPoint: Vector3,
   ) {
     rotationData.forEach((rotation) => {
-      const directionHelper = new THREE.ArrowHelper(
-        rotation.direction,
-        intersectionPoint,
-        2,
-        0xffffff,
-      );
+      const directionHelper = new ArrowHelper(rotation.direction, intersectionPoint, 2, 0xffffff);
       this.scene.add(directionHelper);
     });
   }

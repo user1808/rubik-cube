@@ -5,21 +5,22 @@ import type {
   THexahedronEdgeFaces,
   THexahedronFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
+import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import { RubikHexahedronMaterials } from './materials';
 import { AbstractRubikCubeFactory } from '../../rubik-cube/rubik-cube-factory';
 
 export abstract class AbstractRubikHexahedronFactory<
+  THexahedronCommonName extends TCubeCommonNames,
   THexahedronRotationGroups extends string,
   THexahedronShellFilename extends string,
-  THexahedronShellPieces extends string,
 > extends AbstractRubikCubeFactory<
   THexahedronPiecesFilenamesWithFaces,
+  THexahedronCommonName,
   THexahedronFaces,
   THexahedronEdgeFaces,
   THexahedronRotationGroups,
   THexahedronRotationTypes,
-  THexahedronShellFilename,
-  THexahedronShellPieces
+  THexahedronShellFilename
 > {
   public override createRubikCubeMaterials(): IRubikCubeMaterials<
     THexahedronFaces,

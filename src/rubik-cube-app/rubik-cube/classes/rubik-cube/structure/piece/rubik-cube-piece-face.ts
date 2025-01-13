@@ -1,9 +1,10 @@
-import * as THREE from 'three';
+import type { BufferGeometry, MeshBasicMaterial } from 'three';
+import { Mesh } from 'three';
 import type { IRubikCubePieceFace } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 
 type TRubikCubePieceFaceConstructorParams = {
-  geometry: THREE.BufferGeometry;
-  material: THREE.MeshBasicMaterial;
+  geometry: BufferGeometry;
+  material: MeshBasicMaterial;
 };
 
 /**
@@ -11,7 +12,7 @@ type TRubikCubePieceFaceConstructorParams = {
  * Represents a face of a Rubik's Cube piece.
  */
 export class RubikCubePieceFace
-  extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>
+  extends Mesh<BufferGeometry, MeshBasicMaterial>
   implements IRubikCubePieceFace
 {
   constructor(params: TRubikCubePieceFaceConstructorParams) {

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import type { Scene, PerspectiveCamera } from 'three';
 import type { IRubikCube } from '../../../interfaces/structure';
 import type { IRubikCubeRotationImplementation } from '@/rubik-cube-app/rubik-cube/interfaces';
 import type {
@@ -15,7 +15,7 @@ export class RubikCubeBuilder<
   TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPieces extends string,
+  TCubeShellFilenames extends string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
@@ -25,17 +25,17 @@ export class RubikCubeBuilder<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces,
+      TCubeShellFilenames,
       TCubePiecesFilenames
     >
 {
   constructor(
-    private readonly scene: THREE.Scene,
-    private readonly camera: THREE.PerspectiveCamera,
+    private readonly scene: Scene,
+    private readonly camera: PerspectiveCamera,
     private readonly cubeShellBuilder: IRubikCubeShellBuilder<
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     private readonly cubePiecesBuilder: IRubikCubePiecesBuilder<TCubeFacesNames>,
     private readonly cubeFacesBuilder: IRubikCubeFacesBuilder<TCubeFacesNames>,
@@ -47,12 +47,12 @@ export class RubikCubeBuilder<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
   ) {}
 
   public async buildCube(): Promise<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   > {
     const cubeShell = await this.cubeShellBuilder.buildShell();
     const cubePieces = await this.cubePiecesBuilder.buildPieces();

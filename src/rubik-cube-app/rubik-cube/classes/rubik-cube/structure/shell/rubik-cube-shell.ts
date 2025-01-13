@@ -1,31 +1,23 @@
-import * as THREE from 'three';
-import type {
-  IRubikCubeShell,
-  IRubikCubeShellPiece,
-} from '@/rubik-cube-app/rubik-cube/interfaces/structure';
+import { Group } from 'three';
+import type { IRubikCubeShell } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
+import type { TShellPieces } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 export class RubikCubeShell<
     TCubeRotationGroups extends string,
     TCubeRotationTypes extends string,
-    TCubeShellPieces extends string,
+    TCubeShellFilenames extends string,
   >
-  extends THREE.Group
-  implements IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  extends Group
+  implements IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
 {
   constructor(
-    public readonly pieces: {
-      [TCubeShellPiece in TCubeShellPieces]: IRubikCubeShellPiece<
-        TCubeRotationGroups,
-        TCubeRotationTypes,
-        TCubeShellPiece
-      >;
-    },
+    public readonly pieces: TShellPieces<
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilenames
+    >,
   ) {
     super();
-    this.add(
-      ...Object.values<
-        IRubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
-      >(pieces),
-    );
+    if (pieces.length > 0) this.add(...pieces);
   }
 }

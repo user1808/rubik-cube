@@ -1,3 +1,4 @@
+import type { Vector3 } from 'three';
 import type { TPieceData } from '../../types/rubik-cube';
 
 export interface IRubikCubePiecesData<
@@ -9,5 +10,5 @@ export interface IRubikCubePiecesData<
 > {
   readonly piecesFilenames: Array<TCubePiecesFilenames>;
   readonly piecesInitData: Array<TPieceData<TCubePiecesFilenamesWithFaces, TCubeFacesNames>>;
-  readonly facesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>;
+  readonly facesNormalVectors: Record<TCubeFacesNames, Vector3>;
 }

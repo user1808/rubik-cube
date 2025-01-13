@@ -1,3 +1,4 @@
+import type { TTetrahedronCommonName } from './common-name';
 import type { TTetrahedronFaces, TTetrahedronEdgeFaces } from './cube-faces';
 import type {
   TTetrahedronPiecesFilenamesWithFaces,
@@ -6,10 +7,10 @@ import type {
 import type { TTetrahedronRotationGroups } from './rotation-groups';
 import type { TTetrahedronRotationTypes } from './rotation-types';
 import type { TTetrahedronShellDirections } from './shell-directions';
-import type { TTetrahedronShellFilename } from './shell-filename';
-import type { TTetrahedronShellPieces } from './shell-pieces';
+import type { TTetrahedronShellFilenames } from './shell-filenames';
 
 export type {
+  TTetrahedronCommonName,
   TTetrahedronFaces,
   TTetrahedronEdgeFaces,
   TTetrahedronPiecesFilenamesWithFaces,
@@ -17,6 +18,5 @@ export type {
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
   TTetrahedronShellDirections,
-  TTetrahedronShellFilename,
-  TTetrahedronShellPieces,
+  TTetrahedronShellFilenames,
 };

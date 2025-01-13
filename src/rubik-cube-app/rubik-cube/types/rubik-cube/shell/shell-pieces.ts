@@ -3,11 +3,5 @@ import type { IRubikCubeShellPiece } from '@/rubik-cube-app/rubik-cube/interface
 export type TShellPieces<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPieces extends string,
-> = {
-  [TCubeShellPiece in TCubeShellPieces]: IRubikCubeShellPiece<
-    TCubeRotationGroups,
-    TCubeRotationTypes,
-    TCubeShellPiece
-  >;
-};
+  TCubeShellFilenames extends string,
+> = Array<IRubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>>;

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3 } from 'three';
 import { Radians } from '@/utils/radians';
 import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type { TPieceIdx, TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
@@ -14,27 +14,27 @@ export class RubikTetrahedronRotationData
     Clockwise: {
       angle: -2 * Radians['60deg'],
       durationInSeconds: 0.5,
-      stepsCount: 10,
+      stepsCount: 4,
     },
     CounterClockwise: {
       angle: 2 * Radians['60deg'],
       durationInSeconds: 0.5,
-      stepsCount: 10,
+      stepsCount: 8,
     },
   };
   private readonly _rotationGroupsNormalVectors: typeof this.rotationGroupsNormalVectors = {
-    Front: new THREE.Vector3(0.471, 0.333, 0.8165),
-    Right: new THREE.Vector3(0.471, 0.333, -0.8165),
-    Left: new THREE.Vector3(-0.943, 0.333, 0),
-    Down: new THREE.Vector3(0, -1, 0),
-    RightCorner: new THREE.Vector3(0.943, -0.333, 0),
-    LeftCorner: new THREE.Vector3(-0.471, -0.333, 0.8165),
-    BackCorner: new THREE.Vector3(-0.471, -0.333, -0.8165),
-    UpCorner: new THREE.Vector3(0, 1, 0),
-    RightMidLayer: new THREE.Vector3(0.943, -0.333, 0),
-    LeftMidLayer: new THREE.Vector3(-0.471, -0.333, 0.8165),
-    BackMidLayer: new THREE.Vector3(-0.471, -0.333, -0.8165),
-    UpMidLayer: new THREE.Vector3(0, 1, 0),
+    Front: new Vector3(0.471, 0.333, 0.8165),
+    Right: new Vector3(0.471, 0.333, -0.8165),
+    Left: new Vector3(-0.943, 0.333, 0),
+    Down: new Vector3(0, -1, 0),
+    RightCorner: new Vector3(0.943, -0.333, 0),
+    LeftCorner: new Vector3(-0.471, -0.333, 0.8165),
+    BackCorner: new Vector3(-0.471, -0.333, -0.8165),
+    UpCorner: new Vector3(0, 1, 0),
+    RightMidLayer: new Vector3(0.943, -0.333, 0),
+    LeftMidLayer: new Vector3(-0.471, -0.333, 0.8165),
+    BackMidLayer: new Vector3(-0.471, -0.333, -0.8165),
+    UpMidLayer: new Vector3(0, 1, 0),
   };
   private readonly _rotationPiecesChangesPatterns: typeof this.rotationPiecesChangesPatterns = {
     Clockwise: {
@@ -70,7 +70,7 @@ export class RubikTetrahedronRotationData
   public get rotationTypesData(): Record<TTetrahedronRotationTypes, TRotationTypeData> {
     return this._rotationTypesData;
   }
-  public get rotationGroupsNormalVectors(): Record<TTetrahedronRotationGroups, THREE.Vector3> {
+  public get rotationGroupsNormalVectors(): Record<TTetrahedronRotationGroups, Vector3> {
     return this._rotationGroupsNormalVectors;
   }
   public get rotationPiecesChangesPatterns(): Record<

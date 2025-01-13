@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3, Euler } from 'three';
 import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
 import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
@@ -15,13 +15,13 @@ export abstract class AbstractRubikHexahedronPiecesData
 {
   public readonly piecesFilenames: Array<THexahedronPiecesFilenames> = ['RubikCubePiece.glb'];
 
-  public readonly facesNormalVectors: Record<THexahedronFaces, THREE.Vector3> = {
-    Front: new THREE.Vector3(0, 0, 1),
-    Back: new THREE.Vector3(0, 0, -1),
-    Right: new THREE.Vector3(1, 0, 0),
-    Left: new THREE.Vector3(-1, 0, 0),
-    Up: new THREE.Vector3(0, 1, 0),
-    Down: new THREE.Vector3(0, -1, 0),
+  public readonly facesNormalVectors: Record<THexahedronFaces, Vector3> = {
+    Front: new Vector3(0, 0, 1),
+    Back: new Vector3(0, 0, -1),
+    Right: new Vector3(1, 0, 0),
+    Left: new Vector3(-1, 0, 0),
+    Up: new Vector3(0, 1, 0),
+    Down: new Vector3(0, -1, 0),
   };
 
   /**
@@ -72,12 +72,12 @@ export abstract class AbstractRubikHexahedronPiecesData
           }
           piecesData.push({
             id: id++,
-            position: new THREE.Vector3(
+            position: new Vector3(
               this.positionValues['x'][k],
               this.positionValues['y'][i],
               this.positionValues['z'][j],
             ),
-            rotation: new THREE.Euler(),
+            rotation: new Euler(),
             filename: 'RubikCubePiece.glb',
             pieceFacesToCubeFaces: {
               FaceA: i == 0 ? 'Up' : undefined,

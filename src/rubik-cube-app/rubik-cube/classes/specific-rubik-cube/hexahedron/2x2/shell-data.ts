@@ -1,129 +1,89 @@
-import * as THREE from 'three';
 import type { THexahedron2x2RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/rotation-groups';
-import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
-import type { THexahedron2x2ShellFilename } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/shell-filename';
-import type { THexahedron2x2ShellPieces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/shell-pieces';
-import type { THexahedronShellDirections } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-directions';
-import { AbstractRubikCubeShellData } from '../../shell-data';
+import {
+  AbstractRubikHexahedronShellData,
+  type THexahedronShellPositionValues,
+} from '../shell-data';
 import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
+import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
+import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
 
-export class RubikHexahedron2x2ShellData extends AbstractRubikCubeShellData<
-  THexahedron2x2RotationGroups,
-  THexahedronRotationTypes,
-  THexahedron2x2ShellFilename,
-  THexahedron2x2ShellPieces,
-  THexahedronShellDirections,
-  'Clockwise',
-  'CounterClockwise'
-> {
-  protected override ordinaryRotationName: 'Clockwise' = 'Clockwise';
-  protected override invertedRotationName: 'CounterClockwise' = 'CounterClockwise';
-  protected override directions: Record<THexahedronShellDirections, THREE.Vector3> = {
-    X: new THREE.Vector3(1, 0, 0),
-    Y: new THREE.Vector3(0, 1, 0),
-    Z: new THREE.Vector3(0, 0, 1),
-  };
-
-  public override filename: 'RubikHexahedron2x2Shell.glb' = 'RubikHexahedron2x2Shell.glb';
-  public override piecesData: Record<
-    THexahedron2x2ShellPieces,
-    TShellPieceData<THexahedron2x2RotationGroups, THexahedronRotationTypes>
+export class RubikHexahedron2x2ShellData extends AbstractRubikHexahedronShellData<THexahedron2x2RotationGroups> {
+  protected override readonly horizontalMovements: Record<
+    THexahedronFaces,
+    ArgumentTypes<typeof this.createPieceRotationData>[0]
   > = {
-    FrontDownRight: this.createPieceRotationData([
+    Front: [
       ['X', 'Down'],
-      ['Y', 'Right'],
-    ]),
-    FrontDownLeft: this.createPieceRotationData([
-      ['X', 'Down'],
-      ['Y', 'Left', true],
-    ]),
-    FrontTopRight: this.createPieceRotationData([
       ['X', 'Up', true],
-      ['Y', 'Right'],
-    ]),
-    FrontTopLeft: this.createPieceRotationData([
-      ['X', 'Up', true],
-      ['Y', 'Left', true],
-    ]),
-    BackDownRight: this.createPieceRotationData([
+    ],
+    Back: [
       ['X', 'Down', true],
-      ['Y', 'Left'],
-    ]),
-    BackDownLeft: this.createPieceRotationData([
-      ['X', 'Down', true],
-      ['Y', 'Right', true],
-    ]),
-    BackTopRight: this.createPieceRotationData([
       ['X', 'Up'],
-      ['Y', 'Left'],
-    ]),
-    BackTopLeft: this.createPieceRotationData([
-      ['X', 'Up'],
-      ['Y', 'Right', true],
-    ]),
-    RightDownRight: this.createPieceRotationData([
+    ],
+    Right: [
       ['Z', 'Down', true],
-      ['Y', 'Back'],
-    ]),
-    RightDownLeft: this.createPieceRotationData([
-      ['Z', 'Down', true],
-      ['Y', 'Front', true],
-    ]),
-    RightTopRight: this.createPieceRotationData([
       ['Z', 'Up'],
-      ['Y', 'Back'],
-    ]),
-    RightTopLeft: this.createPieceRotationData([
-      ['Z', 'Up'],
-      ['Y', 'Front', true],
-    ]),
-    LeftDownRight: this.createPieceRotationData([
+    ],
+    Left: [
       ['Z', 'Down'],
-      ['Y', 'Front'],
-    ]),
-    LeftDownLeft: this.createPieceRotationData([
-      ['Z', 'Down'],
-      ['Y', 'Back', true],
-    ]),
-    LeftTopRight: this.createPieceRotationData([
       ['Z', 'Up', true],
-      ['Y', 'Front'],
-    ]),
-    LeftTopLeft: this.createPieceRotationData([
-      ['Z', 'Up', true],
-      ['Y', 'Back', true],
-    ]),
-    UpDownRight: this.createPieceRotationData([
-      ['Z', 'Right', true],
+    ],
+    Up: [
       ['X', 'Front'],
-    ]),
-    UpDownLeft: this.createPieceRotationData([
-      ['Z', 'Left'],
-      ['X', 'Front'],
-    ]),
-    UpTopRight: this.createPieceRotationData([
-      ['Z', 'Right', true],
       ['X', 'Back', true],
-    ]),
-    UpTopLeft: this.createPieceRotationData([
-      ['Z', 'Left'],
-      ['X', 'Back', true],
-    ]),
-    DownDownRight: this.createPieceRotationData([
-      ['Z', 'Right'],
+    ],
+    Down: [
       ['X', 'Back'],
-    ]),
-    DownDownLeft: this.createPieceRotationData([
-      ['Z', 'Left', true],
-      ['X', 'Back'],
-    ]),
-    DownTopRight: this.createPieceRotationData([
-      ['Z', 'Right'],
       ['X', 'Front', true],
-    ]),
-    DownTopLeft: this.createPieceRotationData([
-      ['Z', 'Left', true],
-      ['X', 'Front', true],
-    ]),
+    ],
   };
+  protected override readonly verticalMovements: Record<
+    THexahedronFaces,
+    ArgumentTypes<typeof this.createPieceRotationData>[0]
+  > = {
+    Front: [
+      ['Y', 'Left', true],
+      ['Y', 'Right'],
+    ],
+    Back: [
+      ['Y', 'Right', true],
+      ['Y', 'Left'],
+    ],
+    Right: [
+      ['Y', 'Front', true],
+      ['Y', 'Back'],
+    ],
+    Left: [
+      ['Y', 'Back', true],
+      ['Y', 'Front'],
+    ],
+    Up: [
+      ['Z', 'Left'],
+      ['Z', 'Right', true],
+    ],
+    Down: [
+      ['Z', 'Left', true],
+      ['Z', 'Right'],
+    ],
+  };
+  protected override readonly facePieceInitialPositions: Record<
+    THexahedronFaces,
+    THexahedronShellPositionValues
+  > = {
+    Front: { x: [-0.5025, 0.5025], y: [-0.5025, 0.5025], z: [1.005] },
+    Back: { x: [0.5025, -0.5025], y: [-0.5025, 0.5025], z: [-1.005] },
+    Right: { x: [1.005], y: [-0.5025, 0.5025], z: [0.5025, -0.5025] },
+    Left: { x: [-1.005], y: [-0.5025, 0.5025], z: [-0.5025, 0.5025] },
+    Up: { x: [-0.5025, 0.5025], y: [1.005], z: [0.5025, -0.5025] },
+    Down: { x: [-0.5025, 0.5025], y: [-1.005], z: [-0.5025, 0.5025] },
+  };
+
+  public override piecesData: Array<
+    TShellPieceData<
+      THexahedron2x2RotationGroups,
+      THexahedronRotationTypes,
+      THexahedronShellFilenames
+    >
+  > = this.createPiecesData();
 }

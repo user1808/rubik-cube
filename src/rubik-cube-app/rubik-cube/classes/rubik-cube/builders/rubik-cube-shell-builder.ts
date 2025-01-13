@@ -8,19 +8,19 @@ import { RubikCubeShell } from '../structure/shell/rubik-cube-shell';
 export class RubikCubeShellBuilder<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPieces extends string,
-> implements IRubikCubeShellBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+  TCubeShellFilenames extends string,
+> implements IRubikCubeShellBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
 {
   constructor(
     private readonly shellPiecesBuilder: IRubikCubeShellPiecesBuilder<
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
   ) {}
 
   public async buildShell(): Promise<
-    IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   > {
     const shellPieces = await this.shellPiecesBuilder.buildShellPieces();
     return new RubikCubeShell(shellPieces);

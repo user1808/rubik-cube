@@ -3,7 +3,9 @@ import type { IRubikCubeShell } from '../structure';
 export interface IRubikCubeShellBuilder<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPieces extends string,
+  TCubeShellFilenames extends string,
 > {
-  buildShell(): Promise<IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>>;
+  buildShell(): Promise<
+    IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
+  >;
 }

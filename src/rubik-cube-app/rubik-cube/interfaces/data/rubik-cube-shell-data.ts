@@ -3,12 +3,11 @@ import type { TShellPieceData } from '../../types/rubik-cube';
 export interface IRubikCubeShellData<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellFilename extends string,
-  TCubeShellPieces extends string,
+  TCubeShellFilenames extends string,
 > {
-  readonly filename: TCubeShellFilename;
-  readonly piecesData: Record<
-    TCubeShellPieces,
-    TShellPieceData<TCubeRotationGroups, TCubeRotationTypes>
+  readonly piecesFilenames: Array<TCubeShellFilenames>;
+  readonly piecesData: Array<
+    TShellPieceData<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   >;
+  readonly isRotateOnWorldAxis: boolean;
 }

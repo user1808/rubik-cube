@@ -1,7 +1,7 @@
-import * as THREE from 'three';
+import type { MeshBasicMaterial } from 'three';
 import type { TCubeFaceColor } from './cube-face-color';
 
 export type TCubeFaceMaterial = {
-  material: THREE.MeshBasicMaterial;
+  material: MeshBasicMaterial;
   color: TCubeFaceColor;
 };

@@ -1,5 +1,5 @@
 import { toRaw } from 'vue';
-import * as THREE from 'three';
+import { Euler, Group, Vector3, Quaternion } from 'three';
 import gsap from 'gsap';
 import type { TRotationTypeData } from '../../types/rubik-cube';
 import type { IRubikCube, IRubikCubePieceWrapper } from '../../interfaces/structure';
@@ -7,21 +7,21 @@ import type { IRubikCubeRotationData } from '../../interfaces/data';
 import type { IRubikCubeRotationImplementation } from '../../interfaces';
 
 type TRotationEulers = {
-  singleRotationEuler: THREE.Euler;
-  entireRotationEuler: THREE.Euler;
+  singleRotationEuler: Euler;
+  entireRotationEuler: Euler;
 };
 
 export class RubikCubeRotationImplementation<
   TCubeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
-  TCubeShellPieces extends string,
+  TCubeShellFilenames extends string,
 > implements
     IRubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >
 {
   constructor(
@@ -33,7 +33,7 @@ export class RubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
@@ -60,10 +60,10 @@ export class RubikCubeRotationImplementation<
 
   private rotateGroupAsync(
     rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
-    rotatingThreeJSGroup: THREE.Group,
+    rotatingThreeJSGroup: Group,
     rotatingGroupNewIdxs: Array<number>,
     rotationTypeData: TRotationTypeData,
-    rotationNormal: THREE.Vector3,
+    rotationNormal: Vector3,
   ): Promise<void> {
     const { angle, durationInSeconds, stepsCount } = rotationTypeData;
 
@@ -85,7 +85,7 @@ export class RubikCubeRotationImplementation<
           this.updateRotatedGroupData(
             rotatingGroup,
             rotatingGroupNewIdxs,
-            new THREE.Quaternion().setFromEuler(entireRotationEuler),
+            new Quaternion().setFromEuler(entireRotationEuler),
           );
           resolve();
         },
@@ -106,11 +106,11 @@ export class RubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
     rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
-  ): THREE.Group {
-    const rotatingThreeJSGroup = new THREE.Group();
+  ): Group {
+    const rotatingThreeJSGroup = new Group();
     rubikCube.scene.add(rotatingThreeJSGroup);
     rotatingThreeJSGroup.add(...rotatingGroup.map((pieceWrapper) => toRaw(pieceWrapper.piece)));
     return rotatingThreeJSGroup;
@@ -121,37 +121,35 @@ export class RubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
-      TCubeShellPieces
+      TCubeShellFilenames
     >,
-    rotatedThreeJSGroup: THREE.Group,
+    rotatedThreeJSGroup: Group,
   ): void {
     rubikCube.scene.remove(rotatedThreeJSGroup);
     rubikCube.add(...rubikCube.pieces.map((pieceWrapper) => pieceWrapper.piece));
   }
 
   private createRotationEulers(
-    rotationNormal: THREE.Vector3,
+    rotationNormal: Vector3,
     angle: number,
     stepsCount: number,
   ): TRotationEulers {
-    const singleRotationEuler = new THREE.Euler();
-    const entireRotationEuler = new THREE.Euler();
+    const singleRotationEuler = new Euler();
+    const entireRotationEuler = new Euler();
     singleRotationEuler.setFromQuaternion(
-      new THREE.Quaternion().setFromAxisAngle(rotationNormal, angle / stepsCount),
+      new Quaternion().setFromAxisAngle(rotationNormal, angle / stepsCount),
     );
-    entireRotationEuler.setFromQuaternion(
-      new THREE.Quaternion().setFromAxisAngle(rotationNormal, angle),
-    );
+    entireRotationEuler.setFromQuaternion(new Quaternion().setFromAxisAngle(rotationNormal, angle));
     return { singleRotationEuler, entireRotationEuler };
   }
 
   private updateRotatedGroupPresentation(
     rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
-    rotatingThreeJSGroup: THREE.Group,
+    rotatingThreeJSGroup: Group,
   ): void {
     rotatingGroup.forEach(({ piece }) => {
-      const position = new THREE.Vector3();
-      const quaternion = new THREE.Quaternion();
+      const position = new Vector3();
+      const quaternion = new Quaternion();
       piece.getWorldPosition(position);
       piece.position.set(position.x, position.y, position.z);
       rotatingThreeJSGroup.getWorldQuaternion(quaternion);
@@ -162,7 +160,7 @@ export class RubikCubeRotationImplementation<
   private updateRotatedGroupData(
     rotatingGroup: Array<IRubikCubePieceWrapper<TCubeFacesNames>>,
     rotatingGroupNewIdxs: Array<number>,
-    entireRotationQuaternion: THREE.Quaternion,
+    entireRotationQuaternion: Quaternion,
   ): void {
     rotatingGroup.forEach(({ piece }) => {
       piece.pieceVisibleFaces.forEach((face) => {

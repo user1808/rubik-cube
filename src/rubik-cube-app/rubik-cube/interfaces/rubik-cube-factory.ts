@@ -1,7 +1,8 @@
-import * as THREE from 'three';
+import type { Scene, PerspectiveCamera, MeshBasicMaterial } from 'three';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { MouseTouchTracker } from '@/rubik-cube-app/common';
 import type { IRubikCube } from './structure';
+import type { TCubeCommonNames } from '../types/cube-common-name';
 import type {
   IRubikCubeGLTFLoader,
   IRubikCubeRotationImplementation,
@@ -25,19 +26,22 @@ import type {
   IRubikCubeShellPiecesBuilder,
 } from './builders';
 
+export type DefaultRubikCubeFactory<TCubeCommonName extends TCubeCommonNames = TCubeCommonNames> =
+  IRubikCubeFactory<Record<string, string>, TCubeCommonName>;
+
 export interface IRubikCubeFactory<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
+  TCubeCommonName extends TCubeCommonNames = TCubeCommonNames,
   TCubeFacesNames extends string = string,
   TCubeEdgeFacesNames extends string = string,
   TCubeRotationGroups extends string = string,
   TCubeRotationTypes extends string = string,
-  TCubeShellFilename extends string = string,
-  TCubeShellPieces extends string = string,
+  TCubeShellFilenames extends string = string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
-  get commonName(): string;
+  get commonName(): TCubeCommonName;
 
   createRubikCubePiecesData(): IRubikCubePiecesData<TCubePiecesFilenamesWithFaces, TCubeFacesNames>;
   createRubikCubeFacesData(): IRubikCubeFacesData<TCubeFacesNames>;
@@ -46,24 +50,23 @@ export interface IRubikCubeFactory<
   createRubikCubeShellData(): IRubikCubeShellData<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellFilename,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
 
-  createRubikCubeShellMaterial(): THREE.MeshBasicMaterial;
+  createRubikCubeShellMaterial(): MeshBasicMaterial;
   createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>;
 
-  createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>;
+  createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilenames, TCubePiecesFilenames>;
 
   createRubikCubeShellPiecesBuilder(): IRubikCubeShellPiecesBuilder<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
   createRubikCubeShellBuilder(): IRubikCubeShellBuilder<
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
 
   createRubikCubePieceBuilder(): IRubikCubePieceBuilder<
@@ -84,7 +87,7 @@ export interface IRubikCubeFactory<
     TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
 
   createRubikCubeRotationRaycaster(
@@ -93,22 +96,22 @@ export interface IRubikCubeFactory<
   ): IRubikCubeRotationRaycaster;
 
   createRubikCubeBuilder(
-    scene: THREE.Scene,
-    camera: THREE.PerspectiveCamera,
+    scene: Scene,
+    camera: PerspectiveCamera,
   ): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
     TCubeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
-    TCubeShellPieces
+    TCubeShellFilenames
   >;
 
   createRubikCube(
-    scene: THREE.Scene,
-    camera: THREE.PerspectiveCamera,
+    scene: Scene,
+    camera: PerspectiveCamera,
     mouseTouchTracker: MouseTouchTracker,
     orbitControls: OrbitControls,
   ): Promise<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>
+    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   >;
 }

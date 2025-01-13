@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import type { Scene, PerspectiveCamera } from 'three';
+import { Group } from 'three';
 import type { IRubikCubeShell } from '../shell/rubik-cube-shell';
 import type { IRubikCubeRotationRaycaster } from '../../rubik-cube-rotation-raycaster';
 import type {
@@ -11,14 +12,14 @@ export interface IRubikCube<
   TCubeFacesNames extends string = string,
   TCubeRotationGroups extends string = string,
   TCubeRotationTypes extends string = string,
-  TCubeShellPieces extends string = string,
-> extends THREE.Group {
+  TCubeShellFilenames extends string = string,
+> extends Group {
   isOnScene: boolean;
 
-  readonly scene: THREE.Scene;
-  readonly camera: THREE.PerspectiveCamera;
+  readonly scene: Scene;
+  readonly camera: PerspectiveCamera;
 
-  readonly shell: IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellPieces>;
+  readonly shell: IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>;
   readonly pieces: TCubePieces<TCubeFacesNames>;
   readonly faces: TCubeFaces<TCubeFacesNames>;
   readonly rotationGroups: TRotationGroups<TCubeFacesNames, TCubeRotationGroups>;

@@ -2,6 +2,7 @@ import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specifi
 import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
 import type { THexahedron5x5RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/rotation-groups';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
+import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
 import type {
   IRubikCubeFacesData,
   IRubikCubePiecesData,
@@ -13,17 +14,16 @@ import { RubikHexahedron5x5RotationData } from './rotation-data';
 import { RubikHexahedron5x5PiecesData } from './pieces-data';
 import { AbstractRubikHexahedronFactory } from '../factory';
 import { RubikHexahedron5x5RotationGroupsData } from './rotation-groups-data';
-import type { THexahedron5x5ShellFilename } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/shell-filename';
-import type { THexahedron5x5ShellPieces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/shell-pieces';
 import { RubikHexahedron5x5ShellData } from './shell-data';
 import { RubikHexahedron5x5FacesData } from './faces-data';
+import type { THexahedron5x5CommonName } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/common-name';
 
 export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<
+  THexahedron5x5CommonName,
   THexahedron5x5RotationGroups,
-  THexahedron5x5ShellFilename,
-  THexahedron5x5ShellPieces
+  THexahedronShellFilenames
 > {
-  public override get commonName(): string {
+  public override get commonName(): THexahedron5x5CommonName {
     return '5x5 Cube';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
@@ -47,8 +47,7 @@ export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<
   public override createRubikCubeShellData(): IRubikCubeShellData<
     THexahedron5x5RotationGroups,
     THexahedronRotationTypes,
-    THexahedron5x5ShellFilename,
-    THexahedron5x5ShellPieces
+    THexahedronShellFilenames
   > {
     return new RubikHexahedron5x5ShellData();
   }
