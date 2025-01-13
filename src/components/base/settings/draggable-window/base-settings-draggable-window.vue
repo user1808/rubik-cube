@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useTemplateRef, watch } from 'vue';
+import { ref, computed, useTemplateRef, watch, defineAsyncComponent } from 'vue';
 import { storeToRefs } from 'pinia';
 import debounce from 'lodash.debounce';
 import { UseDraggable, vElementVisibility, vResizeObserver } from '@vueuse/components';
@@ -101,8 +101,11 @@ import type { BaseSettingsSection } from '../base-settings-section.type';
 import type { ElementSize, ResizeObserverEntry } from '@vueuse/core';
 import BasePrimeIcon from '../../icon/base-prime-icon.vue';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
-import BaseSettingsDraggableWindowReset from './base-settings-draggable-window-reset.vue';
 import BaseSettingsSections from '../base-settings-sections.vue';
+
+const BaseSettingsDraggableWindowReset = defineAsyncComponent(
+  () => import('./base-settings-draggable-window-reset.vue'),
+);
 
 const selectedSection = defineModel<BaseSettingsSection>('selectedSection');
 const open = defineModel<boolean>('open', { default: false });

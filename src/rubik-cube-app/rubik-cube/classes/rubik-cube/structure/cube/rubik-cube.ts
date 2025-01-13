@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import type { Scene, PerspectiveCamera } from 'three';
+import { Group, Mesh } from 'three';
 import type { IRubikCube, IRubikCubeShell } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import type {
   TCubeFaces,
@@ -16,7 +17,7 @@ export class RubikCube<
     TCubeRotationTypes extends string,
     TCubeShellFilenames extends string,
   >
-  extends THREE.Group
+  extends Group
   implements
     IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
 {
@@ -26,8 +27,8 @@ export class RubikCube<
   public isOnScene = false;
 
   constructor(
-    public readonly scene: THREE.Scene,
-    public readonly camera: THREE.PerspectiveCamera,
+    public readonly scene: Scene,
+    public readonly camera: PerspectiveCamera,
     public readonly shell: IRubikCubeShell<
       TCubeRotationGroups,
       TCubeRotationTypes,
@@ -74,7 +75,7 @@ export class RubikCube<
   public removeFromScene(): void {
     this.pieces.forEach(({ piece }) => piece.dispose());
     this.shell.children.forEach((child) => {
-      if (child instanceof THREE.Mesh) {
+      if (child instanceof Mesh) {
         child.geometry.dispose();
         child.material.dispose();
       }

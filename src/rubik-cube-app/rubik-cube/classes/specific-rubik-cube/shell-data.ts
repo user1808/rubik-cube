@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import type { Vector3 } from 'three';
 import type { IRubikCubeShellData } from '../../interfaces/data';
 import type { TShellPieceData, TShellRotationData } from '../../types/rubik-cube';
 
@@ -13,7 +13,7 @@ export abstract class AbstractRubikCubeShellData<
 {
   protected abstract readonly ordinaryRotationName: TCubeOrdinaryRotation;
   protected abstract readonly invertedRotationName: TCubeInvertedRotation;
-  protected abstract readonly directions: Record<TCubeShellDirections, THREE.Vector3>;
+  protected abstract readonly directions: Record<TCubeShellDirections, Vector3>;
 
   public abstract readonly piecesFilenames: Array<TCubeShellFilenames>;
   public abstract readonly piecesData: Array<

@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import type { Intersection, Vector3 } from 'three';
+import { Raycaster } from 'three';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { MouseTouchTracker } from '@/rubik-cube-app/common';
 import type { IRubikCube } from '../../interfaces/structure';
@@ -14,9 +15,7 @@ type TRotationIntersectionData<
   TCubeShellFilename extends string,
 > = Nullable<
   Pick<
-    THREE.Intersection<
-      RubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilename>
-    >,
+    Intersection<RubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilename>>,
     'object' | 'point'
   >
 >;
@@ -27,7 +26,7 @@ export class RubikCubeRotationRaycaster<
     TCubeRotationTypes extends string,
     TCubeShellFilenames extends string,
   >
-  extends THREE.Raycaster
+  extends Raycaster
   implements IRubikCubeRotationRaycaster
 {
   private readonly intersectionData: Record<
@@ -109,7 +108,7 @@ export class RubikCubeRotationRaycaster<
     this.resetIntersection();
   }
 
-  private calculateDirectionVector(): Nullable<THREE.Vector3> {
+  private calculateDirectionVector(): Nullable<Vector3> {
     this.intersectionData.SecondPoint = this.getIntersectionData();
     if (!this.intersectionData.SecondPoint || !this.intersectionData.FirstPoint) return null;
     const calculatedDirection = this.intersectionData.SecondPoint.point
@@ -120,7 +119,7 @@ export class RubikCubeRotationRaycaster<
   }
 
   private findBestRotation(
-    calculatedDirection: THREE.Vector3,
+    calculatedDirection: Vector3,
   ): Nullable<[TCubeRotationGroups, TCubeRotationTypes]> {
     if (!this.intersectionData.SecondPoint || !this.intersectionData.FirstPoint) return null;
     const rotationData = this.intersectionData.FirstPoint.object.data;

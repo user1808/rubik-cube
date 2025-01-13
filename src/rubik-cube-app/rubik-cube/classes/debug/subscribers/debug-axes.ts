@@ -1,14 +1,15 @@
-import * as THREE from 'three';
+import type { Scene } from 'three';
+import { AxesHelper } from 'three';
 import type { IDebugModeSubscriber } from '../../../interfaces/debug';
 
 export class DebugAxes implements IDebugModeSubscriber {
-  private debugAxes: THREE.AxesHelper;
+  private debugAxes: AxesHelper;
 
   constructor(
-    private readonly scene: THREE.Scene,
+    private readonly scene: Scene,
     axesSize: number = 5,
   ) {
-    this.debugAxes = new THREE.AxesHelper(axesSize);
+    this.debugAxes = new AxesHelper(axesSize);
   }
 
   public onDebugModeChange(isDebugMode: boolean): void {

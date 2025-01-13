@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import type { Vector3, Euler } from 'three';
 import type { TPieceId } from './piece-id';
 
 export type TPieceData<
@@ -10,8 +10,8 @@ export type TPieceData<
 > = {
   [TPieceFilename in TCubePiecesFilenames]: {
     id: TPieceId;
-    position: THREE.Vector3;
-    rotation: THREE.Euler;
+    position: Vector3;
+    rotation: Euler;
     filename: TPieceFilename;
     pieceFacesToCubeFaces: Partial<
       Record<TCubePiecesFilenamesWithFaces[TPieceFilename], TCubeFacesNames>

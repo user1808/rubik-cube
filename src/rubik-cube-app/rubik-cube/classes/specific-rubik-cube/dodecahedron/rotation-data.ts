@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3 } from 'three';
 import type {
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
@@ -31,21 +31,20 @@ export class RubikDodecahedronRotationData
       stepsCount: 10,
     },
   };
-  public readonly rotationGroupsNormalVectors: Record<TDodecahedronRotationGroups, THREE.Vector3> =
-    {
-      Up: new THREE.Vector3(0, 1, 0),
-      Down: new THREE.Vector3(0, -1, 0),
-      Right: new THREE.Vector3(0.85065, 0.4472, 0.2764),
-      BackLeft: new THREE.Vector3(-0.85065, -0.4472, -0.2764),
-      Front: new THREE.Vector3(0, 0.4472, 0.8944),
-      Back: new THREE.Vector3(0, -0.4472, -0.8944),
-      Left: new THREE.Vector3(-0.85065, 0.4472, 0.2764),
-      BackRight: new THREE.Vector3(0.85065, -0.4472, -0.2764),
-      UpLeft: new THREE.Vector3(-0.5257, 0.4472, -0.7236),
-      DownRight: new THREE.Vector3(0.5257, -0.4472, 0.7236),
-      UpRight: new THREE.Vector3(0.5257, 0.4472, -0.7236),
-      DownLeft: new THREE.Vector3(-0.5257, -0.4472, 0.7236),
-    };
+  public readonly rotationGroupsNormalVectors: Record<TDodecahedronRotationGroups, Vector3> = {
+    Up: new Vector3(0, 1, 0),
+    Down: new Vector3(0, -1, 0),
+    Right: new Vector3(0.85065, 0.4472, 0.2764),
+    BackLeft: new Vector3(-0.85065, -0.4472, -0.2764),
+    Front: new Vector3(0, 0.4472, 0.8944),
+    Back: new Vector3(0, -0.4472, -0.8944),
+    Left: new Vector3(-0.85065, 0.4472, 0.2764),
+    BackRight: new Vector3(0.85065, -0.4472, -0.2764),
+    UpLeft: new Vector3(-0.5257, 0.4472, -0.7236),
+    DownRight: new Vector3(0.5257, -0.4472, 0.7236),
+    UpRight: new Vector3(0.5257, 0.4472, -0.7236),
+    DownLeft: new Vector3(-0.5257, -0.4472, 0.7236),
+  };
   public readonly rotationPiecesChangesPatterns: Record<
     TDodecahedronRotationTypes,
     Record<TDodecahedronRotationGroups, Array<number>>

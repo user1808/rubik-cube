@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3 } from 'three';
 import type { THexahedron2x2RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/rotation-groups';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import { AbstractRubikHexahedronRotationData } from '../rotation-data';
@@ -6,14 +6,14 @@ import { AbstractRubikHexahedronRotationData } from '../rotation-data';
 export class RubikHexahedron2x2RotationData extends AbstractRubikHexahedronRotationData<THexahedron2x2RotationGroups> {
   public override readonly rotationGroupsNormalVectors: Record<
     THexahedron2x2RotationGroups,
-    THREE.Vector3
+    Vector3
   > = {
-    Front: new THREE.Vector3(0, 0, 1),
-    Back: new THREE.Vector3(0, 0, -1),
-    Right: new THREE.Vector3(1, 0, 0),
-    Left: new THREE.Vector3(-1, 0, 0),
-    Up: new THREE.Vector3(0, 1, 0),
-    Down: new THREE.Vector3(0, -1, 0),
+    Front: new Vector3(0, 0, 1),
+    Back: new Vector3(0, 0, -1),
+    Right: new Vector3(1, 0, 0),
+    Left: new Vector3(-1, 0, 0),
+    Up: new Vector3(0, 1, 0),
+    Down: new Vector3(0, -1, 0),
   };
   public override readonly rotationPiecesChangesPatterns: Record<
     THexahedronRotationTypes,

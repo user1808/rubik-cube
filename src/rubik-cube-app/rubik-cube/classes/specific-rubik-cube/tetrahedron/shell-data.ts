@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3, Euler } from 'three';
 import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
   TTetrahedronFaces,
@@ -22,13 +22,13 @@ export class RubikTetrahedronShellData extends AbstractRubikCubeShellData<
 > {
   protected readonly ordinaryRotationName: 'Clockwise' = 'Clockwise';
   protected readonly invertedRotationName: 'CounterClockwise' = 'CounterClockwise';
-  protected readonly directions: Record<TTetrahedronShellDirections, THREE.Vector3> = {
-    DirectionA: new THREE.Vector3(-0.3, -0.82, 0.5),
-    DirectionB: new THREE.Vector3(-0.57, 0.82, 0),
-    DirectionC: new THREE.Vector3(-0.87, 0, 0.5),
-    DirectionD: new THREE.Vector3(0.3, 0.82, 0.5),
-    DirectionE: new THREE.Vector3(0.87, 0, 0.5),
-    DirectionF: new THREE.Vector3(0, 0, -1),
+  protected readonly directions: Record<TTetrahedronShellDirections, Vector3> = {
+    DirectionA: new Vector3(-0.3, -0.82, 0.5),
+    DirectionB: new Vector3(-0.57, 0.82, 0),
+    DirectionC: new Vector3(-0.87, 0, 0.5),
+    DirectionD: new Vector3(0.3, 0.82, 0.5),
+    DirectionE: new Vector3(0.87, 0, 0.5),
+    DirectionF: new Vector3(0, 0, -1),
   };
   public readonly piecesFilenames: Array<TTetrahedronShellFilenames> = ['TetrahedronShellPart.glb'];
 
@@ -153,19 +153,19 @@ export class RubikTetrahedronShellData extends AbstractRubikCubeShellData<
       ['DirectionC', 'BackCorner', true],
     ],
   };
-  protected readonly facePieceInitialRotations: Record<TTetrahedronFaces, Array<THREE.Euler>> = {
-    Down: [new THREE.Euler(0, 0, 0), new THREE.Euler(0, Radians['180deg'], 0)],
+  protected readonly facePieceInitialRotations: Record<TTetrahedronFaces, Array<Euler>> = {
+    Down: [new Euler(0, 0, 0), new Euler(0, Radians['180deg'], 0)],
     Left: [
-      new THREE.Euler(0, Radians['180deg'], -Radians.angleToRadians(109.47)),
-      new THREE.Euler(0, 0, Radians.angleToRadians(109.47)),
+      new Euler(0, Radians['180deg'], -Radians.angleToRadians(109.47)),
+      new Euler(0, 0, Radians.angleToRadians(109.47)),
     ],
     Front: [
-      new THREE.Euler(0, -Radians['60deg'], -Radians.angleToRadians(109.47)),
-      new THREE.Euler(0, Radians['120deg'], Radians.angleToRadians(109.47)),
+      new Euler(0, -Radians['60deg'], -Radians.angleToRadians(109.47)),
+      new Euler(0, Radians['120deg'], Radians.angleToRadians(109.47)),
     ],
     Right: [
-      new THREE.Euler(0, Radians['60deg'], -Radians.angleToRadians(109.47)),
-      new THREE.Euler(0, -Radians['120deg'], Radians.angleToRadians(109.47)),
+      new Euler(0, Radians['60deg'], -Radians.angleToRadians(109.47)),
+      new Euler(0, -Radians['120deg'], Radians.angleToRadians(109.47)),
     ],
   };
   protected readonly facePieceInitialPositions: Record<
@@ -215,7 +215,7 @@ export class RubikTetrahedronShellData extends AbstractRubikCubeShellData<
       const movements = this.movements[face as TTetrahedronFaces];
 
       for (let i = 0; i < facePieceInitialPositions.x.length; i++) {
-        const initPosition = new THREE.Vector3(
+        const initPosition = new Vector3(
           facePieceInitialPositions.x[i],
           facePieceInitialPositions.y[i],
           facePieceInitialPositions.z[i],

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Group } from 'three';
 import type { IRubikCubeShell } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import type { TShellPieces } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
@@ -7,7 +7,7 @@ export class RubikCubeShell<
     TCubeRotationTypes extends string,
     TCubeShellFilenames extends string,
   >
-  extends THREE.Group
+  extends Group
   implements IRubikCubeShell<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
 {
   constructor(

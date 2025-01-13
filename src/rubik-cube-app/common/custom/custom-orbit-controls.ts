@@ -1,6 +1,6 @@
-import { useOrbitControlsDataStore } from '@/stores/useOrbitControlsDataStore';
-import * as THREE from 'three';
+import type { PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { useOrbitControlsDataStore } from '@/stores/useOrbitControlsDataStore';
 
 export class CustomOrbitControls extends OrbitControls {
   override readonly enablePan: boolean = false;
@@ -10,7 +10,7 @@ export class CustomOrbitControls extends OrbitControls {
 
   private readonly store = useOrbitControlsDataStore();
 
-  constructor(camera: THREE.PerspectiveCamera, domElement: HTMLElement) {
+  constructor(camera: PerspectiveCamera, domElement: HTMLElement) {
     super(camera, domElement);
     this.store.init(this.maxDistance, this.getDistance());
     this.addEventListener('end', () => this.store.setDistance(this.getDistance()));

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3, Euler } from 'three';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import type { THexahedronShellDirections } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-directions';
 import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
@@ -21,10 +21,10 @@ export abstract class AbstractRubikHexahedronShellData<
 > {
   protected override ordinaryRotationName: 'Clockwise' = 'Clockwise';
   protected override invertedRotationName: 'CounterClockwise' = 'CounterClockwise';
-  protected override directions: Record<THexahedronShellDirections, THREE.Vector3> = {
-    X: new THREE.Vector3(1, 0, 0),
-    Y: new THREE.Vector3(0, 1, 0),
-    Z: new THREE.Vector3(0, 0, 1),
+  protected override directions: Record<THexahedronShellDirections, Vector3> = {
+    X: new Vector3(1, 0, 0),
+    Y: new Vector3(0, 1, 0),
+    Z: new Vector3(0, 0, 1),
   };
   public override piecesFilenames: Array<THexahedronShellFilenames> = ['HexahedronShellPart.glb'];
 
@@ -38,13 +38,13 @@ export abstract class AbstractRubikHexahedronShellData<
     THexahedronFaces,
     ArgumentTypes<typeof this.createPieceRotationData>[0]
   >;
-  protected readonly facePieceInitialRotations: Record<THexahedronFaces, THREE.Euler> = {
-    Front: new THREE.Euler(Radians['90deg'], 0, 0),
-    Back: new THREE.Euler(-Radians['90deg'], 0, 0),
-    Right: new THREE.Euler(0, 0, Radians['90deg']),
-    Left: new THREE.Euler(0, 0, -Radians['90deg']),
-    Up: new THREE.Euler(0, 0, 0),
-    Down: new THREE.Euler(Radians['180deg'], 0, 0),
+  protected readonly facePieceInitialRotations: Record<THexahedronFaces, Euler> = {
+    Front: new Euler(Radians['90deg'], 0, 0),
+    Back: new Euler(-Radians['90deg'], 0, 0),
+    Right: new Euler(0, 0, Radians['90deg']),
+    Left: new Euler(0, 0, -Radians['90deg']),
+    Up: new Euler(0, 0, 0),
+    Down: new Euler(Radians['180deg'], 0, 0),
   };
   protected abstract readonly facePieceInitialPositions: Record<
     THexahedronFaces,
@@ -67,7 +67,7 @@ export abstract class AbstractRubikHexahedronShellData<
       for (let i = 0; i < facePieceInitialPositions.x.length; i++) {
         for (let j = 0; j < facePieceInitialPositions.y.length; j++) {
           for (let k = 0; k < facePieceInitialPositions.z.length; k++) {
-            const initPosition = new THREE.Vector3(
+            const initPosition = new Vector3(
               facePieceInitialPositions.x[i],
               facePieceInitialPositions.y[j],
               facePieceInitialPositions.z[k],

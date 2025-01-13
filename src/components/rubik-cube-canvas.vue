@@ -17,40 +17,66 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue';
-import type { IRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
+import { ref, onMounted, watch } from 'vue';
+import type {
+  DefaultRubikCubeFactory,
+  IRubikCubeFactory,
+} from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
 import { RubikCubeApp } from '@/rubik-cube-app/rubik-cube-app';
 import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
 import { storeToRefs } from 'pinia';
 import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
-import { RubikDodecahedronFactory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/dodecahedron/factory';
-import { RubikHexahedron2x2Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/2x2/factory';
-import { RubikHexahedron3x3Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/3x3/factory';
-import { RubikHexahedron4x4Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/4x4/factory';
-import { RubikHexahedron5x5Factory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/5x5/factory';
-import { RubikTetrahedronFactory } from '@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/tetrahedron/factory';
 import { ProgressSpinner } from 'primevue';
 
+const canvas = ref<Nullable<HTMLCanvasElement>>(null);
+const rubikCubeApp = ref<Nullable<RubikCubeApp>>(null);
+
 type RubikFactories = {
-  [CubeCommonName in TCubeCommonNames]: IRubikCubeFactory<Record<string, string>, CubeCommonName>;
+  [CubeCommonName in TCubeCommonNames]: () => Promise<
+    IRubikCubeFactory<Record<string, string>, CubeCommonName>
+  >;
 };
 
 const rubikFactories: RubikFactories = {
-  '2x2 Cube': new RubikHexahedron2x2Factory(),
-  '3x3 Cube': new RubikHexahedron3x3Factory(),
-  '4x4 Cube': new RubikHexahedron4x4Factory(),
-  '5x5 Cube': new RubikHexahedron5x5Factory(),
-  Megaminx: new RubikDodecahedronFactory(),
-  Pyraminx: new RubikTetrahedronFactory(),
+  '2x2 Cube': () =>
+    import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/2x2/factory').then(
+      (m) => new m.RubikHexahedron2x2Factory(),
+    ),
+  '3x3 Cube': () =>
+    import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/3x3/factory').then(
+      (m) => new m.RubikHexahedron3x3Factory(),
+    ),
+  '4x4 Cube': () =>
+    import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/4x4/factory').then(
+      (m) => new m.RubikHexahedron4x4Factory(),
+    ),
+  '5x5 Cube': () =>
+    import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/5x5/factory').then(
+      (m) => new m.RubikHexahedron5x5Factory(),
+    ),
+  Megaminx: () =>
+    import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/dodecahedron/factory').then(
+      (m) => new m.RubikDodecahedronFactory(),
+    ),
+  Pyraminx: () =>
+    import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/tetrahedron/factory').then(
+      (m) => new m.RubikTetrahedronFactory(),
+    ),
+};
+const factoryCache = new Map<TCubeCommonNames, DefaultRubikCubeFactory>();
+
+const getFactory = async (name: TCubeCommonNames): Promise<DefaultRubikCubeFactory> => {
+  if (factoryCache.has(name)) {
+    return factoryCache.get(name)!;
+  }
+
+  const factory = await rubikFactories[name]();
+  factoryCache.set(name, factory);
+  return factory;
 };
 
 const selectedCubeStore = useSelectedCubeStore();
 const { getSelectedCubeData, isCubeLoading } = storeToRefs(selectedCubeStore);
-
-const selectedFactory = computed(() => rubikFactories[getSelectedCubeData.value.name]);
-
-const canvas = ref<Nullable<HTMLCanvasElement>>(null);
-const rubikCubeApp = ref<Nullable<RubikCubeApp>>(null);
 
 onMounted(async () => {
   if (!canvas.value) {
@@ -59,14 +85,20 @@ onMounted(async () => {
   const app = new RubikCubeApp(canvas.value);
   rubikCubeApp.value = app;
   isCubeLoading.value = true;
-  await rubikCubeApp.value.start(selectedFactory.value);
+
+  const factory = await getFactory(getSelectedCubeData.value.name);
+  await rubikCubeApp.value.start(factory);
+
   isCubeLoading.value = false;
 });
 watch(
-  () => selectedFactory.value,
+  () => getSelectedCubeData.value,
   async (newFactory) => {
     isCubeLoading.value = true;
-    await rubikCubeApp.value?.changeCube(newFactory);
+
+    const factory = await getFactory(newFactory.name);
+    await rubikCubeApp.value?.changeCube(factory);
+
     isCubeLoading.value = false;
   },
 );
