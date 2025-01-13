@@ -1,12 +1,13 @@
-import * as THREE from 'three';
+import type { BufferGeometry, MeshBasicMaterial, Quaternion } from 'three';
+import { Vector3 } from 'three';
 import { RubikCubePieceFace } from './rubik-cube-piece-face';
 import type { TCubeFaceColor } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 type TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames extends string> = {
-  geometry: THREE.BufferGeometry;
-  material: THREE.MeshBasicMaterial;
+  geometry: BufferGeometry;
+  material: MeshBasicMaterial;
   color: number;
-  cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>;
+  cubeFacesNormalVectors: Record<TCubeFacesNames, Vector3>;
   pieceCubeFacesColors: Record<TCubeFacesNames, Nullable<number>>;
 };
 
@@ -17,8 +18,8 @@ type TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames extends string>
 export class RubikCubePieceVisibleFace<TCubeFacesNames extends string> extends RubikCubePieceFace {
   public readonly color: TCubeFaceColor;
 
-  private readonly normal: THREE.Vector3;
-  private readonly cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>;
+  private readonly normal: Vector3;
+  private readonly cubeFacesNormalVectors: Record<TCubeFacesNames, Vector3>;
   private readonly pieceCubeFacesColors: Record<TCubeFacesNames, Nullable<TCubeFaceColor>>;
 
   constructor(params: TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames>) {
@@ -26,18 +27,16 @@ export class RubikCubePieceVisibleFace<TCubeFacesNames extends string> extends R
     this.color = params.color;
     this.cubeFacesNormalVectors = params.cubeFacesNormalVectors;
     this.pieceCubeFacesColors = params.pieceCubeFacesColors;
-    this.normal = new THREE.Vector3()
-      .fromBufferAttribute(this.geometry.attributes.normal, 0)
-      .normalize();
+    this.normal = new Vector3().fromBufferAttribute(this.geometry.attributes.normal, 0).normalize();
     this.roundNormal();
     this.setCubeFace();
   }
 
-  public getNormal(): THREE.Vector3 {
+  public getNormal(): Vector3 {
     return this.normal.clone();
   }
 
-  public applyQuaternionToNormal(quaternion: THREE.Quaternion): void {
+  public applyQuaternionToNormal(quaternion: Quaternion): void {
     const originalNormal = this.normal.clone();
 
     this.normal.applyQuaternion(quaternion).normalize();

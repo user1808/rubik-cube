@@ -1,6 +1,6 @@
-import * as THREE from 'three';
+import type { BufferGeometry, MeshBasicMaterial } from 'three';
+import { Mesh } from 'three';
 
-export interface IRubikCubePieceFace
-  extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> {
+export interface IRubikCubePieceFace extends Mesh<BufferGeometry, MeshBasicMaterial> {
   dispose(): void;
 }

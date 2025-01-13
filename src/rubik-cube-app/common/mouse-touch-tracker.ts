@@ -1,8 +1,8 @@
-import * as THREE from 'three';
+import { Vector2 } from 'three';
 import type { ScreenSize } from './screen-size';
 
 export class MouseTouchTracker {
-  private readonly _pointerPosition: THREE.Vector2 = new THREE.Vector2();
+  private readonly _pointerPosition: Vector2 = new Vector2();
 
   constructor(private readonly screenSize: ScreenSize) {
     window.addEventListener('mousemove', (event) => {
@@ -13,7 +13,7 @@ export class MouseTouchTracker {
     window.addEventListener('touchstart', (event) => this.touchEventListener(event));
   }
 
-  public get pointerPosition(): THREE.Vector2 {
+  public get pointerPosition(): Vector2 {
     return this._pointerPosition;
   }
 

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import type { Scene, PerspectiveCamera, MeshBasicMaterial } from 'three';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { MouseTouchTracker } from '@/rubik-cube-app/common';
 import type { IRubikCube } from './structure';
@@ -53,7 +53,7 @@ export interface IRubikCubeFactory<
     TCubeShellFilenames
   >;
 
-  createRubikCubeShellMaterial(): THREE.MeshBasicMaterial;
+  createRubikCubeShellMaterial(): MeshBasicMaterial;
   createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>;
 
   createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilenames, TCubePiecesFilenames>;
@@ -96,8 +96,8 @@ export interface IRubikCubeFactory<
   ): IRubikCubeRotationRaycaster;
 
   createRubikCubeBuilder(
-    scene: THREE.Scene,
-    camera: THREE.PerspectiveCamera,
+    scene: Scene,
+    camera: PerspectiveCamera,
   ): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
     TCubeFacesNames,
@@ -107,8 +107,8 @@ export interface IRubikCubeFactory<
   >;
 
   createRubikCube(
-    scene: THREE.Scene,
-    camera: THREE.PerspectiveCamera,
+    scene: Scene,
+    camera: PerspectiveCamera,
     mouseTouchTracker: MouseTouchTracker,
     orbitControls: OrbitControls,
   ): Promise<

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import type { Scene, PerspectiveCamera } from 'three';
 import type { IRubikCube } from '../../../interfaces/structure';
 import type { IRubikCubeRotationImplementation } from '@/rubik-cube-app/rubik-cube/interfaces';
 import type {
@@ -30,8 +30,8 @@ export class RubikCubeBuilder<
     >
 {
   constructor(
-    private readonly scene: THREE.Scene,
-    private readonly camera: THREE.PerspectiveCamera,
+    private readonly scene: Scene,
+    private readonly camera: PerspectiveCamera,
     private readonly cubeShellBuilder: IRubikCubeShellBuilder<
       TCubeRotationGroups,
       TCubeRotationTypes,

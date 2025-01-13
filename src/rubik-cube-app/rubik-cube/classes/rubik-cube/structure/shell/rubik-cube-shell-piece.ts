@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import type { BufferGeometry, MeshBasicMaterial } from 'three';
+import { Mesh } from 'three';
 import type { IRubikCubeShellPiece } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import type { TShellPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
@@ -7,7 +8,7 @@ export class RubikCubeShellPiece<
     TCubeRotationTypes extends string,
     TCubeShellFilename extends string,
   >
-  extends THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>
+  extends Mesh<BufferGeometry, MeshBasicMaterial>
   implements IRubikCubeShellPiece<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilename>
 {
   constructor(
@@ -16,8 +17,8 @@ export class RubikCubeShellPiece<
       TCubeRotationTypes,
       TCubeShellFilename
     >['rotations'],
-    geometry: THREE.BufferGeometry,
-    material: THREE.MeshBasicMaterial,
+    geometry: BufferGeometry,
+    material: MeshBasicMaterial,
   ) {
     super(geometry, material);
   }

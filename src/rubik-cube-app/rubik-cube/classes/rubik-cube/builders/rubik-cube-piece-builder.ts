@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import type { BufferGeometry, Euler, Group, Object3D } from 'three';
+import { Vector3, Mesh, MeshBasicMaterial } from 'three';
 import type {
   TCubeFaceColor,
   TCubeFaceMaterial,
@@ -39,7 +40,7 @@ export class RubikCubePieceBuilder<
     loadedGLTFPieces: Map<TPiecesFilenames, GLTF>,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
-    cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>,
+    cubeFacesNormalVectors: Record<TCubeFacesNames, Vector3>,
   ): RubikCubePiece<TCubeFacesNames> {
     const { id, position, rotation, filename } = pieceData;
 
@@ -75,10 +76,10 @@ export class RubikCubePieceBuilder<
    * @returns The transformed piece faces.
    */
   private transformGLTFPieceFaces(
-    gltfPiece: THREE.Group,
+    gltfPiece: Group,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
-    cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>,
+    cubeFacesNormalVectors: Record<TCubeFacesNames, Vector3>,
     initCubeFacesColors: Record<TCubeFacesNames, Nullable<TCubeFaceColor>>,
   ): TTransformGLTFPieceFacesReturn<TCubeFacesNames> {
     const allFaces: Array<RubikCubePieceFace> = [];
@@ -110,23 +111,23 @@ export class RubikCubePieceBuilder<
    * @returns The created piece face.
    */
   private createPieceFace(
-    pieceFace: THREE.Object3D,
+    pieceFace: Object3D,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
-    cubeFacesNormalVectors: Record<TCubeFacesNames, THREE.Vector3>,
+    cubeFacesNormalVectors: Record<TCubeFacesNames, Vector3>,
     pieceCubeFacesColors: Record<TCubeFacesNames, Nullable<TCubeFaceColor>>,
   ): RubikCubePieceFace | RubikCubePieceVisibleFace<TCubeFacesNames> {
-    if (!TypeGuards.isT(pieceFace, THREE.Mesh))
+    if (!TypeGuards.isT(pieceFace, Mesh))
       throw new Error('Loaded Piece Face is not a three.js Mesh');
 
-    const geometry: THREE.BufferGeometry = pieceFace.geometry;
-    const material: TCubeFaceMaterial | THREE.MeshBasicMaterial = this.chooseRightMaterial(
+    const geometry: BufferGeometry = pieceFace.geometry;
+    const material: TCubeFaceMaterial | MeshBasicMaterial = this.chooseRightMaterial(
       pieceFace.name,
       pieceData,
       materials,
     );
 
-    return material instanceof THREE.MeshBasicMaterial
+    return material instanceof MeshBasicMaterial
       ? new RubikCubePieceFace({ geometry, material })
       : new RubikCubePieceVisibleFace({
           geometry,
@@ -148,10 +149,9 @@ export class RubikCubePieceBuilder<
     pieceFaceName: string,
     pieceData: TPieceData<TPiecesFilenamesWithFaces, TCubeFacesNames, TPiecesFilenames>,
     materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
-  ): TCubeFaceMaterial | THREE.MeshBasicMaterial {
+  ): TCubeFaceMaterial | MeshBasicMaterial {
     const { pieceFacesToCubeFaces } = pieceData;
-    let material: TCubeFaceMaterial | THREE.MeshBasicMaterial =
-      materials.cubeInvisibleFacesMaterials;
+    let material: TCubeFaceMaterial | MeshBasicMaterial = materials.cubeInvisibleFacesMaterials;
 
     if (TypeGuards.isObjectKey(pieceFaceName, pieceFacesToCubeFaces)) {
       const cubeFace = pieceFacesToCubeFaces[pieceFaceName];
@@ -169,24 +169,24 @@ export class RubikCubePieceBuilder<
    */
   private setPieceInWorld(
     piece: RubikCubePiece<TCubeFacesNames>,
-    position: THREE.Vector3,
-    rotation: THREE.Euler,
+    position: Vector3,
+    rotation: Euler,
   ) {
     this.setPosition(piece, position);
     this.setRotation(piece, rotation);
   }
 
-  private setPosition(newPiece: RubikCubePiece<TCubeFacesNames>, { x, y, z }: THREE.Vector3) {
+  private setPosition(newPiece: RubikCubePiece<TCubeFacesNames>, { x, y, z }: Vector3) {
     newPiece.position.set(x, y, z);
   }
 
   /**
    * This method should set the rotation of the piece. The rotation is made like this because in Blender the rotation is made some kind of different, so we need to rotate the piece in the world axis.
    */
-  private setRotation(newPiece: RubikCubePiece<TCubeFacesNames>, euler: THREE.Euler) {
-    newPiece.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), euler.x);
-    newPiece.rotateOnWorldAxis(new THREE.Vector3(0, 0, -1), euler.z);
-    newPiece.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), euler.y);
+  private setRotation(newPiece: RubikCubePiece<TCubeFacesNames>, euler: Euler) {
+    newPiece.rotateOnWorldAxis(new Vector3(1, 0, 0), euler.x);
+    newPiece.rotateOnWorldAxis(new Vector3(0, 0, -1), euler.z);
+    newPiece.rotateOnWorldAxis(new Vector3(0, 1, 0), euler.y);
     newPiece.pieceVisibleFaces.forEach((face) => face.applyQuaternionToNormal(newPiece.quaternion));
   }
 }

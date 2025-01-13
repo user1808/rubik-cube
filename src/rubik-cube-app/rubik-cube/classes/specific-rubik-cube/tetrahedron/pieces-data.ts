@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3, Euler } from 'three';
 import type { IRubikCubePiecesData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import type { TPieceData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
@@ -15,11 +15,11 @@ export class RubikTetrahedronPiecesData
     'RubikOctahedronPiece.glb',
   ];
 
-  public readonly facesNormalVectors: Record<TTetrahedronFaces, THREE.Vector3> = {
-    Front: new THREE.Vector3(0.471, 0.333, 0.8165),
-    Right: new THREE.Vector3(0.471, 0.333, -0.8165),
-    Left: new THREE.Vector3(-0.943, 0.333, 0),
-    Down: new THREE.Vector3(0, -1, 0),
+  public readonly facesNormalVectors: Record<TTetrahedronFaces, Vector3> = {
+    Front: new Vector3(0.471, 0.333, 0.8165),
+    Right: new Vector3(0.471, 0.333, -0.8165),
+    Left: new Vector3(-0.943, 0.333, 0),
+    Down: new Vector3(0, -1, 0),
   };
 
   public readonly piecesInitData: Array<
@@ -27,8 +27,8 @@ export class RubikTetrahedronPiecesData
   > = [
     {
       id: 0,
-      position: new THREE.Vector3(0, 1.99712, 0),
-      rotation: new THREE.Euler(),
+      position: new Vector3(0, 1.99712, 0),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceA: 'Front',
@@ -38,8 +38,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 1,
-      position: new THREE.Vector3(0, 0.999245, 0),
-      rotation: new THREE.Euler(),
+      position: new Vector3(0, 0.999245, 0),
+      rotation: new Euler(),
       filename: 'RubikOctahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceB: 'Right',
@@ -49,8 +49,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 2,
-      position: new THREE.Vector3(-0.470434, 0.666966, 0.814357),
-      rotation: new THREE.Euler(),
+      position: new Vector3(-0.470434, 0.666966, 0.814357),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceA: 'Front',
@@ -59,8 +59,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 3,
-      position: new THREE.Vector3(0.940249, 0.667194, 0),
-      rotation: new THREE.Euler(),
+      position: new Vector3(0.940249, 0.667194, 0),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceA: 'Front',
@@ -69,8 +69,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 4,
-      position: new THREE.Vector3(-0.470882, 0.665698, -0.815522),
-      rotation: new THREE.Euler(),
+      position: new Vector3(-0.470882, 0.665698, -0.815522),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceB: 'Right',
@@ -79,8 +79,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 5,
-      position: new THREE.Vector3(-0.47008, -0.331997, 0.814378),
-      rotation: new THREE.Euler(),
+      position: new Vector3(-0.47008, -0.331997, 0.814378),
+      rotation: new Euler(),
       filename: 'RubikOctahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceD: 'Front',
@@ -90,8 +90,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 6,
-      position: new THREE.Vector3(0.941284, -0.331883, 0),
-      rotation: new THREE.Euler(),
+      position: new Vector3(0.941284, -0.331883, 0),
+      rotation: new Euler(),
       filename: 'RubikOctahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceB: 'Right',
@@ -101,8 +101,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 7,
-      position: new THREE.Vector3(-0.470611, -0.332631, -0.815633),
-      rotation: new THREE.Euler(),
+      position: new Vector3(-0.470611, -0.332631, -0.815633),
+      rotation: new Euler(),
       filename: 'RubikOctahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceB: 'Right',
@@ -112,8 +112,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 8,
-      position: new THREE.Vector3(-0.940715, -0.665078, 1.62973),
-      rotation: new THREE.Euler(),
+      position: new Vector3(-0.940715, -0.665078, 1.62973),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceA: 'Front',
@@ -123,8 +123,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 9,
-      position: new THREE.Vector3(0.471911, -0.665021, 0.814124),
-      rotation: new THREE.Euler(),
+      position: new Vector3(0.471911, -0.665021, 0.814124),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceA: 'Front',
@@ -133,8 +133,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 10,
-      position: new THREE.Vector3(1.88255, -0.664964, 0),
-      rotation: new THREE.Euler(),
+      position: new Vector3(1.88255, -0.664964, 0),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceA: 'Front',
@@ -144,8 +144,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 11,
-      position: new THREE.Vector3(0.470415, -0.665338, -0.815621),
-      rotation: new THREE.Euler(),
+      position: new Vector3(0.470415, -0.665338, -0.815621),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceB: 'Right',
@@ -154,8 +154,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 12,
-      position: new THREE.Vector3(-0.9414, -0.665712, -1.63052),
-      rotation: new THREE.Euler(),
+      position: new Vector3(-0.9414, -0.665712, -1.63052),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceB: 'Right',
@@ -165,8 +165,8 @@ export class RubikTetrahedronPiecesData
     },
     {
       id: 13,
-      position: new THREE.Vector3(-0.940827, -0.665395, 0),
-      rotation: new THREE.Euler(),
+      position: new Vector3(-0.940827, -0.665395, 0),
+      rotation: new Euler(),
       filename: 'RubikTetrahedronPiece.glb',
       pieceFacesToCubeFaces: {
         FaceC: 'Left',

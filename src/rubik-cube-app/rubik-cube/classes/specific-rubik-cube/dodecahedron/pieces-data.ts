@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3, Euler } from 'three';
 import type {
   TDodecahedronPiecesFilenames,
   TDodecahedronPiecesFilenamesWithFaces,
@@ -35,19 +35,19 @@ export class RubikDodecahedronPiecesData
     'RubikDodecahedronVertexPiece.glb',
   ];
 
-  public readonly facesNormalVectors: Record<TDodecahedronFaces, THREE.Vector3> = {
-    Up: new THREE.Vector3(0, 1, 0),
-    Down: new THREE.Vector3(0, -1, 0),
-    Right: new THREE.Vector3(0.85065, 0.4472, 0.2764),
-    BackLeft: new THREE.Vector3(-0.85065, -0.4472, -0.2764),
-    Front: new THREE.Vector3(0, 0.4472, 0.8944),
-    Back: new THREE.Vector3(0, -0.4472, -0.8944),
-    Left: new THREE.Vector3(-0.85065, 0.4472, 0.2764),
-    BackRight: new THREE.Vector3(0.85065, -0.4472, -0.2764),
-    UpLeft: new THREE.Vector3(-0.5257, 0.4472, -0.7236),
-    DownRight: new THREE.Vector3(0.5257, -0.4472, 0.7236),
-    UpRight: new THREE.Vector3(0.5257, 0.4472, -0.7236),
-    DownLeft: new THREE.Vector3(-0.5257, -0.4472, 0.7236),
+  public readonly facesNormalVectors: Record<TDodecahedronFaces, Vector3> = {
+    Up: new Vector3(0, 1, 0),
+    Down: new Vector3(0, -1, 0),
+    Right: new Vector3(0.85065, 0.4472, 0.2764),
+    BackLeft: new Vector3(-0.85065, -0.4472, -0.2764),
+    Front: new Vector3(0, 0.4472, 0.8944),
+    Back: new Vector3(0, -0.4472, -0.8944),
+    Left: new Vector3(-0.85065, 0.4472, 0.2764),
+    BackRight: new Vector3(0.85065, -0.4472, -0.2764),
+    UpLeft: new Vector3(-0.5257, 0.4472, -0.7236),
+    DownRight: new Vector3(0.5257, -0.4472, 0.7236),
+    UpRight: new Vector3(0.5257, 0.4472, -0.7236),
+    DownLeft: new Vector3(-0.5257, -0.4472, 0.7236),
   };
 
   public readonly piecesInitData: Array<
@@ -122,8 +122,8 @@ export class RubikDodecahedronPiecesData
     return [
       {
         id: 10,
-        position: new THREE.Vector3(0, 1.806, 0),
-        rotation: new THREE.Euler(0, 2 * Radians['18deg'], 0),
+        position: new Vector3(0, 1.806, 0),
+        rotation: new Euler(0, 2 * Radians['18deg'], 0),
         filename: 'RubikDodecahedronFacePiece.glb',
         pieceFacesToCubeFaces: { FaceA: 'Up' },
       },
@@ -379,8 +379,8 @@ export class RubikDodecahedronPiecesData
     return [
       {
         id: 61,
-        position: new THREE.Vector3(0, -1.806, 0),
-        rotation: new THREE.Euler(0, 0, Radians['180deg']),
+        position: new Vector3(0, -1.806, 0),
+        rotation: new Euler(0, 0, Radians['180deg']),
         filename: 'RubikDodecahedronFacePiece.glb',
         pieceFacesToCubeFaces: { FaceA: 'Down' },
       },
@@ -394,8 +394,8 @@ export class RubikDodecahedronPiecesData
     const piecesData: typeof this.piecesInitData = [];
 
     for (let i = 0; i < count; i++) {
-      const position = new THREE.Vector3(positionData.x[i], positionData.y[i], positionData.z[i]);
-      const rotation = new THREE.Euler(rotationData.x[i], rotationData.y[i], rotationData.z[i]);
+      const position = new Vector3(positionData.x[i], positionData.y[i], positionData.z[i]);
+      const rotation = new Euler(rotationData.x[i], rotationData.y[i], rotationData.z[i]);
       piecesData.push({
         id: startIdx + i,
         position,

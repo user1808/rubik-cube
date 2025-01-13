@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector3, Euler } from 'three';
 import type {
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
@@ -23,23 +23,23 @@ export class RubikDodecahedronShellData extends AbstractRubikCubeShellData<
 > {
   protected readonly ordinaryRotationName: 'Clockwise' = 'Clockwise';
   protected readonly invertedRotationName: 'CounterClockwise' = 'CounterClockwise';
-  protected readonly directions: Record<TDodecahedronShellDirections, THREE.Vector3> = {
-    DirectionA: new THREE.Vector3(0, -0.86, -0.53),
-    DirectionB: new THREE.Vector3(0, 0.53, -0.86),
-    DirectionC: new THREE.Vector3(0.31, 0, -0.95),
-    DirectionD: new THREE.Vector3(0.31, 0, 0.95),
-    DirectionE: new THREE.Vector3(0.31, -0.86, 0.425),
-    DirectionF: new THREE.Vector3(-0.31, -0.86, 0.425),
-    DirectionG: new THREE.Vector3(-0.31, 0.86, 0.425),
-    DirectionH: new THREE.Vector3(0.53, -0.53, -0.69),
-    DirectionI: new THREE.Vector3(0.53, 0.53, 0.69),
-    DirectionJ: new THREE.Vector3(-0.53, -0.86, -0.17),
-    DirectionK: new THREE.Vector3(0.53, -0.86, -0.17),
-    DirectionL: new THREE.Vector3(-0.81, 0, -0.59),
-    DirectionM: new THREE.Vector3(-0.81, 0, 0.59),
-    DirectionN: new THREE.Vector3(0.81, -0.53, 0.26),
-    DirectionO: new THREE.Vector3(0.81, 0.53, -0.26),
-    DirectionP: new THREE.Vector3(1, 0, 0),
+  protected readonly directions: Record<TDodecahedronShellDirections, Vector3> = {
+    DirectionA: new Vector3(0, -0.86, -0.53),
+    DirectionB: new Vector3(0, 0.53, -0.86),
+    DirectionC: new Vector3(0.31, 0, -0.95),
+    DirectionD: new Vector3(0.31, 0, 0.95),
+    DirectionE: new Vector3(0.31, -0.86, 0.425),
+    DirectionF: new Vector3(-0.31, -0.86, 0.425),
+    DirectionG: new Vector3(-0.31, 0.86, 0.425),
+    DirectionH: new Vector3(0.53, -0.53, -0.69),
+    DirectionI: new Vector3(0.53, 0.53, 0.69),
+    DirectionJ: new Vector3(-0.53, -0.86, -0.17),
+    DirectionK: new Vector3(0.53, -0.86, -0.17),
+    DirectionL: new Vector3(-0.81, 0, -0.59),
+    DirectionM: new Vector3(-0.81, 0, 0.59),
+    DirectionN: new Vector3(0.81, -0.53, 0.26),
+    DirectionO: new Vector3(0.81, 0.53, -0.26),
+    DirectionP: new Vector3(1, 0, 0),
   };
 
   public readonly piecesFilenames: Array<TDodecahedronShellFilenames> = [
@@ -81,18 +81,18 @@ export class RubikDodecahedronShellData extends AbstractRubikCubeShellData<
   protected readonly axes: Partial<
     Record<TDodecahedronRotationGroups, TShellPieceDataInitRotation['axes']>
   > = {
-    Up: { y: new THREE.Vector3(0, 1, 0) },
-    Down: { y: new THREE.Vector3(0, -1, 0) },
-    Right: { y: new THREE.Vector3(0.85065, 0.4472, 0.2764) },
-    BackLeft: { z: new THREE.Vector3(-0.85065, -0.4472, -0.2764) },
-    Front: { y: new THREE.Vector3(0, 0.4472, 0.8944) },
-    Back: { y: new THREE.Vector3(0, -0.4472, -0.8944) },
-    Left: { y: new THREE.Vector3(-0.85065, 0.4472, 0.2764) },
-    BackRight: { z: new THREE.Vector3(0.85065, -0.4472, -0.2764) },
-    UpLeft: { z: new THREE.Vector3(-0.5257, 0.4472, -0.7236) },
-    DownRight: { y: new THREE.Vector3(0.5257, -0.4472, 0.7236) },
-    UpRight: { z: new THREE.Vector3(0.5257, 0.4472, -0.7236) },
-    DownLeft: { y: new THREE.Vector3(-0.5257, -0.4472, 0.7236) },
+    Up: { y: new Vector3(0, 1, 0) },
+    Down: { y: new Vector3(0, -1, 0) },
+    Right: { y: new Vector3(0.85065, 0.4472, 0.2764) },
+    BackLeft: { z: new Vector3(-0.85065, -0.4472, -0.2764) },
+    Front: { y: new Vector3(0, 0.4472, 0.8944) },
+    Back: { y: new Vector3(0, -0.4472, -0.8944) },
+    Left: { y: new Vector3(-0.85065, 0.4472, 0.2764) },
+    BackRight: { z: new Vector3(0.85065, -0.4472, -0.2764) },
+    UpLeft: { z: new Vector3(-0.5257, 0.4472, -0.7236) },
+    DownRight: { y: new Vector3(0.5257, -0.4472, 0.7236) },
+    UpRight: { z: new Vector3(0.5257, 0.4472, -0.7236) },
+    DownLeft: { y: new Vector3(-0.5257, -0.4472, 0.7236) },
   };
 
   private readonly zerosRotation: Array<number> = Array(11).fill(0);
@@ -368,12 +368,12 @@ export class RubikDodecahedronShellData extends AbstractRubikCubeShellData<
       const movements = this.movements[face as TDodecahedronFaces];
 
       for (let i = 0; i < facePieceInitialPositions.x.length; i++) {
-        const initPosition = new THREE.Vector3(
+        const initPosition = new Vector3(
           facePieceInitialPositions.x[i],
           facePieceInitialPositions.y[i],
           facePieceInitialPositions.z[i],
         );
-        const initRotation = new THREE.Euler(
+        const initRotation = new Euler(
           facePieceInitialRotations.x[i],
           facePieceInitialRotations.y[i],
           facePieceInitialRotations.z[i],

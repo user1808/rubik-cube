@@ -12,6 +12,7 @@
       </template>
     </BaseSettingsSideDrawer>
     <BaseSettingsDraggableWindow
+      v-if="isMinimizedAvailable"
       :sections="settingsSections"
       v-model:selected-section="selectedSection"
       v-model:open="isSettingsOpen"
@@ -25,11 +26,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, defineAsyncComponent } from 'vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import type { BaseSettingsSection } from './base-settings-section.type';
 import BaseSettingsSideDrawer from './side-drawer/base-settings-side-drawer.vue';
-import BaseSettingsDraggableWindow from './draggable-window/base-settings-draggable-window.vue';
+
+const BaseSettingsDraggableWindow = defineAsyncComponent(
+  () => import('./draggable-window/base-settings-draggable-window.vue'),
+);
 
 type BaseSettingsModel = BaseSettingsSection;
 const selectedSection = defineModel<BaseSettingsModel>('selectedSection');

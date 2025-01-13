@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Scene } from 'three';
 import { toRaw } from 'vue';
 import type { IRubikCube } from './rubik-cube/interfaces/structure';
 import type { DefaultRubikCubeFactory } from './rubik-cube/interfaces/rubik-cube-factory';
@@ -8,7 +8,7 @@ import { DebugModeCoordinator } from './rubik-cube/classes/debug/debug-mode-coor
 import { DebugAxes, DebugStats, DebugCubeUI } from './rubik-cube/classes/debug/subscribers';
 
 export class RubikCubeApp {
-  private readonly scene: THREE.Scene = new THREE.Scene();
+  private readonly scene: Scene = new Scene();
 
   private readonly screenSize: ScreenSize = new ScreenSize();
   private readonly screenSizeTracker: ScreenSizeTracker = new ScreenSizeTracker();
