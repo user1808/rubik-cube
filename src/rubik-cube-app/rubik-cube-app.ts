@@ -1,4 +1,4 @@
-import { Scene } from 'three';
+import { Color, Scene } from 'three';
 import { toRaw } from 'vue';
 import type { IRubikCube } from './rubik-cube/interfaces/structure';
 import type { DefaultRubikCubeFactory } from './rubik-cube/interfaces/rubik-cube-factory';
@@ -28,6 +28,7 @@ export class RubikCubeApp {
   });
 
   constructor(canvas: HTMLCanvasElement) {
+    this.scene.background = new Color('black');
     this.renderer = new CustomRenderer(canvas, this.screenSize);
     this.screenSizeTracker.startTrack(this.screenSize, this.camera, this.renderer);
     this.orbitControls = new CustomOrbitControls(this.camera, canvas);

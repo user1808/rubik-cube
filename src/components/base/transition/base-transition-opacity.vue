@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, type BaseTransitionProps } from 'vue';
+import type { BaseTransitionProps } from 'vue';
 
 type BaseTransitionOpacityProps = {
   mode?: BaseTransitionProps['mode'];
