@@ -5,6 +5,11 @@
 @import "./primevue/tailwind.css";
 @import "tailwindcss/utilities";
 
+html {
+  background-color: black;
+  overflow: hidden;
+}
+
 body {
   font-family: 'JetBrains Mono', monospace, Verdana , Arial, sans-serif !important;
 }
