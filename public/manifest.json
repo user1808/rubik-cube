@@ -1,0 +1,14 @@
+{
+  "name": "Cube App",
+  "short_name": "Cube App",
+  "icons": [
+    {"src": "/android-chrome-192x192.png", "sizes":"192x192", "type":"image/png"},
+    {"src": "/android-chrome-512x512.png", "sizes":"512x512", "type":"image/png"}
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "description": "Cube App that allows you to play with a variety of cubes, including such as Ordinary Cube, Pyraminx and Megaminx.",
+  "start_url": "/"
+}

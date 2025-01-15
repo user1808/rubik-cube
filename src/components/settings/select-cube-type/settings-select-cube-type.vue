@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto flex w-full flex-col gap-y-2 overflow-hidden rounded-lg p-4 xs:gap-y-4">
+  <div class="mx-auto flex flex-col gap-y-2 p-4 xs:gap-y-4">
     <span class="select-none text-xl tracking-tight text-white">Cube Type</span>
     <Carousel
       v-model:page="temporaryCubeIndex"
