@@ -30,8 +30,6 @@ const useSelectedCubeStorePrivateState = defineStore('selected-cube-private', ()
 export const useSelectedCubeStore = defineStore('selected-cube', () => {
   const privateState = useSelectedCubeStorePrivateState();
 
-  const isCubeLoading = ref<boolean>(false);
-
   const getSelectedCubeData = computed<SelectedCubeData>(() => {
     const idx = privateState.selectedCubeIdx;
     return {
@@ -49,7 +47,6 @@ export const useSelectedCubeStore = defineStore('selected-cube', () => {
   };
 
   return {
-    isCubeLoading,
     getSelectedCubeData,
     getAllAvailableCubesNames,
     setSelectedCube,

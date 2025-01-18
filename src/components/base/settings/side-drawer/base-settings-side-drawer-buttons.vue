@@ -25,7 +25,7 @@
 import gsap from 'gsap';
 import { computed } from 'vue';
 import type { BaseSettingsSection } from '../base-settings-section.type';
-import { useOrbitControlsDataStore } from '@/stores/useOrbitControlsDataStore';
+import { useOrbitControlsDataStore } from '@/stores/use-orbit-controls-data-store';
 import { storeToRefs } from 'pinia';
 import { PopoverButton } from '@headlessui/vue';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';

@@ -76,8 +76,9 @@ const getFactory = async (name: TCubeCommonNames): Promise<DefaultRubikCubeFacto
 };
 
 const selectedCubeStore = useSelectedCubeStore();
-const { getSelectedCubeData, isCubeLoading } = storeToRefs(selectedCubeStore);
+const { getSelectedCubeData } = storeToRefs(selectedCubeStore);
 
+const isCubeLoading = ref(false);
 onMounted(async () => {
   if (!canvas.value) {
     throw new Error('Canvas HTML Element not found!');
