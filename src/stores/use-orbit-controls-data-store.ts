@@ -16,15 +16,6 @@ const useOrbitControlsDataPrivateState = defineStore('orbit-controls-data-privat
 export const useOrbitControlsDataStore = defineStore('orbit-controls-data', () => {
   const privateState = useOrbitControlsDataPrivateState();
 
-  const init = (maxDistance: number, currentDistance: number) => {
-    privateState.maxDistance = maxDistance;
-    privateState.distance = currentDistance;
-  };
-
-  const setDistance = (distance: number) => {
-    privateState.distance = distance;
-  };
-
   const getDistanceState = computed<TDistanceState>(() => {
     if (privateState.distance > privateState.maxDistance * 0.75) {
       return 'far';
@@ -35,8 +26,15 @@ export const useOrbitControlsDataStore = defineStore('orbit-controls-data', () =
     }
   });
 
+  const setMaxDistance = (maxDistance: number) => {
+    privateState.maxDistance = maxDistance;
+  };
+  const setDistance = (distance: number) => {
+    privateState.distance = distance;
+  };
+
   return {
-    init,
+    setMaxDistance,
     setDistance,
     getDistanceState,
   };

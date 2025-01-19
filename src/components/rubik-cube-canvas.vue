@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import type {
   DefaultRubikCubeFactory,
   IRubikCubeFactory,
@@ -76,7 +76,7 @@ const getFactory = async (name: TCubeCommonNames): Promise<DefaultRubikCubeFacto
 };
 
 const selectedCubeStore = useSelectedCubeStore();
-const { getSelectedCubeData } = storeToRefs(selectedCubeStore);
+const { getCurrentCube } = storeToRefs(selectedCubeStore);
 
 const isCubeLoading = ref(false);
 onMounted(async () => {
@@ -87,20 +87,22 @@ onMounted(async () => {
   rubikCubeApp.value = app;
   isCubeLoading.value = true;
 
-  const factory = await getFactory(getSelectedCubeData.value.name);
+  const factory = await getFactory(getCurrentCube.value.name);
   await rubikCubeApp.value.start(factory);
 
   isCubeLoading.value = false;
 });
-watch(
-  () => getSelectedCubeData.value,
-  async (newFactory) => {
-    isCubeLoading.value = true;
 
-    const factory = await getFactory(newFactory.name);
-    await rubikCubeApp.value?.changeCube(factory);
+selectedCubeStore.$subscribe(async () => {
+  if (!rubikCubeApp.value) {
+    return;
+  }
 
-    isCubeLoading.value = false;
-  },
-);
+  isCubeLoading.value = true;
+
+  const factory = await getFactory(getCurrentCube.value.name);
+  await rubikCubeApp.value.changeCube(factory);
+
+  isCubeLoading.value = false;
+});
 </script>

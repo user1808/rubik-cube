@@ -30,8 +30,8 @@ import { storeToRefs } from 'pinia';
 import { PopoverButton } from '@headlessui/vue';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
 
-const store = useOrbitControlsDataStore();
-const { getDistanceState } = storeToRefs(store);
+const orbitControlsDataStore = useOrbitControlsDataStore();
+const { getDistanceState } = storeToRefs(orbitControlsDataStore);
 
 type BaseSettingsSideDrawerButtonsProps = {
   isSideDrawerOpen: boolean;

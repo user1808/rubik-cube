@@ -128,8 +128,8 @@ const POSITION_STORAGE_KEY = 'settings-window-position';
 const { applyStyles } = useStyleHelpers();
 
 const settingsWindowSizeStore = useSettingsWindowSizeStore();
-const { windowSize } = storeToRefs(settingsWindowSizeStore);
-const { updateWindowSize } = settingsWindowSizeStore;
+const { getWindowSize } = storeToRefs(settingsWindowSizeStore);
+const { setWindowSize } = settingsWindowSizeStore;
 
 const { width: browserWidth, height: browserHeight } = useWindowSize();
 const windowPosition = useSessionStorage(
@@ -170,8 +170,8 @@ const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {
 
   if (setInitSizeDataFlag.value) {
     applyStyles(target, {
-      width: `${windowSize.value.width}px`,
-      height: `${windowSize.value.height}px`,
+      width: `${getWindowSize.value.width}px`,
+      height: `${getWindowSize.value.height}px`,
       minHeight: `${MIN_HEIGHT}px`,
       minWidth: `${MIN_WIDTH}px`,
     });
@@ -188,7 +188,7 @@ const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {
     return;
   }
 
-  updateWindowSize(entry.contentRect);
+  setWindowSize(entry.contentRect);
 };
 
 const isResetWindowPending = ref<boolean>(false);
@@ -197,15 +197,15 @@ const resetWindow = async () => {
   if (!draggableElement) return;
   isResetWindowPending.value = true;
   const size: ElementSize = {
-    width: windowSize.value.width,
-    height: windowSize.value.height,
+    width: getWindowSize.value.width,
+    height: getWindowSize.value.height,
   };
   if (!bordersVisibility.value.right) {
     size.width = Math.max(browserWidth.value - windowPosition.value.x, MIN_WIDTH);
     windowPosition.value.x = browserWidth.value - size.width;
   }
   if (!bordersVisibility.value.left) {
-    size.width = Math.max(windowPosition.value.x + windowSize.value.width, MIN_WIDTH);
+    size.width = Math.max(windowPosition.value.x + getWindowSize.value.width, MIN_WIDTH);
     windowPosition.value.x = 0;
   }
   if (!bordersVisibility.value.bottom) {
@@ -213,10 +213,10 @@ const resetWindow = async () => {
     windowPosition.value.y = browserHeight.value - size.height;
   }
   if (!bordersVisibility.value.top) {
-    size.height = Math.max(windowPosition.value.y + windowSize.value.height, MIN_HEIGHT);
+    size.height = Math.max(windowPosition.value.y + getWindowSize.value.height, MIN_HEIGHT);
     windowPosition.value.y = 0;
   }
-  updateWindowSize(size);
+  setWindowSize(size);
   applyStyles(draggableElement, {
     width: `${size.width}px`,
     height: `${size.height}px`,
