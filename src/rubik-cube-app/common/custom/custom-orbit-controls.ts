@@ -1,7 +1,7 @@
-import type { PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { useOrbitControlsDataStore } from '@/stores/use-orbit-controls-data-store';
 import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
+import type { CustomPersepctiveCamera } from './custom-perspective-camera';
 
 export class CustomOrbitControls extends OrbitControls {
   private readonly cameraNear;
@@ -16,7 +16,10 @@ export class CustomOrbitControls extends OrbitControls {
   private readonly orbitControlsStore = useOrbitControlsDataStore();
   private readonly selectedCubeStore = useSelectedCubeStore();
 
-  constructor(camera: PerspectiveCamera, domElement: HTMLElement) {
+  constructor(
+    private readonly camera: CustomPersepctiveCamera,
+    domElement: HTMLElement,
+  ) {
     super(camera, domElement);
 
     this.cameraNear = camera.near;
@@ -30,6 +33,9 @@ export class CustomOrbitControls extends OrbitControls {
   private setDistances() {
     this.minDistance = this.selectedCubeStore.getCurrentCube.cameraMinDistance + this.cameraNear;
     this.maxDistance = this.maxDistanceFactor * this.minDistance;
+    this.camera.position
+      .copy(this.camera.normalizedDefaultPosition)
+      .multiplyScalar(this.maxDistance);
     this.orbitControlsStore.setMaxDistance(this.maxDistance);
     this.orbitControlsStore.setDistance(this.getDistance());
   }
