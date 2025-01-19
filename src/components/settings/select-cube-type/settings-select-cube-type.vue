@@ -1,10 +1,10 @@
 <template>
-  <div class="mx-auto flex w-full flex-col gap-y-2 overflow-hidden rounded-lg p-4 xs:gap-y-4">
+  <div class="mx-auto flex flex-col gap-y-2 p-4 xs:gap-y-4">
     <span class="select-none text-xl tracking-tight text-white">Cube Type</span>
     <Carousel
       v-model:page="temporaryCubeIndex"
       class="rounded-lg bg-gray-700"
-      :value="getAllAvailableCubesNames"
+      :value="getAllSelectableCubesNames"
       :num-visible="1"
       :num-scroll="1"
       :show-indicators="false"
@@ -30,9 +30,9 @@
     <BaseTransitionOpacity mode="out-in">
       <span v-if="temporaryCubeIndex === undefined" />
       <Button
-        v-else-if="getSelectedCubeData.idx !== temporaryCubeIndex"
+        v-else-if="currentCubeIndex !== temporaryCubeIndex"
         label="Select"
-        @click="store.setSelectedCube(temporaryCubeIndex)"
+        @click="selectCube(temporaryCubeIndex)"
         class="text-xl"
       />
       <div
@@ -60,8 +60,8 @@ import BaseIcon5x5Cube from '@/components/base/icon/base-icon-5x5-cube.vue';
 import BaseIconMegaminxCube from '@/components/base/icon/base-icon-megaminx-cube.vue';
 import BaseIconPyraminxCube from '@/components/base/icon/base-icon-pyraminx-cube.vue';
 
-const store = useSelectedCubeStore();
-const { getAllAvailableCubesNames, getSelectedCubeData } = storeToRefs(store);
+const selectedCubeStore = useSelectedCubeStore();
+const { getAllSelectableCubesNames, currentCubeIndex } = storeToRefs(selectedCubeStore);
 
 const temporaryCubeIndex = ref<number>();
 
@@ -75,6 +75,10 @@ const cubesIcons: Record<TCubeCommonNames, Component> = {
 };
 
 onMounted(() => {
-  temporaryCubeIndex.value = getSelectedCubeData.value.idx;
+  temporaryCubeIndex.value = currentCubeIndex.value;
 });
+
+const selectCube = (index: number) => {
+  currentCubeIndex.value = index;
+};
 </script>

@@ -26,6 +26,7 @@
     "pinia-plugin-persistedstate": "^4.2.0",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.5",
+    "screenfull": "^6.0.2",
     "stats-gl": "^3.6.0",
     "stats.js": "^0.17.0",
     "tailwindcss-primeui": "^0.3.4",

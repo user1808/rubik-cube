@@ -43,6 +43,7 @@
         <div
           ref="handle"
           class="flex cursor-move flex-row items-center justify-between gap-x-4 bg-gray-800 p-2 text-white"
+          :style="{ height: `${HANDLE_HEIGHT}px` }"
         >
           <slot name="header">
             <div class="flex select-none items-center gap-x-2">
@@ -81,6 +82,7 @@
             v-model:selected-section="selectedSection"
             @update:selected-section="resetWindow()"
             :sections="sections"
+            :height="SECTION_HEIGHT"
           />
         </div>
       </div>
@@ -89,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useTemplateRef, watch, defineAsyncComponent } from 'vue';
+import { ref, computed, useTemplateRef, defineAsyncComponent } from 'vue';
 import { storeToRefs } from 'pinia';
 import debounce from 'lodash.debounce';
 import { UseDraggable, vElementVisibility, vResizeObserver } from '@vueuse/components';
@@ -117,14 +119,24 @@ type BaseSettingsDraggableWindowProps = {
 const props = defineProps<BaseSettingsDraggableWindowProps>();
 
 const MIN_WIDTH = 475;
-const MIN_HEIGHT = 72 + props.sections.length * 72 + 16;
+const HANDLE_HEIGHT = 72;
+const SECTION_HEIGHT = 72;
+const MARGIN_HEIGHT = 16;
+const MIN_HEIGHT = HANDLE_HEIGHT + props.sections.length * SECTION_HEIGHT + MARGIN_HEIGHT;
 const POSITION_STORAGE_KEY = 'settings-window-position';
 
 const { applyStyles } = useStyleHelpers();
+
 const settingsWindowSizeStore = useSettingsWindowSizeStore();
-const { width, height } = storeToRefs(settingsWindowSizeStore);
-const { width: windowWidth, height: windowHeight } = useWindowSize();
-const position = useSessionStorage(POSITION_STORAGE_KEY, { x: 10, y: 10 }, { initOnMounted: true });
+const { getWindowSize } = storeToRefs(settingsWindowSizeStore);
+const { setWindowSize } = settingsWindowSizeStore;
+
+const { width: browserWidth, height: browserHeight } = useWindowSize();
+const windowPosition = useSessionStorage(
+  POSITION_STORAGE_KEY,
+  { x: 10, y: 10 },
+  { initOnMounted: true },
+);
 
 const window = useTemplateRef('window');
 const handle = useTemplateRef<HTMLElement>('handle');
@@ -158,8 +170,8 @@ const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {
 
   if (setInitSizeDataFlag.value) {
     applyStyles(target, {
-      width: `${width.value}px`,
-      height: `${height.value}px`,
+      width: `${getWindowSize.value.width}px`,
+      height: `${getWindowSize.value.height}px`,
       minHeight: `${MIN_HEIGHT}px`,
       minWidth: `${MIN_WIDTH}px`,
     });
@@ -170,13 +182,13 @@ const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {
   if (entry.contentRect.width <= 0 || entry.contentRect.height <= 0) {
     setInitSizeDataFlag.value = true;
     if (isWindowVisible.value) {
-      position.value.x = target.style.left ? parseFloat(target.style.left) : 0;
-      position.value.y = target.style.top ? parseFloat(target.style.top) : 0;
+      windowPosition.value.x = target.style.left ? parseFloat(target.style.left) : 0;
+      windowPosition.value.y = target.style.top ? parseFloat(target.style.top) : 0;
     }
     return;
   }
 
-  settingsWindowSizeStore.updateSize(entry.contentRect);
+  setWindowSize(entry.contentRect);
 };
 
 const isResetWindowPending = ref<boolean>(false);
@@ -185,46 +197,32 @@ const resetWindow = async () => {
   if (!draggableElement) return;
   isResetWindowPending.value = true;
   const size: ElementSize = {
-    width: width.value,
-    height: height.value,
+    width: getWindowSize.value.width,
+    height: getWindowSize.value.height,
   };
   if (!bordersVisibility.value.right) {
-    size.width = Math.max(windowWidth.value - position.value.x, MIN_WIDTH);
-    position.value.x = windowWidth.value - size.width;
+    size.width = Math.max(browserWidth.value - windowPosition.value.x, MIN_WIDTH);
+    windowPosition.value.x = browserWidth.value - size.width;
   }
   if (!bordersVisibility.value.left) {
-    size.width = Math.max(position.value.x + width.value, MIN_WIDTH);
-    position.value.x = 0;
+    size.width = Math.max(windowPosition.value.x + getWindowSize.value.width, MIN_WIDTH);
+    windowPosition.value.x = 0;
   }
   if (!bordersVisibility.value.bottom) {
-    size.height = Math.max(windowHeight.value - position.value.y, MIN_HEIGHT);
-    position.value.y = windowHeight.value - size.height;
+    size.height = Math.max(browserHeight.value - windowPosition.value.y, MIN_HEIGHT);
+    windowPosition.value.y = browserHeight.value - size.height;
   }
   if (!bordersVisibility.value.top) {
-    size.height = Math.max(position.value.y + height.value, MIN_HEIGHT);
-    position.value.y = 0;
+    size.height = Math.max(windowPosition.value.y + getWindowSize.value.height, MIN_HEIGHT);
+    windowPosition.value.y = 0;
   }
-  settingsWindowSizeStore.updateSize(size);
+  setWindowSize(size);
   applyStyles(draggableElement, {
     width: `${size.width}px`,
     height: `${size.height}px`,
-    left: `${position.value.x}px`,
-    top: `${position.value.y}px`,
+    left: `${windowPosition.value.x}px`,
+    top: `${windowPosition.value.y}px`,
   });
   debounce(() => (isResetWindowPending.value = false), 20)();
 };
-
-watch(
-  selectedSection,
-  () => {
-    if (minimized.value)
-      applyStyles(window.value?.$el, {
-        width: `${width}px`,
-        height: `${height}px`,
-        left: `${position.value.x}px`,
-        top: `${position.value.y}px`,
-      });
-  },
-  { flush: 'post' },
-);
 </script>

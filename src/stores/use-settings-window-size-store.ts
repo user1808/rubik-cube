@@ -1,25 +1,19 @@
 import type { ElementSize } from '@vueuse/core';
 import { useWindowSize } from '@vueuse/core';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
-const { width: windowWidth, height: windowHeight } = useWindowSize();
+const { width: browserWidth, height: browserHeight } = useWindowSize();
 
-export const useSettingsWindowSizeStore = defineStore(
-  'settings-window-size',
+const useSettingsWindowSizePrivateStore = defineStore(
+  'settings-window-size-private',
   () => {
-    const width = ref(Math.floor((9 / 20) * windowWidth.value));
-    const height = ref(Math.floor((4 / 5) * windowHeight.value));
-
-    const updateSize = (newSize: ElementSize) => {
-      width.value = newSize.width;
-      height.value = newSize.height;
-    };
+    const width = ref(Math.floor((9 / 20) * browserWidth.value));
+    const height = ref(Math.floor((4 / 5) * browserHeight.value));
 
     return {
       width,
       height,
-      updateSize,
     };
   },
   {
@@ -29,3 +23,22 @@ export const useSettingsWindowSizeStore = defineStore(
     },
   },
 );
+
+export const useSettingsWindowSizeStore = defineStore('settings-window-size', () => {
+  const privateState = useSettingsWindowSizePrivateStore();
+
+  const getWindowSize = computed<ElementSize>(() => ({
+    width: privateState.width,
+    height: privateState.height,
+  }));
+
+  const setWindowSize = (newSize: ElementSize) => {
+    privateState.width = newSize.width;
+    privateState.height = newSize.height;
+  };
+
+  return {
+    getWindowSize,
+    setWindowSize,
+  };
+});

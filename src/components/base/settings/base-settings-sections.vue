@@ -5,6 +5,7 @@
         v-for="(section, idx) in sections"
         :key="idx"
         class="z-10 cursor-pointer p-2 hover:bg-gray-800/60"
+        :style="{ height: `${height}px` }"
         @click="selectSection(section)"
       >
         <component :is="section.icon" v-bind="section.iconBind" />
@@ -29,6 +30,7 @@ const selectedSection = defineModel<BaseSettingsSection>('selectedSection');
 
 type BaseSettingsSectionsProps = {
   sections: Array<BaseSettingsSection>;
+  height?: number;
 };
 const props = defineProps<BaseSettingsSectionsProps>();
 
