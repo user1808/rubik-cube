@@ -27,18 +27,18 @@ const useSettingsWindowSizePrivateStore = defineStore(
 export const useSettingsWindowSizeStore = defineStore('settings-window-size', () => {
   const privateState = useSettingsWindowSizePrivateStore();
 
-  const windowSize = computed<ElementSize>(() => ({
+  const getWindowSize = computed<ElementSize>(() => ({
     width: privateState.width,
     height: privateState.height,
   }));
 
-  const updateWindowSize = (newSize: ElementSize) => {
+  const setWindowSize = (newSize: ElementSize) => {
     privateState.width = newSize.width;
     privateState.height = newSize.height;
   };
 
   return {
-    windowSize,
-    updateWindowSize,
+    getWindowSize,
+    setWindowSize,
   };
 });
