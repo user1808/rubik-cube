@@ -1,10 +1,5 @@
 <template>
   <BaseTransitionOpacity>
-    <!-- TODO <BaseSettingsDraggableWindowReset
-      v-if="open && minimized && isAnyBorderHidden"
-    /> -->
-  </BaseTransitionOpacity>
-  <BaseTransitionOpacity>
     <UseDraggable
       ref="window"
       v-if="selectedSection && open && minimized"

@@ -30,6 +30,8 @@ import { ref, computed, watch, defineAsyncComponent } from 'vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import type { BaseSettingsSection } from './base-settings-section.type';
 import BaseSettingsSideDrawer from './side-drawer/base-settings-side-drawer.vue';
+import { useSettingsStateStore } from '@/stores/use-settings-state-store';
+import { storeToRefs } from 'pinia';
 
 const BaseSettingsDraggableWindow = defineAsyncComponent(
   () => import('./draggable-window/base-settings-draggable-window.vue'),
@@ -44,11 +46,8 @@ type BaseSettingsProps = {
 };
 defineProps<BaseSettingsProps>();
 
-type IsSettingsOpen = boolean;
-type IsSettingsMinimized = boolean;
-
-const isSettingsOpen = ref<IsSettingsOpen>(false);
-const isSettingsMinimized = ref<IsSettingsMinimized>(false);
+const settingsStateStore = useSettingsStateStore();
+const { isSettingsOpen, isSettingsMinimized } = storeToRefs(settingsStateStore);
 
 const { current } = useBreakpoints(breakpointsTailwind);
 const isMinimizedAvailable = computed(() => current().value.includes('lg'));
