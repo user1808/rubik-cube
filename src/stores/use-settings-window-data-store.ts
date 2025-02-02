@@ -24,7 +24,7 @@ const useSettingsWindowSizePrivateStore = defineStore(
   },
 );
 
-export const useSettingsWindowSizeStore = defineStore('settings-window-size', () => {
+export const useSettingsWindowDataStore = defineStore('settings-window-size', () => {
   const privateState = useSettingsWindowSizePrivateStore();
 
   const getWindowSize = computed<ElementSize>(() => ({

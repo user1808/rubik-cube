@@ -97,7 +97,7 @@ import debounce from 'lodash.debounce';
 import { UseDraggable, vElementVisibility, vResizeObserver } from '@vueuse/components';
 import { useSessionStorage, useWindowSize } from '@vueuse/core';
 import { useStyleHelpers } from '@/composables/useStyleHelpers';
-import { useSettingsWindowSizeStore } from '@/stores/use-settings-window-size-store';
+import { useSettingsWindowDataStore } from '@/stores/use-settings-window-data-store';
 import type { BaseSettingsDraggableWindowBorders } from './base-settings-draggable-window-borders.type';
 import type { BaseSettingsSection } from '../base-settings-section.type';
 import type { ElementSize, ResizeObserverEntry } from '@vueuse/core';
@@ -127,9 +127,9 @@ const POSITION_STORAGE_KEY = 'settings-window-position';
 
 const { applyStyles } = useStyleHelpers();
 
-const settingsWindowSizeStore = useSettingsWindowSizeStore();
-const { getWindowSize } = storeToRefs(settingsWindowSizeStore);
-const { setWindowSize } = settingsWindowSizeStore;
+const settingsWindowDataStore = useSettingsWindowDataStore();
+const { getWindowSize } = storeToRefs(settingsWindowDataStore);
+const { setWindowSize } = settingsWindowDataStore;
 
 const { width: browserWidth, height: browserHeight } = useWindowSize();
 const windowPosition = useSessionStorage(
