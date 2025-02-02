@@ -3,6 +3,8 @@ import { useWindowSize } from '@vueuse/core';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
+type BaseSettingsDraggableWindowBorders = 'top' | 'right' | 'bottom' | 'left';
+
 const { width: browserWidth, height: browserHeight } = useWindowSize();
 
 const useSettingsWindowSizePrivateStore = defineStore(
@@ -24,21 +26,50 @@ const useSettingsWindowSizePrivateStore = defineStore(
   },
 );
 
+const useSettingsWindowBordersVisibilityPrivateStore = defineStore(
+  'settings-window-borders-visibility-private',
+  () => {
+    const bordersVisibility = ref<Record<BaseSettingsDraggableWindowBorders, boolean>>({
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
+    });
+
+    return {
+      bordersVisibility,
+    };
+  },
+);
+
 export const useSettingsWindowDataStore = defineStore('settings-window-size', () => {
-  const privateState = useSettingsWindowSizePrivateStore();
+  const privateSizeState = useSettingsWindowSizePrivateStore();
+  const privateBordersVisibilityState = useSettingsWindowBordersVisibilityPrivateStore();
 
   const getWindowSize = computed<ElementSize>(() => ({
-    width: privateState.width,
-    height: privateState.height,
+    width: privateSizeState.width,
+    height: privateSizeState.height,
   }));
 
   const setWindowSize = (newSize: ElementSize) => {
-    privateState.width = newSize.width;
-    privateState.height = newSize.height;
+    privateSizeState.width = newSize.width;
+    privateSizeState.height = newSize.height;
+  };
+
+  const getBordersVisibility = computed<Record<BaseSettingsDraggableWindowBorders, boolean>>(
+    () => privateBordersVisibilityState.bordersVisibility,
+  );
+
+  const setBordersVisibility = (
+    newBordersVisibility: Record<BaseSettingsDraggableWindowBorders, boolean>,
+  ) => {
+    privateBordersVisibilityState.bordersVisibility = newBordersVisibility;
   };
 
   return {
     getWindowSize,
     setWindowSize,
+    getBordersVisibility,
+    setBordersVisibility,
   };
 });
