@@ -1,9 +1,7 @@
 <template>
   <BaseTransitionOpacity>
     <!-- TODO <BaseSettingsDraggableWindowReset
-      v-if="open && minimized && isAnyBorderHidden && !isResetWindowPending"
-      :borders-visibility="bordersVisibility"
-      @reset-window-size="resetWindow"
+      v-if="open && minimized && isAnyBorderHidden"
     /> -->
   </BaseTransitionOpacity>
   <BaseTransitionOpacity>
@@ -93,7 +91,6 @@
 <script setup lang="ts">
 import { onUnmounted, ref, useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
-import debounce from 'lodash.debounce';
 import { UseDraggable, vElementVisibility, vResizeObserver } from '@vueuse/components';
 import { useEventBus, useSessionStorage, useWindowSize } from '@vueuse/core';
 import { useStyleHelpers } from '@/composables/useStyleHelpers';
@@ -175,11 +172,9 @@ const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {
   setWindowSize(entry.contentRect);
 };
 
-const isResetWindowPending = ref<boolean>(false);
 const resetWindow = () => {
   const draggableElement = window.value?.$el as HTMLElement;
   if (!draggableElement) return;
-  isResetWindowPending.value = true;
 
   const { right, left, bottom, top } = getBordersVisibility.value;
 
@@ -210,7 +205,6 @@ const resetWindow = () => {
     left: `${windowPosition.value.x}px`,
     top: `${windowPosition.value.y}px`,
   });
-  debounce(() => (isResetWindowPending.value = false), 20)();
 };
 
 const draggableWindowEventBus = useEventBus(useDraggableWindowEventBus);
