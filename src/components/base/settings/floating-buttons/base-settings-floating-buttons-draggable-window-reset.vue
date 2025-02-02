@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="fixed z-40 flex items-center gap-x-2 rounded-lg bg-gray-800 p-2 hover:bg-gray-700 focus-visible:outline-none"
+    class="flex items-center gap-x-2 rounded-lg bg-gray-800 p-2 hover:bg-gray-700 focus-visible:outline-none"
     :class="[
       bordersVisibility.left ? 'left-6 sm:left-8' : 'right-6 sm:right-8',
       bordersVisibility.top ? 'top-6 sm:top-8' : 'bottom-6 sm:bottom-8',
