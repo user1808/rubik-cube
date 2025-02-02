@@ -10,6 +10,8 @@ import type {
   IRubikCubeRotationImplementation,
   IRubikCubeRotationRaycaster,
 } from '@/rubik-cube-app/rubik-cube/interfaces';
+import { useRotateCubeEventBus } from '@/event-buses/use-rotate-cube-event-bus';
+import { useEventBus, type Fn } from '@vueuse/core';
 
 export class RubikCube<
     TCubeFacesNames extends string,
@@ -21,6 +23,8 @@ export class RubikCube<
   implements
     IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
 {
+  private readonly rotateCubeEventBus = useEventBus(useRotateCubeEventBus);
+  private rotateCubeEventBusUnsubscribe: Fn;
   private _rotationRaycaster: Nullable<IRubikCubeRotationRaycaster> = null;
   private _rotationPending = false;
 
@@ -47,6 +51,10 @@ export class RubikCube<
     super();
     this.add(...pieces.map((piece) => piece.piece));
     this.add(shell);
+
+    this.rotateCubeEventBusUnsubscribe = this.rotateCubeEventBus.on(({ face, type }) => {
+      this.rotate(face as TCubeRotationGroups, type as TCubeRotationTypes);
+    });
   }
 
   public setRotationRaycaster(raycaster: IRubikCubeRotationRaycaster) {
@@ -83,6 +91,7 @@ export class RubikCube<
     this.scene.remove(this);
     this._rotationRaycaster?.stop();
     this.isOnScene = false;
+    this.rotateCubeEventBusUnsubscribe();
   }
 
   private updateLogicalFaces(): void {

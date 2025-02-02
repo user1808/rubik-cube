@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto flex flex-col gap-y-2 p-4 xs:gap-y-4">
-    <span class="select-none text-xl tracking-tight text-white">Cube Type</span>
+    <h1 class="select-none text-xl tracking-tight text-white">Cube Type</h1>
     <Carousel
       v-model:page="temporaryCubeIndex"
       class="rounded-lg bg-gray-700"
@@ -33,7 +33,6 @@
         v-else-if="currentCubeIndex !== temporaryCubeIndex"
         label="Select"
         @click="selectCube(temporaryCubeIndex)"
-        class="text-xl"
       />
       <div
         v-else
