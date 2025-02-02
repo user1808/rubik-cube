@@ -60,16 +60,19 @@ export const useSettingsWindowDataStore = defineStore('settings-window-size', ()
     () => privateBordersVisibilityState.bordersVisibility,
   );
 
-  const setBordersVisibility = (
-    newBordersVisibility: Record<BaseSettingsDraggableWindowBorders, boolean>,
-  ) => {
-    privateBordersVisibilityState.bordersVisibility = newBordersVisibility;
+  const setBorderVisibility = (border: BaseSettingsDraggableWindowBorders, state: boolean) => {
+    privateBordersVisibilityState.bordersVisibility[border] = state;
   };
+
+  const isAnyBorderHidden = computed<boolean>(() =>
+    Object.values(privateBordersVisibilityState.bordersVisibility).some((value) => !value),
+  );
 
   return {
     getWindowSize,
     setWindowSize,
     getBordersVisibility,
-    setBordersVisibility,
+    setBorderVisibility,
+    isAnyBorderHidden,
   };
 });

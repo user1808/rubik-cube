@@ -26,19 +26,19 @@
       <div class="relative flex size-full flex-col">
         <div
           class="absolute inset-x-0 bottom-0 h-0.5 w-full"
-          v-element-visibility="(state) => onBordersVisibility('bottom', state)"
+          v-element-visibility="(state) => setBorderVisibility('bottom', state)"
         />
         <div
           class="absolute inset-y-0 right-0 h-full w-0.5"
-          v-element-visibility="(state) => onBordersVisibility('right', state)"
+          v-element-visibility="(state) => setBorderVisibility('right', state)"
         />
         <div
           class="absolute inset-x-0 top-0 h-0.5 w-full"
-          v-element-visibility="(state) => onBordersVisibility('top', state)"
+          v-element-visibility="(state) => setBorderVisibility('top', state)"
         />
         <div
           class="absolute inset-y-0 left-0 h-full w-0.5"
-          v-element-visibility="(state) => onBordersVisibility('left', state)"
+          v-element-visibility="(state) => setBorderVisibility('left', state)"
         />
         <div
           ref="handle"
@@ -91,23 +91,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useTemplateRef, defineAsyncComponent } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
 import debounce from 'lodash.debounce';
 import { UseDraggable, vElementVisibility, vResizeObserver } from '@vueuse/components';
 import { useSessionStorage, useWindowSize } from '@vueuse/core';
 import { useStyleHelpers } from '@/composables/useStyleHelpers';
 import { useSettingsWindowDataStore } from '@/stores/use-settings-window-data-store';
-import type { BaseSettingsDraggableWindowBorders } from './base-settings-draggable-window-borders.type';
 import type { BaseSettingsSection } from '../base-settings-section.type';
 import type { ElementSize, ResizeObserverEntry } from '@vueuse/core';
 import BasePrimeIcon from '../../icon/base-prime-icon.vue';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
 import BaseSettingsSections from '../base-settings-sections.vue';
-
-const BaseSettingsDraggableWindowReset = defineAsyncComponent(
-  () => import('./base-settings-draggable-window-reset.vue'),
-);
 
 const selectedSection = defineModel<BaseSettingsSection>('selectedSection');
 const open = defineModel<boolean>('open', { default: false });
@@ -129,7 +124,7 @@ const { applyStyles } = useStyleHelpers();
 
 const settingsWindowDataStore = useSettingsWindowDataStore();
 const { getWindowSize } = storeToRefs(settingsWindowDataStore);
-const { setWindowSize } = settingsWindowDataStore;
+const { setWindowSize, setBorderVisibility } = settingsWindowDataStore;
 
 const { width: browserWidth, height: browserHeight } = useWindowSize();
 const windowPosition = useSessionStorage(
@@ -149,18 +144,6 @@ const onDragEnd = () => {
 
 const switchOpen = () => (open.value = !open.value);
 const maximize = () => (minimized.value = false);
-
-const bordersVisibility = ref<Record<BaseSettingsDraggableWindowBorders, boolean>>({
-  top: true,
-  right: true,
-  bottom: true,
-  left: true,
-});
-const onBordersVisibility = (border: BaseSettingsDraggableWindowBorders, state: boolean) =>
-  (bordersVisibility.value[border] = state);
-const isAnyBorderHidden = computed<boolean>(() =>
-  Object.values(bordersVisibility.value).some((value) => !value),
-);
 
 const setInitSizeDataFlag = ref<boolean>(true);
 const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {

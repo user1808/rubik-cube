@@ -3,10 +3,10 @@
     type="button"
     class="flex items-center gap-x-2 rounded-lg bg-gray-800 p-2 hover:bg-gray-700 focus-visible:outline-none"
     :class="[
-      bordersVisibility.left ? 'left-6 sm:left-8' : 'right-6 sm:right-8',
-      bordersVisibility.top ? 'top-6 sm:top-8' : 'bottom-6 sm:bottom-8',
+      getBordersVisibility.left ? 'left-6 sm:left-8' : 'right-6 sm:right-8',
+      getBordersVisibility.top ? 'top-6 sm:top-8' : 'bottom-6 sm:bottom-8',
     ]"
-    @click="$emit('resetWindowSize')"
+    @click="resetWindowSize"
   >
     <BasePrimeIcon icon="pi-undo" class="p-[6px]" :size="44" />
     <span
@@ -18,16 +18,12 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
+import { useSettingsWindowDataStore } from '@/stores/use-settings-window-data-store';
 import BasePrimeIcon from '../../icon/base-prime-icon.vue';
-import type { BaseSettingsDraggableWindowBorders } from '../draggable-window/base-settings-draggable-window-borders.type';
 
-type BaseSettingsDraggableWindowResetProps = {
-  bordersVisibility: Record<BaseSettingsDraggableWindowBorders, boolean>;
-};
-defineProps<BaseSettingsDraggableWindowResetProps>();
+const settingsWindowDataStore = useSettingsWindowDataStore();
+const { getBordersVisibility } = storeToRefs(settingsWindowDataStore);
 
-type BaseSettingsDraggableWindowResetEmits = {
-  resetWindowSize: [];
-};
-defineEmits<BaseSettingsDraggableWindowResetEmits>();
+const resetWindowSize = () => {};
 </script>
