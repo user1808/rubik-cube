@@ -4,11 +4,9 @@ import { ref } from 'vue';
 export const useSettingsStateStore = defineStore('settings-state', () => {
   const isSettingsOpen = ref<boolean>(false);
   const isSettingsMinimized = ref<boolean>(false);
-  const isResetWindowPending = ref<boolean>(false);
 
   return {
     isSettingsOpen,
     isSettingsMinimized,
-    isResetWindowPending,
   };
 });

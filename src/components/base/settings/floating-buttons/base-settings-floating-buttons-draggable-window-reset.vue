@@ -1,7 +1,7 @@
 <template>
   <BaseTransitionOpacity>
     <button
-      v-if="isSettingsOpen && isSettingsMinimized && isAnyBorderHidden && !isResetWindowPending"
+      v-if="isSettingsOpen && isSettingsMinimized && isAnyBorderHidden"
       type="button"
       class="flex items-center gap-x-2 rounded-lg bg-gray-800 p-2 hover:bg-gray-700 focus-visible:outline-none"
       @click="resetWindowSize"
@@ -32,6 +32,5 @@ const draggableWindowEventBus = useEventBus(useDraggableWindowEventBus);
 const resetWindowSize = () => draggableWindowEventBus.emit('reset-window-size');
 
 const settingsStateStore = useSettingsStateStore();
-const { isSettingsOpen, isSettingsMinimized, isResetWindowPending } =
-  storeToRefs(settingsStateStore);
+const { isSettingsOpen, isSettingsMinimized } = storeToRefs(settingsStateStore);
 </script>
