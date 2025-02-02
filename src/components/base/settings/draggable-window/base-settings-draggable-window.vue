@@ -96,6 +96,8 @@ import BasePrimeIcon from '../../icon/base-prime-icon.vue';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
 import BaseSettingsSections from '../base-settings-sections.vue';
 import { useDraggableWindowEventBus } from '@/event-buses/use-draggable-window-event-bus';
+import { useSettingsStateStore } from '@/stores/use-settings-state-store';
+import debounce from 'lodash.debounce';
 
 const selectedSection = defineModel<BaseSettingsSection>('selectedSection');
 const open = defineModel<boolean>('open', { default: false });
@@ -167,10 +169,13 @@ const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {
   setWindowSize(entry.contentRect);
 };
 
+const settingsStateStore = useSettingsStateStore();
+const { isResetWindowPending } = storeToRefs(settingsStateStore);
 const resetWindow = () => {
   const draggableElement = window.value?.$el as HTMLElement;
   if (!draggableElement) return;
 
+  isResetWindowPending.value = true;
   const { right, left, bottom, top } = getBordersVisibility.value;
 
   const size: ElementSize = {
@@ -200,6 +205,7 @@ const resetWindow = () => {
     left: `${windowPosition.value.x}px`,
     top: `${windowPosition.value.y}px`,
   });
+  debounce(() => (isResetWindowPending.value = false), 20)();
 };
 
 const draggableWindowEventBus = useEventBus(useDraggableWindowEventBus);
