@@ -21,9 +21,12 @@
 import { storeToRefs } from 'pinia';
 import { useSettingsWindowDataStore } from '@/stores/use-settings-window-data-store';
 import BasePrimeIcon from '../../icon/base-prime-icon.vue';
+import { useDraggableWindowEventBus } from '@/event-buses/use-draggable-window-event-bus';
+import { useEventBus } from '@vueuse/core';
 
 const settingsWindowDataStore = useSettingsWindowDataStore();
 const { getBordersVisibility } = storeToRefs(settingsWindowDataStore);
 
-const resetWindowSize = () => {};
+const draggableWindowEventBus = useEventBus(useDraggableWindowEventBus);
+const resetWindowSize = () => draggableWindowEventBus.emit('reset-window-size');
 </script>
