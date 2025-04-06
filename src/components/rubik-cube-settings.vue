@@ -18,6 +18,7 @@ import type { BaseSettingsSection } from './base/settings/base-settings-section.
 import BaseIcon2x2Cube from './base/icon/base-icon-2x2-cube.vue';
 import SettingsSelectCubeType from './settings/select-cube-type/settings-select-cube-type.vue';
 import SettingsToggleFullscreen from './settings/toggle-fullscreen/settings-toggle-fullscreen.vue';
+import SettingsSelectInteractionMode from './settings/select-interaction-mode/settings-select-interaction-mode.vue';
 
 const mobileSection: BaseSettingsSection = {
   title: 'Open Menu',
@@ -36,7 +37,7 @@ const settingsSections: Array<BaseSettingsSection> = [
     title: 'General Settings',
     icon: markRaw(BasePrimeIcon),
     iconBind: { icon: 'pi-cog', class: 'p-[6px]', size: 44 },
-    content: [markRaw(SettingsToggleFullscreen)],
+    content: [markRaw(SettingsToggleFullscreen), markRaw(SettingsSelectInteractionMode)],
   },
 ];
 

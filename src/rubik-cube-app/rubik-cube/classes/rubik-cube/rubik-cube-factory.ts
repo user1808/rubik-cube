@@ -1,7 +1,7 @@
 import type { Scene, PerspectiveCamera } from 'three';
 import { MeshBasicMaterial } from 'three';
-import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { MouseTouchTracker } from '@/rubik-cube-app/common';
+import type { CustomOrbitControls } from '@/rubik-cube-app/common/custom/custom-orbit-controls';
 import type { IRubikCubeShellData } from '../../interfaces/data/rubik-cube-shell-data';
 import type { IRubikCube } from '../../interfaces/structure';
 import type { TCubeCommonNames } from '../../types/cube-common-name';
@@ -164,7 +164,7 @@ export abstract class AbstractRubikCubeFactory<
 
   public createRubikCubeRotationRaycaster(
     mouseTouchTracker: MouseTouchTracker,
-    orbitControls: OrbitControls,
+    orbitControls: CustomOrbitControls,
   ): IRubikCubeRotationRaycaster {
     if (!this.cube) throw new Error('Cube is not created yet');
     return new RubikCubeRotationRaycaster(this.cube, mouseTouchTracker, orbitControls);
@@ -202,7 +202,7 @@ export abstract class AbstractRubikCubeFactory<
     scene: Scene,
     camera: PerspectiveCamera,
     mouseTouchTracker: MouseTouchTracker,
-    orbitControls: OrbitControls,
+    orbitControls: CustomOrbitControls,
   ): Promise<
     IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
   > {

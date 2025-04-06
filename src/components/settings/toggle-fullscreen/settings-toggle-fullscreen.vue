@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto flex w-full flex-col gap-y-2 p-4 xs:gap-y-4">
-    <span class="select-none text-xl tracking-tight text-white">Fullscreen</span>
+    <h1 class="select-none text-xl tracking-tight text-white">Fullscreen</h1>
     <Button
       class="w-full text-xl"
       :label="buttonLabel"

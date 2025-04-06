@@ -1,12 +1,13 @@
 import type { Intersection, Vector3 } from 'three';
 import { Raycaster } from 'three';
-import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { MouseTouchTracker } from '@/rubik-cube-app/common';
+import type { CustomOrbitControls } from '@/rubik-cube-app/common/custom/custom-orbit-controls';
 import type { IRubikCube } from '../../interfaces/structure';
 import { TypeGuards } from '@/utils/type-guards';
 import { MouseButtonEnum } from '@/utils/mouse_button_enum';
 import type { IRubikCubeRotationRaycaster } from '../../interfaces';
 import { RubikCubeShellPiece } from './structure/shell/rubik-cube-shell-piece';
+import { useInteractionModeStore } from '@/stores/use-interaction-mode-store';
 
 type TPoints = 'FirstPoint' | 'SecondPoint';
 type TRotationIntersectionData<
@@ -37,6 +38,8 @@ export class RubikCubeRotationRaycaster<
   private readonly mouseMoveLimit = 4;
   private mouseMoveCounter = 0;
 
+  private readonly interactionModeStore = useInteractionModeStore();
+
   constructor(
     private readonly cube: IRubikCube<
       TCubeFacesNames,
@@ -45,7 +48,7 @@ export class RubikCubeRotationRaycaster<
       TCubeShellFilenames
     >,
     private readonly mouseTouchTracker: MouseTouchTracker,
-    private readonly orbitControls: OrbitControls,
+    private readonly orbitControls: CustomOrbitControls,
   ) {
     super();
     this.camera = cube.camera;
@@ -78,14 +81,26 @@ export class RubikCubeRotationRaycaster<
 
   private onMouseDown(event: MouseEvent | TouchEvent): void {
     if (event instanceof MouseEvent && event.button !== MouseButtonEnum.Main) return;
+    if (this.interactionModeStore.interactionMode === 'Camera Only') return;
+    if (
+      this.interactionModeStore.interactionMode === 'Camera Or Cube' &&
+      this.interactionModeStore.cameraOrCube === 'Camera'
+    )
+      return;
     this.intersectionData.FirstPoint = this.getIntersectionData();
-    this.orbitControls.enabled = !this.intersectionData.FirstPoint;
+    this.orbitControls.toggleEnabled(!this.intersectionData.FirstPoint);
   }
 
   private onMouseUp(event: MouseEvent | TouchEvent): void {
     if (event instanceof MouseEvent && event.button !== MouseButtonEnum.Main) return;
+    if (this.interactionModeStore.interactionMode === 'Camera Only') return;
+    if (
+      this.interactionModeStore.interactionMode === 'Camera Or Cube' &&
+      this.interactionModeStore.cameraOrCube === 'Camera'
+    )
+      return;
     this.resetIntersection();
-    this.orbitControls.enabled = true;
+    this.orbitControls.toggleEnabled(true);
   }
 
   private onMouseMove(event: MouseEvent | TouchEvent): void {

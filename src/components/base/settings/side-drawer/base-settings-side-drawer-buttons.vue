@@ -3,7 +3,7 @@
     <BaseTransitionOpacity v-for="(section, idx) in sections" :key="idx">
       <div v-if="!isSideDrawerOpen">
         <PopoverButton
-          class="flex w-full items-center gap-x-2 rounded-lg bg-gray-800 p-2 hover:bg-gray-700 focus-visible:outline-none"
+          class="flex w-full items-center gap-x-2 rounded-lg bg-gray-800 p-2 transition-colors hover:bg-gray-700 focus-visible:outline-none"
           @click="$emit('selectSection', section)"
         >
           <component v-if="section.icon" :is="section.icon" v-bind="section.iconBind" />
