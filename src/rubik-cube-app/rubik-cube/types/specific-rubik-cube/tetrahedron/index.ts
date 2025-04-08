@@ -1,5 +1,6 @@
 import type { TTetrahedronCommonName } from './common-name';
 import type { TTetrahedronFaces, TTetrahedronEdgeFaces } from './cube-faces';
+import type { TTetrahedronFacesTextsFilename } from './faces-texts-filename';
 import type {
   TTetrahedronPiecesFilenamesWithFaces,
   TTetrahedronPiecesFilenames,
@@ -13,6 +14,7 @@ export type {
   TTetrahedronCommonName,
   TTetrahedronFaces,
   TTetrahedronEdgeFaces,
+  TTetrahedronFacesTextsFilename,
   TTetrahedronPiecesFilenamesWithFaces,
   TTetrahedronPiecesFilenames,
   TTetrahedronRotationGroups,

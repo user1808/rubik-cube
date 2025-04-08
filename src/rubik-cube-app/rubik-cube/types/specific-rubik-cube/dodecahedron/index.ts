@@ -1,5 +1,6 @@
 import type { TDodecahedronCommonName } from './common-name';
 import type { TDodecahedronFaces, TDodecahedronEdgeFaces } from './cube-faces';
+import type { TDodecahedronFacesTextsFilename } from './faces-texts-filename';
 import type {
   TDodecahedronPiecesFilenamesWithFaces,
   TDodecahedronPiecesFilenames,
@@ -13,6 +14,7 @@ export type {
   TDodecahedronCommonName,
   TDodecahedronFaces,
   TDodecahedronEdgeFaces,
+  TDodecahedronFacesTextsFilename,
   TDodecahedronPiecesFilenamesWithFaces,
   TDodecahedronPiecesFilenames,
   TDodecahedronRotationGroups,

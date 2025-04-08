@@ -152,7 +152,10 @@ export class RubikCubeRotationRaycaster<
   > {
     this.setFromCamera(this.mouseTouchTracker.pointerPosition, this.camera);
     const intersections = this.intersectObject(this.cube);
-    const intersection = intersections.length > 0 ? intersections[0] : null;
+    const intersection =
+      intersections.length > 0
+        ? intersections.find((intersection) => !intersection.object.userData.ignoreRaycast)
+        : null;
     if (
       intersection &&
       TypeGuards.isT(

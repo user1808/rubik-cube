@@ -15,13 +15,18 @@ export class RubikCubePiecesBuilder<
   TCubeFacesNames extends string,
   TCubeEdgeFacesNames extends string,
   TCubeShellFilename extends string,
+  TCubeFacesTextsFilename extends string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > implements IRubikCubePiecesBuilder<TCubeFacesNames>
 {
   constructor(
-    private readonly gltfLoader: IRubikCubeGLTFLoader<TCubeShellFilename, TCubePiecesFilenames>,
+    private readonly gltfLoader: IRubikCubeGLTFLoader<
+      TCubeShellFilename,
+      TCubePiecesFilenames,
+      TCubeFacesTextsFilename
+    >,
     private readonly materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
     private readonly pieceBuilder: IRubikCubePieceBuilder<
       TCubePiecesFilenamesWithFaces,

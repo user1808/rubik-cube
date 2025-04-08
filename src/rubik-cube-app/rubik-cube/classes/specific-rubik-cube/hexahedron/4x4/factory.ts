@@ -17,14 +17,19 @@ import { RubikHexahedron4x4RotationGroupsData } from './rotation-groups-data';
 import { RubikHexahedron4x4ShellData } from './shell-data';
 import { RubikHexahedron4x4FacesData } from './faces-data';
 import type { THexahedron4x4CommonName } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/4x4/common-name';
+import type { THexahedron4x4FacesTextsFilename } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/4x4/faces-texts-filename';
 
 export class RubikHexahedron4x4Factory extends AbstractRubikHexahedronFactory<
   THexahedron4x4CommonName,
   THexahedron4x4RotationGroups,
-  THexahedronShellFilenames
+  THexahedronShellFilenames,
+  THexahedron4x4FacesTextsFilename
 > {
   public override get commonName(): THexahedron4x4CommonName {
     return '4x4 Cube';
+  }
+  public override get facesTextsFilename(): THexahedron4x4FacesTextsFilename {
+    return 'RubikHexahedron4x4FacesTexts.glb';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
     THexahedronPiecesFilenamesWithFaces,

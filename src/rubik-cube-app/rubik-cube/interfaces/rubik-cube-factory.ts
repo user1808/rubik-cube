@@ -25,6 +25,7 @@ import type {
   IRubikCubeShellBuilder,
   IRubikCubeShellPiecesBuilder,
 } from './builders';
+import type { IRubikCubeFacesTextsBuilder } from './builders/rubik-cube-faces-texts-builder';
 
 export type DefaultRubikCubeFactory<TCubeCommonName extends TCubeCommonNames = TCubeCommonNames> =
   IRubikCubeFactory<Record<string, string>, TCubeCommonName>;
@@ -37,11 +38,13 @@ export interface IRubikCubeFactory<
   TCubeRotationGroups extends string = string,
   TCubeRotationTypes extends string = string,
   TCubeShellFilenames extends string = string,
+  TCubeFacesTextsFilename extends string = string,
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
   get commonName(): TCubeCommonName;
+  get facesTextsFilename(): TCubeFacesTextsFilename;
 
   createRubikCubePiecesData(): IRubikCubePiecesData<TCubePiecesFilenamesWithFaces, TCubeFacesNames>;
   createRubikCubeFacesData(): IRubikCubeFacesData<TCubeFacesNames>;
@@ -56,7 +59,11 @@ export interface IRubikCubeFactory<
   createRubikCubeShellMaterial(): MeshBasicMaterial;
   createRubikCubeMaterials(): IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>;
 
-  createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<TCubeShellFilenames, TCubePiecesFilenames>;
+  createRubikCubeGLTFLoader(): IRubikCubeGLTFLoader<
+    TCubeShellFilenames,
+    TCubePiecesFilenames,
+    TCubeFacesTextsFilename
+  >;
 
   createRubikCubeShellPiecesBuilder(): IRubikCubeShellPiecesBuilder<
     TCubeRotationGroups,
@@ -82,6 +89,8 @@ export interface IRubikCubeFactory<
     TCubeFacesNames,
     TCubeRotationGroups
   >;
+
+  createRubikCubeFacesTextsBuilder(): IRubikCubeFacesTextsBuilder;
 
   createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
     TCubeFacesNames,

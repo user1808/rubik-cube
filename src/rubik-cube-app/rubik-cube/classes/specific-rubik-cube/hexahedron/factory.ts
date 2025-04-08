@@ -13,6 +13,7 @@ export abstract class AbstractRubikHexahedronFactory<
   THexahedronCommonName extends TCubeCommonNames,
   THexahedronRotationGroups extends string,
   THexahedronShellFilename extends string,
+  THexahedronFacesTextsFilename extends string,
 > extends AbstractRubikCubeFactory<
   THexahedronPiecesFilenamesWithFaces,
   THexahedronCommonName,
@@ -20,7 +21,8 @@ export abstract class AbstractRubikHexahedronFactory<
   THexahedronEdgeFaces,
   THexahedronRotationGroups,
   THexahedronRotationTypes,
-  THexahedronShellFilename
+  THexahedronShellFilename,
+  THexahedronFacesTextsFilename
 > {
   public override createRubikCubeMaterials(): IRubikCubeMaterials<
     THexahedronFaces,
