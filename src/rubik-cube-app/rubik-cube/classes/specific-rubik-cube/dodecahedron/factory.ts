@@ -9,6 +9,7 @@ import type {
   TDodecahedronCommonName,
   TDodecahedronEdgeFaces,
   TDodecahedronFaces,
+  TDodecahedronFacesTextsFilename,
   TDodecahedronPiecesFilenamesWithFaces,
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
@@ -30,10 +31,14 @@ export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronEdgeFaces,
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
-  TDodecahedronShellFilenames
+  TDodecahedronShellFilenames,
+  TDodecahedronFacesTextsFilename
 > {
-  public get commonName(): TDodecahedronCommonName {
+  public override get commonName(): TDodecahedronCommonName {
     return 'Megaminx';
+  }
+  public override get facesTextsFilename(): TDodecahedronFacesTextsFilename {
+    return 'RubikDodecahedronFacesTexts.glb';
   }
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
     TDodecahedronPiecesFilenamesWithFaces,

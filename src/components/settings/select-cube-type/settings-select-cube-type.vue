@@ -28,7 +28,7 @@
       </template>
     </Carousel>
     <BaseTransitionOpacity mode="out-in">
-      <span v-if="temporaryCubeIndex === undefined" />
+      <span class="h-[46px]" v-if="temporaryCubeIndex === undefined" />
       <Button
         v-else-if="currentCubeIndex !== temporaryCubeIndex"
         label="Select"

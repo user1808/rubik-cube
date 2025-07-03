@@ -7,6 +7,7 @@ import type {
   TCubePieces,
   TRotationGroups,
 } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { IRubikCubeFacesTexts } from '../helpers/rubik-cube-faces-texts';
 
 export interface IRubikCube<
   TCubeFacesNames extends string = string,
@@ -23,6 +24,7 @@ export interface IRubikCube<
   readonly pieces: TCubePieces<TCubeFacesNames>;
   readonly faces: TCubeFaces<TCubeFacesNames>;
   readonly rotationGroups: TRotationGroups<TCubeFacesNames, TCubeRotationGroups>;
+  readonly facesTexts: IRubikCubeFacesTexts;
 
   setRotationRaycaster(raycaster: IRubikCubeRotationRaycaster): void;
   rotate(rotationGroup: TCubeRotationGroups, rotationType: TCubeRotationTypes): Promise<void>;

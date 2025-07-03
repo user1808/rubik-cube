@@ -11,12 +11,17 @@ export class RubikCubeShellPiecesBuilder<
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
   TCubeShellFilenames extends string,
+  TCubeFacesTextsFilename extends string,
   TCubePiecesFilenames extends string,
 > implements
     IRubikCubeShellPiecesBuilder<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
 {
   constructor(
-    private readonly gltfLoader: IRubikCubeGLTFLoader<TCubeShellFilenames, TCubePiecesFilenames>,
+    private readonly gltfLoader: IRubikCubeGLTFLoader<
+      TCubeShellFilenames,
+      TCubePiecesFilenames,
+      TCubeFacesTextsFilename
+    >,
     private readonly material: MeshBasicMaterial,
     private readonly shellData: IRubikCubeShellData<
       TCubeRotationGroups,

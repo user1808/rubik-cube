@@ -15,7 +15,7 @@
       >
         <BasePrimeIcon icon="pi-undo" class="p-[6px]" :size="44" />
         <span
-          class="line-clamp-2 max-w-44 grow pr-2 text-center text-lg font-bold leading-tight tracking-tight text-white"
+          class="line-clamp-2 max-w-36 grow pr-2 text-center text-lg font-bold leading-tight tracking-tight text-white xl:max-w-44"
         >
           Fit Window To Screen
         </span>

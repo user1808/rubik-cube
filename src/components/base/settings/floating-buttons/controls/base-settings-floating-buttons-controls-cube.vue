@@ -12,11 +12,7 @@
       <div
         class="flex w-full flex-col gap-y-4 border-gray-700 px-4 py-3 sm:w-60 sm:border-r sm:py-2"
       >
-        <Select
-          :options="getCurrentCube.faces as Array<string>"
-          placeholder="Select face"
-          v-model="face"
-        >
+        <Select :options="faces" placeholder="Select face" v-model="face">
           <template #option="{ option }">
             {{ formatCamelCase(option) }}
           </template>
@@ -24,11 +20,7 @@
             {{ value ? formatCamelCase(value) : placeholder }}
           </template>
         </Select>
-        <Select
-          :options="getCurrentCube.rotationTypes as Array<string>"
-          placeholder="Select type"
-          v-model="type"
-        >
+        <Select :options="rotationTypes" placeholder="Select type" v-model="type">
           <template #option="{ option }">
             {{ formatCamelCase(option) }}
           </template>
@@ -63,6 +55,12 @@ import { useRotateCubeEventBus } from '@/event-buses/use-rotate-cube-event-bus';
 const selectedCubeStore = useSelectedCubeStore();
 
 const { getCurrentCube } = storeToRefs(selectedCubeStore);
+const faces = computed<Array<string>>(() => {
+  return (getCurrentCube.value?.faces as Array<string>) ?? [];
+});
+const rotationTypes = computed<Array<string>>(() => {
+  return (getCurrentCube.value?.rotationTypes as Array<string>) ?? [];
+});
 
 const { formatCamelCase } = useStringHelpers();
 

@@ -1,8 +1,11 @@
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { IRubikCubeGLTFLoader } from '../../interfaces';
 
-export class RubikCubeGLTFLoader<TShellFilenames extends string, TPiecesFilenames extends string>
-  implements IRubikCubeGLTFLoader<TShellFilenames, TPiecesFilenames>
+export class RubikCubeGLTFLoader<
+  TShellFilenames extends string,
+  TPiecesFilenames extends string,
+  TCubeFacesTextsFilename extends string,
+> implements IRubikCubeGLTFLoader<TShellFilenames, TPiecesFilenames, TCubeFacesTextsFilename>
 {
   private readonly FOLDER_WITH_MODELS: string = 'models';
   private readonly gltfLoader: GLTFLoader = new GLTFLoader();
@@ -39,5 +42,12 @@ export class RubikCubeGLTFLoader<TShellFilenames extends string, TPiecesFilename
     }
 
     return gltfShellMap;
+  }
+
+  public async loadGLTFCubeFacesTexts(filename: TCubeFacesTextsFilename): Promise<GLTF> {
+    const gltfFacesTexts = await this.gltfLoader.loadAsync(
+      `${this.FOLDER_WITH_MODELS}/${filename}`,
+    );
+    return gltfFacesTexts;
   }
 }
