@@ -1,5 +1,5 @@
 import type { Scene, PerspectiveCamera } from 'three';
-import { Group, Mesh } from 'three';
+import { Group } from 'three';
 import type {
   IRubikCube,
   IRubikCubeFacesTexts,
@@ -16,25 +16,45 @@ import type {
 } from '@/rubik-cube-app/rubik-cube/interfaces';
 import { useRotateCubeEventBus } from '@/event-buses/use-rotate-cube-event-bus';
 import { useEventBus, type Fn } from '@vueuse/core';
+import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
+import type { IRubikCubeProperties } from '@/rubik-cube-app/rubik-cube/interfaces/structure/cube/rubik-cube';
+import type { IRubikCubeColorRaycaster } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-color-raycaster';
 
 export class RubikCube<
+    TCubeCommonName extends TCubeCommonNames,
     TCubeFacesNames extends string,
+    TCubeEdgeFacesNames extends string,
     TCubeRotationGroups extends string,
     TCubeRotationTypes extends string,
     TCubeShellFilenames extends string,
   >
   extends Group
   implements
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
+    IRubikCube<
+      TCubeCommonName,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilenames
+    >
 {
   private readonly rotateCubeEventBus = useEventBus(useRotateCubeEventBus);
   private rotateCubeEventBusUnsubscribe: Fn;
   private _rotationRaycaster: Nullable<IRubikCubeRotationRaycaster> = null;
   private _rotationPending = false;
 
+  private _colorRaycaster: Nullable<IRubikCubeColorRaycaster> = null;
+
   public isOnScene = false;
 
   constructor(
+    public readonly properties: IRubikCubeProperties<
+      TCubeCommonName,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
+      TCubeRotationTypes
+    >,
     public readonly scene: Scene,
     public readonly camera: PerspectiveCamera,
     public readonly shell: IRubikCubeShell<
@@ -47,7 +67,9 @@ export class RubikCube<
     public readonly rotationGroups: TRotationGroups<TCubeFacesNames, TCubeRotationGroups>,
     public readonly facesTexts: IRubikCubeFacesTexts,
     private readonly rotationImplementation: IRubikCubeRotationImplementation<
+      TCubeCommonName,
       TCubeFacesNames,
+      TCubeEdgeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellFilenames
@@ -67,6 +89,10 @@ export class RubikCube<
     this._rotationRaycaster = raycaster;
   }
 
+  public setColorRaycaster(raycaster: IRubikCubeColorRaycaster) {
+    this._colorRaycaster = raycaster;
+  }
+
   public async rotate(
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
@@ -81,27 +107,25 @@ export class RubikCube<
   }
 
   public addToScene(): void {
+    this.facesTexts.prepare();
     this.scene.add(this);
     this._rotationRaycaster?.start();
+    this._colorRaycaster?.start();
     this.isOnScene = true;
   }
 
   public removeFromScene(): void {
     this.pieces.forEach(({ piece }) => piece.dispose());
-    this.shell.children.forEach((child) => {
-      if (child instanceof Mesh) {
-        child.geometry.dispose();
-        child.material.dispose();
-      }
-    });
+    this.shell.dispose();
     this.facesTexts.dispose();
     this.scene.remove(this);
     this._rotationRaycaster?.stop();
+    this._colorRaycaster?.stop();
     this.isOnScene = false;
     this.rotateCubeEventBusUnsubscribe();
   }
 
-  private updateLogicalFaces(): void {
+  public updateLogicalFaces(): void {
     this.faces.logical = Object.entries<TCubePieces<TCubeFacesNames>>(this.faces.physical).reduce(
       (faces, [faceName, facePieces]) => {
         faces[faceName as TCubeFacesNames] = facePieces.map(

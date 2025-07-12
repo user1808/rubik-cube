@@ -4,8 +4,8 @@ import { computed, ref } from 'vue';
 type TDistanceState = 'far' | 'medium' | 'close';
 
 const useOrbitControlsDataPrivateState = defineStore('orbit-controls-data-private', () => {
-  const maxDistance = ref(Infinity);
-  const distance = ref(Infinity);
+  const maxDistance = ref<number>(Infinity);
+  const distance = ref<number>(Infinity);
 
   return {
     maxDistance,
@@ -26,10 +26,10 @@ export const useOrbitControlsDataStore = defineStore('orbit-controls-data', () =
     }
   });
 
-  const setMaxDistance = (maxDistance: number) => {
+  const setMaxDistance = (maxDistance: number): void => {
     privateState.maxDistance = maxDistance;
   };
-  const setDistance = (distance: number) => {
+  const setDistance = (distance: number): void => {
     privateState.distance = distance;
   };
 

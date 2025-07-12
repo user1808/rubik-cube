@@ -41,6 +41,8 @@ import { RubikCubeRotationImplementation } from './rubik-cube-rotation-implement
 import { RubikCubeRotationRaycaster } from './rubik-cube-rotation-raycaster';
 import { RubikCubeFacesTextsBuilder } from './builders/rubik-cube-faces-texts-builder';
 import type { IRubikCubeFacesTextsBuilder } from '../../interfaces/builders/rubik-cube-faces-texts-builder';
+import { RubikCubeColorRaycaster } from './rubik-cube-color-raycaster';
+import type { IRubikCubeColorRaycaster } from '../../interfaces/rubik-cube-color-raycaster';
 
 export abstract class AbstractRubikCubeFactory<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
@@ -67,14 +69,24 @@ export abstract class AbstractRubikCubeFactory<
     >
 {
   private cube: Nullable<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
+    IRubikCube<
+      TCubeCommonName,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilenames
+    >
   > = null;
   private gltfLoader: Nullable<
     IRubikCubeGLTFLoader<TCubeShellFilenames, TCubePiecesFilenames, TCubeFacesTextsFilename>
   > = null;
 
-  public abstract get commonName(): TCubeCommonName;
-  public abstract get facesTextsFilename(): TCubeFacesTextsFilename;
+  public abstract readonly commonName: TCubeCommonName;
+  public abstract readonly cameraMinDistance: number;
+  public abstract readonly facesNames: Readonly<Array<TCubeFacesNames>>;
+  public abstract readonly rotationTypesNames: Readonly<Array<TCubeRotationTypes>>;
+  public abstract readonly facesTextsFilename: TCubeFacesTextsFilename;
 
   public abstract createRubikCubePiecesData(): IRubikCubePiecesData<
     TCubePiecesFilenamesWithFaces,
@@ -138,7 +150,10 @@ export abstract class AbstractRubikCubeFactory<
   > {
     return new RubikCubePieceBuilder();
   }
-  public createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<TCubeFacesNames> {
+  public createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<
+    TCubeFacesNames,
+    TCubeEdgeFacesNames
+  > {
     const gltfLoader = this.createRubikCubeGLTFLoader();
     const pieceBuilder = this.createRubikCubePieceBuilder();
     const materials = this.createRubikCubeMaterials();
@@ -165,7 +180,9 @@ export abstract class AbstractRubikCubeFactory<
   }
 
   public createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
+    TCubeCommonName,
     TCubeFacesNames,
+    TCubeEdgeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
     TCubeShellFilenames
@@ -182,12 +199,21 @@ export abstract class AbstractRubikCubeFactory<
     return new RubikCubeRotationRaycaster(this.cube, mouseTouchTracker, orbitControls);
   }
 
+  public createRubikCubeColorRaycaster(
+    mouseTouchTracker: MouseTouchTracker,
+  ): IRubikCubeColorRaycaster {
+    if (!this.cube) throw new Error('Cube is not created yet');
+    return new RubikCubeColorRaycaster(this.cube, mouseTouchTracker);
+  }
+
   public createRubikCubeBuilder(
     scene: Scene,
     camera: PerspectiveCamera,
   ): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
+    TCubeCommonName,
     TCubeFacesNames,
+    TCubeEdgeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
     TCubeShellFilenames
@@ -201,6 +227,12 @@ export abstract class AbstractRubikCubeFactory<
     const rotationImplementation = this.createRubikCubeRotationImplementation();
 
     return new RubikCubeBuilder(
+      {
+        commonName: this.commonName,
+        cameraMinDistance: this.cameraMinDistance,
+        facesNames: this.facesNames,
+        rotationTypesNames: this.rotationTypesNames,
+      },
       scene,
       camera,
       shellBuilder,
@@ -218,7 +250,14 @@ export abstract class AbstractRubikCubeFactory<
     mouseTouchTracker: MouseTouchTracker,
     orbitControls: CustomOrbitControls,
   ): Promise<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
+    IRubikCube<
+      TCubeCommonName,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilenames
+    >
   > {
     if (this.cube) return this.cube;
 
@@ -228,6 +267,7 @@ export abstract class AbstractRubikCubeFactory<
     this.cube.setRotationRaycaster(
       this.createRubikCubeRotationRaycaster(mouseTouchTracker, orbitControls),
     );
+    this.cube.setColorRaycaster(this.createRubikCubeColorRaycaster(mouseTouchTracker));
     return this.cube;
   }
 }

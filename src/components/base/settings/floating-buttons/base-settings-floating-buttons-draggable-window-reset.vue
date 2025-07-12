@@ -2,13 +2,13 @@
   <div
     class="fixed z-50 flex flex-col gap-y-4 max-sm:!inset-x-6 max-sm:!bottom-6"
     :class="[
-      getBordersVisibility.left && isSettingsMinimized ? 'sm:left-8' : 'sm:right-8',
+      getBordersVisibility.left && getIsSettingsMinimized ? 'sm:left-8' : 'sm:right-8',
       getBordersVisibility.top ? 'sm:top-8' : 'sm:bottom-8',
     ]"
   >
     <BaseTransitionOpacity>
       <button
-        v-if="isSettingsOpen && isSettingsMinimized && isAnyBorderHidden"
+        v-if="getIsSettingsOpen && getIsSettingsMinimized && isAnyBorderHidden"
         type="button"
         class="flex items-center gap-x-2 rounded-lg bg-gray-800 p-2 hover:bg-gray-700 focus-visible:outline-none"
         @click="resetWindowSize"
@@ -26,19 +26,19 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { useSettingsWindowDataStore } from '@/stores/use-settings-window-data-store';
+import { useSettingsWindowStore } from '@/stores/use-settings-window-store';
 import BasePrimeIcon from '../../icon/base-prime-icon.vue';
 import { useDraggableWindowEventBus } from '@/event-buses/use-draggable-window-event-bus';
 import { useEventBus } from '@vueuse/core';
-import { useSettingsStateStore } from '@/stores/use-settings-state-store';
+import { useSettingsStore } from '@/stores/use-settings-store';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
 
-const settingsWindowDataStore = useSettingsWindowDataStore();
+const settingsWindowDataStore = useSettingsWindowStore();
 const { isAnyBorderHidden, getBordersVisibility } = storeToRefs(settingsWindowDataStore);
 
 const draggableWindowEventBus = useEventBus(useDraggableWindowEventBus);
 const resetWindowSize = () => draggableWindowEventBus.emit('reset-window-size');
 
-const settingsStateStore = useSettingsStateStore();
-const { isSettingsOpen, isSettingsMinimized } = storeToRefs(settingsStateStore);
+const settingsStateStore = useSettingsStore();
+const { getIsSettingsOpen, getIsSettingsMinimized } = storeToRefs(settingsStateStore);
 </script>

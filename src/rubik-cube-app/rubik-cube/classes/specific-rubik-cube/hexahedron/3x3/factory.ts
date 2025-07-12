@@ -25,12 +25,11 @@ export class RubikHexahedron3x3Factory extends AbstractRubikHexahedronFactory<
   THexahedronShellFilenames,
   THexahedron3x3FacesTextsFilename
 > {
-  public override get commonName(): THexahedron3x3CommonName {
-    return '3x3 Cube';
-  }
-  public override get facesTextsFilename(): THexahedron3x3FacesTextsFilename {
-    return 'RubikHexahedron3x3FacesTexts.glb';
-  }
+  public override readonly commonName: THexahedron3x3CommonName = '3x3 Cube';
+  public override readonly cameraMinDistance: number = 1.5 * Math.sqrt(3);
+  public override readonly facesTextsFilename: THexahedron3x3FacesTextsFilename =
+    'RubikHexahedron3x3FacesTexts.glb';
+
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
     THexahedronPiecesFilenamesWithFaces,
     THexahedronFaces

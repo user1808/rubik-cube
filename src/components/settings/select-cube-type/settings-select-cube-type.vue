@@ -4,7 +4,7 @@
     <Carousel
       v-model:page="temporaryCubeIndex"
       class="rounded-lg bg-gray-700"
-      :value="getAllSelectableCubesNames"
+      :value="CubeCommonNames"
       :num-visible="1"
       :num-scroll="1"
       :show-indicators="false"
@@ -30,7 +30,7 @@
     <BaseTransitionOpacity mode="out-in">
       <span class="h-[46px]" v-if="temporaryCubeIndex === undefined" />
       <Button
-        v-else-if="currentCubeIndex !== temporaryCubeIndex"
+        v-else-if="selectedCubeIndex !== temporaryCubeIndex"
         label="Select"
         @click="selectCube(temporaryCubeIndex)"
       />
@@ -45,24 +45,32 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, type Component } from 'vue';
+import { computed, onMounted, ref, type Component } from 'vue';
 import Carousel from 'primevue/carousel';
 import Button from 'primevue/button';
 import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
 import { storeToRefs } from 'pinia';
 import BaseTransitionOpacity from '@/components/base/transition/base-transition-opacity.vue';
-import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
+import {
+  CubeCommonNames,
+  type TCubeCommonNames,
+} from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import BaseIcon2x2Cube from '@/components/base/icon/base-icon-2x2-cube.vue';
 import BaseIcon3x3Cube from '@/components/base/icon/base-icon-3x3-cube.vue';
 import BaseIcon4x4Cube from '@/components/base/icon/base-icon-4x4-cube.vue';
 import BaseIcon5x5Cube from '@/components/base/icon/base-icon-5x5-cube.vue';
 import BaseIconMegaminxCube from '@/components/base/icon/base-icon-megaminx-cube.vue';
 import BaseIconPyraminxCube from '@/components/base/icon/base-icon-pyraminx-cube.vue';
+import { useEventBus } from '@vueuse/core';
+import { useSelectCubeEventBus } from '@/event-buses/use-select-cube-event-bus';
 
 const selectedCubeStore = useSelectedCubeStore();
-const { getAllSelectableCubesNames, currentCubeIndex } = storeToRefs(selectedCubeStore);
+const { getCurrentCubeProperties } = storeToRefs(selectedCubeStore);
 
 const temporaryCubeIndex = ref<number>();
+const selectedCubeIndex = computed<number>(() => {
+  return CubeCommonNames.indexOf(getCurrentCubeProperties.value?.commonName ?? '3x3 Cube');
+});
 
 const cubesIcons: Record<TCubeCommonNames, Component> = {
   '2x2 Cube': BaseIcon2x2Cube,
@@ -74,10 +82,11 @@ const cubesIcons: Record<TCubeCommonNames, Component> = {
 };
 
 onMounted(() => {
-  temporaryCubeIndex.value = currentCubeIndex.value;
+  temporaryCubeIndex.value = selectedCubeIndex.value;
 });
 
+const selectCubeEventBus = useEventBus(useSelectCubeEventBus);
 const selectCube = (index: number) => {
-  currentCubeIndex.value = index;
+  selectCubeEventBus.emit({ name: CubeCommonNames[index] });
 };
 </script>

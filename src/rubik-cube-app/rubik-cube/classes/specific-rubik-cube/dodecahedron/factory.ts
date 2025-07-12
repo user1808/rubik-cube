@@ -23,6 +23,8 @@ import type {
   IRubikCubeRotationGroupsData,
   IRubikCubeFacesData,
 } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import { DodecahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/cube-faces';
+import { DodecahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron/rotation-types';
 
 export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronPiecesFilenamesWithFaces,
@@ -34,12 +36,14 @@ export class RubikDodecahedronFactory extends AbstractRubikCubeFactory<
   TDodecahedronShellFilenames,
   TDodecahedronFacesTextsFilename
 > {
-  public override get commonName(): TDodecahedronCommonName {
-    return 'Megaminx';
-  }
-  public override get facesTextsFilename(): TDodecahedronFacesTextsFilename {
-    return 'RubikDodecahedronFacesTexts.glb';
-  }
+  public override readonly commonName: TDodecahedronCommonName = 'Megaminx';
+  public override readonly cameraMinDistance: number = 0.5 * Math.sqrt(3) * (1 + Math.sqrt(5));
+  public override readonly facesNames: Readonly<Array<TDodecahedronFaces>> = DodecahedronFaces;
+  public override readonly rotationTypesNames: Readonly<Array<TDodecahedronRotationTypes>> =
+    DodecahedronRotationTypes;
+  public override readonly facesTextsFilename: TDodecahedronFacesTextsFilename =
+    'RubikDodecahedronFacesTexts.glb';
+
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
     TDodecahedronPiecesFilenamesWithFaces,
     TDodecahedronFaces

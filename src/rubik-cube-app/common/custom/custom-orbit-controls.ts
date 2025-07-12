@@ -7,6 +7,8 @@ import { useInteractionModeStore } from '@/stores/use-interaction-mode-store';
 import { useOrbitControlsEventBus } from '@/event-buses/use-orbit-controls-event-bus';
 import { gsap } from 'gsap';
 import { Vector3 } from 'three';
+import { useInteractionModeEventBus } from '@/event-buses/use-interaction-mode-event-bus';
+import { useUpdateCubePropertiesEventBus } from '@/event-buses/use-update-cube-properties-event-bus';
 
 export class CustomOrbitControls extends OrbitControls {
   private readonly cameraNear;
@@ -23,6 +25,8 @@ export class CustomOrbitControls extends OrbitControls {
   private readonly interactionModeStore = useInteractionModeStore();
 
   private readonly orbitControlsEventBus = useEventBus(useOrbitControlsEventBus);
+  private readonly interactionModeEventBus = useEventBus(useInteractionModeEventBus);
+  private readonly updateCubePropertiesEventBus = useEventBus(useUpdateCubePropertiesEventBus);
 
   private readonly manualRotationAmount = Math.PI / 18;
   private isManualMovePending = false;
@@ -36,11 +40,20 @@ export class CustomOrbitControls extends OrbitControls {
     this.cameraNear = camera.near;
 
     this.setDistances();
-    this.toggleEnabled();
+    this.updateEnabled();
 
     this.addEventListener('end', () => this.orbitControlsStore.setDistance(this.getDistance()));
-    this.selectedCubeStore.$subscribe(() => this.setDistances());
-    this.interactionModeStore.$subscribe(() => this.toggleEnabled());
+
+    this.updateCubePropertiesEventBus.on((event) => {
+      switch (event) {
+        case 'update-cube-properties':
+          this.setDistances();
+          return;
+        default:
+          event satisfies never;
+          return;
+      }
+    });
 
     this.orbitControlsEventBus.on(async (event) => {
       if (this.isManualMovePending) return;
@@ -49,23 +62,27 @@ export class CustomOrbitControls extends OrbitControls {
       let polarAngle = this.getPolarAngle();
       let azimuthalAngle = this.getAzimuthalAngle();
 
-      if (event === 'rotate-left') {
-        azimuthalAngle -= this.manualRotationAmount;
-      }
-      if (event === 'rotate-right') {
-        azimuthalAngle += this.manualRotationAmount;
-      }
-      if (event === 'rotate-top') {
-        polarAngle = Math.max(polarAngle - this.manualRotationAmount, 0.01);
-      }
-      if (event === 'rotate-bottom') {
-        polarAngle = Math.min(polarAngle + this.manualRotationAmount, Math.PI - 0.01);
-      }
-      if (event === 'zoom-in') {
-        distance *= 0.9;
-      }
-      if (event === 'zoom-out') {
-        distance *= 1.1;
+      switch (event) {
+        case 'rotate-left':
+          azimuthalAngle -= this.manualRotationAmount;
+          break;
+        case 'rotate-right':
+          azimuthalAngle += this.manualRotationAmount;
+          break;
+        case 'rotate-top':
+          polarAngle = Math.max(polarAngle - this.manualRotationAmount, 0.01);
+          break;
+        case 'rotate-bottom':
+          polarAngle = Math.min(polarAngle + this.manualRotationAmount, Math.PI - 0.01);
+          break;
+        case 'zoom-in':
+          distance *= 0.9;
+          break;
+        case 'zoom-out':
+          distance *= 1.1;
+          break;
+        default:
+          event satisfies never;
       }
 
       const newY = distance * Math.cos(polarAngle);
@@ -75,6 +92,17 @@ export class CustomOrbitControls extends OrbitControls {
       this.isManualMovePending = true;
       await this.rotateCamera(new Vector3(newX, newY, newZ));
       this.isManualMovePending = false;
+    });
+
+    this.interactionModeEventBus.on((event) => {
+      switch (event) {
+        case 'update-interaction-mode-controls':
+          this.updateEnabled();
+          return;
+        default:
+          event satisfies never;
+          return;
+      }
     });
   }
 
@@ -92,7 +120,9 @@ export class CustomOrbitControls extends OrbitControls {
   }
 
   private setDistances() {
-    this.minDistance = this.selectedCubeStore.getCurrentCube.cameraMinDistance + this.cameraNear;
+    const cubeCameraMinDistance: number =
+      this.selectedCubeStore.getCurrentCubeProperties?.cameraMinDistance ?? 0;
+    this.minDistance = cubeCameraMinDistance + this.cameraNear;
     this.maxDistance = this.maxDistanceFactor * this.minDistance;
     this.camera.position
       .copy(this.camera.normalizedDefaultPosition)
@@ -101,11 +131,11 @@ export class CustomOrbitControls extends OrbitControls {
     this.orbitControlsStore.setDistance(this.getDistance());
   }
 
-  public toggleEnabled(newEnabled?: boolean) {
+  public updateEnabled(newEnabled?: boolean) {
+    const { getInteractionMode, getCameraOrCubeOption } = this.interactionModeStore;
     if (
-      this.interactionModeStore.interactionMode === 'Cube Only' ||
-      (this.interactionModeStore.interactionMode === 'Camera Or Cube' &&
-        this.interactionModeStore.cameraOrCube === 'Cube')
+      getInteractionMode === 'Cube Only' ||
+      (getInteractionMode === 'Camera Or Cube' && getCameraOrCubeOption === 'Cube')
     ) {
       this.enabled = false;
     } else {

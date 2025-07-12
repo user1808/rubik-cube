@@ -26,6 +26,7 @@ import type {
   IRubikCubeShellPiecesBuilder,
 } from './builders';
 import type { IRubikCubeFacesTextsBuilder } from './builders/rubik-cube-faces-texts-builder';
+import type { IRubikCubeColorRaycaster } from './rubik-cube-color-raycaster';
 
 export type DefaultRubikCubeFactory<TCubeCommonName extends TCubeCommonNames = TCubeCommonNames> =
   IRubikCubeFactory<Record<string, string>, TCubeCommonName>;
@@ -43,8 +44,11 @@ export interface IRubikCubeFactory<
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
-  get commonName(): TCubeCommonName;
-  get facesTextsFilename(): TCubeFacesTextsFilename;
+  readonly commonName: TCubeCommonName;
+  readonly cameraMinDistance: number;
+  readonly facesNames: Readonly<Array<TCubeFacesNames>>;
+  readonly rotationTypesNames: Readonly<Array<TCubeRotationTypes>>;
+  readonly facesTextsFilename: TCubeFacesTextsFilename;
 
   createRubikCubePiecesData(): IRubikCubePiecesData<TCubePiecesFilenamesWithFaces, TCubeFacesNames>;
   createRubikCubeFacesData(): IRubikCubeFacesData<TCubeFacesNames>;
@@ -81,7 +85,7 @@ export interface IRubikCubeFactory<
     TCubeFacesNames,
     TCubeEdgeFacesNames
   >;
-  createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<TCubeFacesNames>;
+  createRubikCubePiecesBuilder(): IRubikCubePiecesBuilder<TCubeFacesNames, TCubeEdgeFacesNames>;
 
   createRubikCubeFacesBuilder(): IRubikCubeFacesBuilder<TCubeFacesNames>;
 
@@ -93,7 +97,9 @@ export interface IRubikCubeFactory<
   createRubikCubeFacesTextsBuilder(): IRubikCubeFacesTextsBuilder;
 
   createRubikCubeRotationImplementation(): IRubikCubeRotationImplementation<
+    TCubeCommonName,
     TCubeFacesNames,
+    TCubeEdgeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
     TCubeShellFilenames
@@ -104,12 +110,16 @@ export interface IRubikCubeFactory<
     orbitControls: OrbitControls,
   ): IRubikCubeRotationRaycaster;
 
+  createRubikCubeColorRaycaster(mouseTouchTracker: MouseTouchTracker): IRubikCubeColorRaycaster;
+
   createRubikCubeBuilder(
     scene: Scene,
     camera: PerspectiveCamera,
   ): IRubikCubeBuilder<
     TCubePiecesFilenamesWithFaces,
+    TCubeCommonName,
     TCubeFacesNames,
+    TCubeEdgeFacesNames,
     TCubeRotationGroups,
     TCubeRotationTypes,
     TCubeShellFilenames
@@ -121,6 +131,13 @@ export interface IRubikCubeFactory<
     mouseTouchTracker: MouseTouchTracker,
     orbitControls: OrbitControls,
   ): Promise<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
+    IRubikCube<
+      TCubeCommonName,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilenames
+    >
   >;
 }

@@ -3,11 +3,13 @@
     <BaseSettingsFloatingButtonsDraggableWindowReset />
     <BaseSettingsFloatingButtons />
     <BaseSettingsSideDrawer
+      v-model:selected-section="selectedSection"
       :sections="settingsSections"
       :mobile-section="mobileSection"
-      v-model:selected-section="selectedSection"
-      v-model:open="isSettingsOpen"
-      v-model:minimized="isSettingsMinimized"
+      :open="getIsSettingsOpen"
+      :minimized="getIsSettingsMinimized"
+      @update:open="settingsStateStore.setIsSettingsOpen"
+      @update:minimized="settingsStateStore.setIsSettingsMinimized"
     >
       <template #content>
         <slot />
@@ -15,10 +17,12 @@
     </BaseSettingsSideDrawer>
     <BaseSettingsDraggableWindow
       v-if="isMinimizedAvailable"
-      :sections="settingsSections"
       v-model:selected-section="selectedSection"
-      v-model:open="isSettingsOpen"
-      v-model:minimized="isSettingsMinimized"
+      :sections="settingsSections"
+      :open="getIsSettingsOpen"
+      :minimized="getIsSettingsMinimized"
+      @update:open="settingsStateStore.setIsSettingsOpen"
+      @update:minimized="settingsStateStore.setIsSettingsMinimized"
     >
       <template #content>
         <slot />
@@ -32,7 +36,7 @@ import { computed, watch, defineAsyncComponent } from 'vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import type { BaseSettingsSection } from './base-settings-section.type';
 import BaseSettingsSideDrawer from './side-drawer/base-settings-side-drawer.vue';
-import { useSettingsStateStore } from '@/stores/use-settings-state-store';
+import { useSettingsStore } from '@/stores/use-settings-store';
 import { storeToRefs } from 'pinia';
 import BaseSettingsFloatingButtonsDraggableWindowReset from './floating-buttons/base-settings-floating-buttons-draggable-window-reset.vue';
 import BaseSettingsFloatingButtons from './floating-buttons/base-settings-floating-buttons.vue';
@@ -50,12 +54,17 @@ type BaseSettingsProps = {
 };
 defineProps<BaseSettingsProps>();
 
-const settingsStateStore = useSettingsStateStore();
-const { isSettingsOpen, isSettingsMinimized } = storeToRefs(settingsStateStore);
+const settingsStateStore = useSettingsStore();
+const { getIsSettingsOpen, getIsSettingsMinimized } = storeToRefs(settingsStateStore);
+
+const maximizeSettings = (isMinimizedAvailable: boolean): void => {
+  if (isMinimizedAvailable === false) {
+    settingsStateStore.setIsSettingsMinimized(false);
+  }
+};
 
 const { current } = useBreakpoints(breakpointsTailwind);
-const isMinimizedAvailable = computed(() => current().value.includes('lg'));
-watch(isMinimizedAvailable, (newValue) => {
-  if (!newValue) isSettingsMinimized.value = false;
-});
+const isMinimizedAvailable = computed<boolean>(() => current().value.includes('lg'));
+maximizeSettings(isMinimizedAvailable.value);
+watch(isMinimizedAvailable, maximizeSettings);
 </script>

@@ -20,6 +20,7 @@ import SettingsSelectCubeType from './settings/select-cube-type/settings-select-
 import SettingsCheckboxShowFacesHelper from './settings/checkbox-show-faces-helper/checkbox-show-faces-helper.vue';
 import SettingsToggleFullscreen from './settings/toggle-fullscreen/settings-toggle-fullscreen.vue';
 import SettingsSelectInteractionMode from './settings/select-interaction-mode/settings-select-interaction-mode.vue';
+import SettingsSetCubeColors from './settings/set-cube-colors/settings-set-cube-colors.vue';
 
 const mobileSection: BaseSettingsSection = {
   title: 'Open Menu',
@@ -32,7 +33,11 @@ const settingsSections: Array<BaseSettingsSection> = [
     title: 'Cube Settings',
     icon: markRaw(BaseIcon2x2Cube),
     iconBind: { class: 'size-14 min-h-14 min-w-14' },
-    content: [markRaw(SettingsSelectCubeType), markRaw(SettingsCheckboxShowFacesHelper)],
+    content: [
+      markRaw(SettingsSelectCubeType),
+      markRaw(SettingsCheckboxShowFacesHelper),
+      markRaw(SettingsSetCubeColors),
+    ],
   },
   {
     title: 'General Settings',
