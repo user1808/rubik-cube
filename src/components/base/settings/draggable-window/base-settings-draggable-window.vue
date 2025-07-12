@@ -1,12 +1,5 @@
 <template>
   <BaseTransitionOpacity>
-    <BaseSettingsDraggableWindowReset
-      v-if="open && minimized && isAnyBorderHidden && !isResetWindowPending"
-      :borders-visibility="bordersVisibility"
-      @reset-window-size="resetWindow"
-    />
-  </BaseTransitionOpacity>
-  <BaseTransitionOpacity>
     <UseDraggable
       ref="window"
       v-if="selectedSection && open && minimized"
@@ -26,19 +19,19 @@
       <div class="relative flex size-full flex-col">
         <div
           class="absolute inset-x-0 bottom-0 h-0.5 w-full"
-          v-element-visibility="(state) => onBordersVisibility('bottom', state)"
+          v-element-visibility="(state) => setBorderVisibility('bottom', state)"
         />
         <div
           class="absolute inset-y-0 right-0 h-full w-0.5"
-          v-element-visibility="(state) => onBordersVisibility('right', state)"
+          v-element-visibility="(state) => setBorderVisibility('right', state)"
         />
         <div
           class="absolute inset-x-0 top-0 h-0.5 w-full"
-          v-element-visibility="(state) => onBordersVisibility('top', state)"
+          v-element-visibility="(state) => setBorderVisibility('top', state)"
         />
         <div
           class="absolute inset-y-0 left-0 h-full w-0.5"
-          v-element-visibility="(state) => onBordersVisibility('left', state)"
+          v-element-visibility="(state) => setBorderVisibility('left', state)"
         />
         <div
           ref="handle"
@@ -91,23 +84,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useTemplateRef, defineAsyncComponent } from 'vue';
+import { onUnmounted, ref, useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
-import debounce from 'lodash.debounce';
 import { UseDraggable, vElementVisibility, vResizeObserver } from '@vueuse/components';
-import { useSessionStorage, useWindowSize } from '@vueuse/core';
+import { useEventBus, useSessionStorage, useWindowSize } from '@vueuse/core';
 import { useStyleHelpers } from '@/composables/useStyleHelpers';
-import { useSettingsWindowSizeStore } from '@/stores/use-settings-window-size-store';
-import type { BaseSettingsDraggableWindowBorders } from './base-settings-draggable-window-borders.type';
+import { useSettingsWindowDataStore } from '@/stores/use-settings-window-data-store';
 import type { BaseSettingsSection } from '../base-settings-section.type';
 import type { ElementSize, ResizeObserverEntry } from '@vueuse/core';
 import BasePrimeIcon from '../../icon/base-prime-icon.vue';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
 import BaseSettingsSections from '../base-settings-sections.vue';
-
-const BaseSettingsDraggableWindowReset = defineAsyncComponent(
-  () => import('./base-settings-draggable-window-reset.vue'),
-);
+import { useDraggableWindowEventBus } from '@/event-buses/use-draggable-window-event-bus';
 
 const selectedSection = defineModel<BaseSettingsSection>('selectedSection');
 const open = defineModel<boolean>('open', { default: false });
@@ -127,9 +115,9 @@ const POSITION_STORAGE_KEY = 'settings-window-position';
 
 const { applyStyles } = useStyleHelpers();
 
-const settingsWindowSizeStore = useSettingsWindowSizeStore();
-const { getWindowSize } = storeToRefs(settingsWindowSizeStore);
-const { setWindowSize } = settingsWindowSizeStore;
+const settingsWindowDataStore = useSettingsWindowDataStore();
+const { getWindowSize, getBordersVisibility } = storeToRefs(settingsWindowDataStore);
+const { setWindowSize, setBorderVisibility } = settingsWindowDataStore;
 
 const { width: browserWidth, height: browserHeight } = useWindowSize();
 const windowPosition = useSessionStorage(
@@ -149,18 +137,6 @@ const onDragEnd = () => {
 
 const switchOpen = () => (open.value = !open.value);
 const maximize = () => (minimized.value = false);
-
-const bordersVisibility = ref<Record<BaseSettingsDraggableWindowBorders, boolean>>({
-  top: true,
-  right: true,
-  bottom: true,
-  left: true,
-});
-const onBordersVisibility = (border: BaseSettingsDraggableWindowBorders, state: boolean) =>
-  (bordersVisibility.value[border] = state);
-const isAnyBorderHidden = computed<boolean>(() =>
-  Object.values(bordersVisibility.value).some((value) => !value),
-);
 
 const setInitSizeDataFlag = ref<boolean>(true);
 const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {
@@ -191,28 +167,29 @@ const onResize = (entries: ReadonlyArray<ResizeObserverEntry>) => {
   setWindowSize(entry.contentRect);
 };
 
-const isResetWindowPending = ref<boolean>(false);
-const resetWindow = async () => {
+const resetWindow = () => {
   const draggableElement = window.value?.$el as HTMLElement;
   if (!draggableElement) return;
-  isResetWindowPending.value = true;
+
+  const { right, left, bottom, top } = getBordersVisibility.value;
+
   const size: ElementSize = {
     width: getWindowSize.value.width,
     height: getWindowSize.value.height,
   };
-  if (!bordersVisibility.value.right) {
+  if (!right) {
     size.width = Math.max(browserWidth.value - windowPosition.value.x, MIN_WIDTH);
     windowPosition.value.x = browserWidth.value - size.width;
   }
-  if (!bordersVisibility.value.left) {
+  if (!left) {
     size.width = Math.max(windowPosition.value.x + getWindowSize.value.width, MIN_WIDTH);
     windowPosition.value.x = 0;
   }
-  if (!bordersVisibility.value.bottom) {
+  if (!bottom) {
     size.height = Math.max(browserHeight.value - windowPosition.value.y, MIN_HEIGHT);
     windowPosition.value.y = browserHeight.value - size.height;
   }
-  if (!bordersVisibility.value.top) {
+  if (!top) {
     size.height = Math.max(windowPosition.value.y + getWindowSize.value.height, MIN_HEIGHT);
     windowPosition.value.y = 0;
   }
@@ -223,6 +200,12 @@ const resetWindow = async () => {
     left: `${windowPosition.value.x}px`,
     top: `${windowPosition.value.y}px`,
   });
-  debounce(() => (isResetWindowPending.value = false), 20)();
 };
+
+const draggableWindowEventBus = useEventBus(useDraggableWindowEventBus);
+const unsubscribeResetWindowSize = draggableWindowEventBus.on((event) => {
+  if (event === 'reset-window-size') resetWindow();
+});
+
+onUnmounted(() => unsubscribeResetWindowSize());
 </script>

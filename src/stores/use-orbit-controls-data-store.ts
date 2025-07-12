@@ -34,8 +34,8 @@ export const useOrbitControlsDataStore = defineStore('orbit-controls-data', () =
   };
 
   return {
+    getDistanceState,
     setMaxDistance,
     setDistance,
-    getDistanceState,
   };
 });

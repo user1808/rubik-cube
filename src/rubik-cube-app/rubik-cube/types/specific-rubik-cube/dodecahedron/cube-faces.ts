@@ -1,4 +1,4 @@
-const DodecahedronFaces = [
+export const DodecahedronFaces = [
   'Up',
   'Down',
   'Right',

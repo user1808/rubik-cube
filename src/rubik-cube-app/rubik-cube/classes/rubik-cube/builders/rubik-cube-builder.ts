@@ -9,6 +9,7 @@ import type {
 } from '../../../interfaces/builders';
 import { RubikCube } from '../structure/cube/rubik-cube';
 import type { IRubikCubeFacesBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-faces-builder';
+import type { IRubikCubeFacesTextsBuilder } from '@/rubik-cube-app/rubik-cube/interfaces/builders/rubik-cube-faces-texts-builder';
 
 export class RubikCubeBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
@@ -43,6 +44,7 @@ export class RubikCubeBuilder<
       TCubeFacesNames,
       TCubeRotationGroups
     >,
+    private readonly cubeFacesTextsBuilder: IRubikCubeFacesTextsBuilder,
     private readonly rotationImplementation: IRubikCubeRotationImplementation<
       TCubeFacesNames,
       TCubeRotationGroups,
@@ -58,6 +60,7 @@ export class RubikCubeBuilder<
     const cubePieces = await this.cubePiecesBuilder.buildPieces();
     const cubeFaces = this.cubeFacesBuilder.buildFaces(cubePieces);
     const cubeRotationGroups = this.cubeRotationGroupsBuilder.buildRotationGroups(cubePieces);
+    const cubeFacesTexts = await this.cubeFacesTextsBuilder.buildFacesTexts();
 
     return new RubikCube(
       this.scene,
@@ -66,6 +69,7 @@ export class RubikCubeBuilder<
       cubePieces,
       cubeFaces,
       cubeRotationGroups,
+      cubeFacesTexts,
       this.rotationImplementation,
     );
   }

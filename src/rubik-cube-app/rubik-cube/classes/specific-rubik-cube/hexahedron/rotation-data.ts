@@ -26,8 +26,8 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
     },
     Double: {
       angle: Radians['180deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 1,
+      durationInSeconds: 0.75,
+      stepsCount: 2,
     },
   };
 }
