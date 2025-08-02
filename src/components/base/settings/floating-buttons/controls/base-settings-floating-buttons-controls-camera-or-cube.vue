@@ -1,6 +1,6 @@
 <template>
   <SelectButton
-    v-model="cameraOrCube"
+    :model-value="getCameraOrCubeOption"
     :options="getCameraOrCubeOptions"
     :allow-empty="false"
     class="h-16 w-full px-4 sm:w-72 sm:px-0"
@@ -10,6 +10,7 @@
         content: 'relative size-full',
       },
     }"
+    @update:model-value="interactionModeStore.setCameraOrCubeOption"
   >
     <template #option="{ option }">
       <BaseKeyboardInputElement
@@ -30,10 +31,10 @@ import { useInteractionModeStore } from '@/stores/use-interaction-mode-store';
 import { onKeyPressed } from '@vueuse/core';
 import BaseKeyboardInputElement from '@/components/base/base-keyboard-input-element.vue';
 const interactionModeStore = useInteractionModeStore();
-const { cameraOrCube, getCameraOrCubeOptions } = storeToRefs(interactionModeStore);
+const { getCameraOrCubeOption, getCameraOrCubeOptions } = storeToRefs(interactionModeStore);
 
 onKeyPressed(['q', 'Q'], (event) => {
   event.preventDefault();
-  interactionModeStore.toggleCameraOrCube();
+  interactionModeStore.toggleCameraOrCubeOption();
 });
 </script>

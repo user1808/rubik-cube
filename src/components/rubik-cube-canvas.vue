@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import type {
   DefaultRubikCubeFactory,
   IRubikCubeFactory,
@@ -27,6 +27,8 @@ import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
 import { storeToRefs } from 'pinia';
 import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import { ProgressSpinner } from 'primevue';
+import { useEventBus } from '@vueuse/core';
+import { useSelectCubeEventBus } from '@/event-buses/use-select-cube-event-bus';
 
 const canvas = ref<Nullable<HTMLCanvasElement>>(null);
 const rubikCubeApp = ref<Nullable<RubikCubeApp>>(null);
@@ -76,33 +78,39 @@ const getFactory = async (name: TCubeCommonNames): Promise<DefaultRubikCubeFacto
 };
 
 const selectedCubeStore = useSelectedCubeStore();
-const { getCurrentCube } = storeToRefs(selectedCubeStore);
+const { getCurrentCubeProperties } = storeToRefs(selectedCubeStore);
 
-const isCubeLoading = ref(false);
+const isCubeLoading = ref<boolean>(false);
 onMounted(async () => {
   if (!canvas.value) {
     throw new Error('Canvas HTML Element not found!');
   }
   const app = new RubikCubeApp(canvas.value);
   rubikCubeApp.value = app;
+  const initialCubeName = getCurrentCubeProperties.value?.commonName ?? '3x3 Cube';
   isCubeLoading.value = true;
 
-  const factory = await getFactory(getCurrentCube.value.name);
+  const factory = await getFactory(initialCubeName);
   await rubikCubeApp.value.start(factory);
 
   isCubeLoading.value = false;
 });
 
-selectedCubeStore.$subscribe(async () => {
+const selectCubeEventBus = useEventBus(useSelectCubeEventBus);
+const selectCubeEventBusUnsubscribe = selectCubeEventBus.on(async ({ name }) => {
   if (!rubikCubeApp.value) {
     return;
   }
 
   isCubeLoading.value = true;
 
-  const factory = await getFactory(getCurrentCube.value.name);
+  const factory = await getFactory(name);
   await rubikCubeApp.value.changeCube(factory);
 
   isCubeLoading.value = false;
+});
+
+onUnmounted(() => {
+  selectCubeEventBusUnsubscribe();
 });
 </script>

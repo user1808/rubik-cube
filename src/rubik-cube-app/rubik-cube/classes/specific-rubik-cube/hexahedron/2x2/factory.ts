@@ -25,12 +25,11 @@ export class RubikHexahedron2x2Factory extends AbstractRubikHexahedronFactory<
   THexahedronShellFilenames,
   THexahedron2x2FacesTextsFilename
 > {
-  public override get commonName(): THexahedron2x2CommonName {
-    return '2x2 Cube';
-  }
-  public override get facesTextsFilename(): THexahedron2x2FacesTextsFilename {
-    return 'RubikHexahedron2x2FacesTexts.glb';
-  }
+  public override readonly commonName: THexahedron2x2CommonName = '2x2 Cube';
+  public override readonly cameraMinDistance: number = Math.sqrt(3);
+  public override readonly facesTextsFilename: THexahedron2x2FacesTextsFilename =
+    'RubikHexahedron2x2FacesTexts.glb';
+
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
     THexahedronPiecesFilenamesWithFaces,
     THexahedronFaces

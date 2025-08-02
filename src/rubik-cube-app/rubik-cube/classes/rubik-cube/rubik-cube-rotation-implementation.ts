@@ -5,6 +5,7 @@ import type { TRotationTypeData } from '../../types/rubik-cube';
 import type { IRubikCube, IRubikCubePieceWrapper } from '../../interfaces/structure';
 import type { IRubikCubeRotationData } from '../../interfaces/data';
 import type { IRubikCubeRotationImplementation } from '../../interfaces';
+import type { TCubeCommonNames } from '../../types/cube-common-name';
 
 type TRotationEulers = {
   singleRotationEuler: Euler;
@@ -12,13 +13,17 @@ type TRotationEulers = {
 };
 
 export class RubikCubeRotationImplementation<
+  TCubeCommonName extends TCubeCommonNames,
   TCubeFacesNames extends string,
+  TCubeEdgeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
   TCubeShellFilenames extends string,
 > implements
     IRubikCubeRotationImplementation<
+      TCubeCommonName,
       TCubeFacesNames,
+      TCubeEdgeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellFilenames
@@ -30,7 +35,9 @@ export class RubikCubeRotationImplementation<
 
   public async rotateRubikCubeGroup(
     rubikCube: IRubikCube<
+      TCubeCommonName,
       TCubeFacesNames,
+      TCubeEdgeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellFilenames
@@ -103,7 +110,9 @@ export class RubikCubeRotationImplementation<
 
   private createRotatingThreeJSGroup(
     rubikCube: IRubikCube<
+      TCubeCommonName,
       TCubeFacesNames,
+      TCubeEdgeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellFilenames
@@ -118,7 +127,9 @@ export class RubikCubeRotationImplementation<
 
   private removeRotatingThreeJSGroup(
     rubikCube: IRubikCube<
+      TCubeCommonName,
       TCubeFacesNames,
+      TCubeEdgeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellFilenames

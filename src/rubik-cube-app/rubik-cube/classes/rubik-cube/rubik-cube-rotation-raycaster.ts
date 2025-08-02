@@ -8,6 +8,8 @@ import { MouseButtonEnum } from '@/utils/mouse_button_enum';
 import type { IRubikCubeRotationRaycaster } from '../../interfaces';
 import { RubikCubeShellPiece } from './structure/shell/rubik-cube-shell-piece';
 import { useInteractionModeStore } from '@/stores/use-interaction-mode-store';
+import type { TCubeCommonNames } from '../../types/cube-common-name';
+import { useColorCubeModeStore } from '@/stores/use-color-cube-mode-store';
 
 type TPoints = 'FirstPoint' | 'SecondPoint';
 type TRotationIntersectionData<
@@ -22,7 +24,9 @@ type TRotationIntersectionData<
 >;
 
 export class RubikCubeRotationRaycaster<
+    TCubeCommonName extends TCubeCommonNames,
     TCubeFacesNames extends string,
+    TCubeEdgeFacesNames extends string,
     TCubeRotationGroups extends string,
     TCubeRotationTypes extends string,
     TCubeShellFilenames extends string,
@@ -39,10 +43,13 @@ export class RubikCubeRotationRaycaster<
   private mouseMoveCounter = 0;
 
   private readonly interactionModeStore = useInteractionModeStore();
+  private readonly colorCubeModeStore = useColorCubeModeStore();
 
   constructor(
     private readonly cube: IRubikCube<
+      TCubeCommonName,
       TCubeFacesNames,
+      TCubeEdgeFacesNames,
       TCubeRotationGroups,
       TCubeRotationTypes,
       TCubeShellFilenames
@@ -81,26 +88,28 @@ export class RubikCubeRotationRaycaster<
 
   private onMouseDown(event: MouseEvent | TouchEvent): void {
     if (event instanceof MouseEvent && event.button !== MouseButtonEnum.Main) return;
-    if (this.interactionModeStore.interactionMode === 'Camera Only') return;
+    if (this.colorCubeModeStore.getIsColorCubeModeOn) return;
+    if (this.interactionModeStore.getInteractionMode === 'Camera Only') return;
     if (
-      this.interactionModeStore.interactionMode === 'Camera Or Cube' &&
-      this.interactionModeStore.cameraOrCube === 'Camera'
+      this.interactionModeStore.getInteractionMode === 'Camera Or Cube' &&
+      this.interactionModeStore.getCameraOrCubeOption === 'Camera'
     )
       return;
     this.intersectionData.FirstPoint = this.getIntersectionData();
-    this.orbitControls.toggleEnabled(!this.intersectionData.FirstPoint);
+    this.orbitControls.updateEnabled(!this.intersectionData.FirstPoint);
   }
 
   private onMouseUp(event: MouseEvent | TouchEvent): void {
     if (event instanceof MouseEvent && event.button !== MouseButtonEnum.Main) return;
-    if (this.interactionModeStore.interactionMode === 'Camera Only') return;
+    if (this.colorCubeModeStore.getIsColorCubeModeOn) return;
+    if (this.interactionModeStore.getInteractionMode === 'Camera Only') return;
     if (
-      this.interactionModeStore.interactionMode === 'Camera Or Cube' &&
-      this.interactionModeStore.cameraOrCube === 'Camera'
+      this.interactionModeStore.getInteractionMode === 'Camera Or Cube' &&
+      this.interactionModeStore.getCameraOrCubeOption === 'Camera'
     )
       return;
     this.resetIntersection();
-    this.orbitControls.toggleEnabled(true);
+    this.orbitControls.updateEnabled(true);
   }
 
   private onMouseMove(event: MouseEvent | TouchEvent): void {

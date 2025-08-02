@@ -23,6 +23,8 @@ import type {
   TTetrahedronCommonName,
   TTetrahedronFacesTextsFilename,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
+import { TetrahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/cube-faces';
+import { TetrahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/rotation-types';
 
 export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronPiecesFilenamesWithFaces,
@@ -34,12 +36,14 @@ export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronShellFilenames,
   TTetrahedronFacesTextsFilename
 > {
-  public override get commonName(): TTetrahedronCommonName {
-    return 'Pyraminx';
-  }
-  public override get facesTextsFilename(): TTetrahedronFacesTextsFilename {
-    return 'RubikTetrahedronFacesTexts.glb';
-  }
+  public override readonly commonName: TTetrahedronCommonName = 'Pyraminx';
+  public override readonly cameraMinDistance: number = 1.2 * Math.sqrt(6);
+  public override readonly facesNames: Readonly<Array<TTetrahedronFaces>> = TetrahedronFaces;
+  public override readonly rotationTypesNames: Readonly<Array<TTetrahedronRotationTypes>> =
+    TetrahedronRotationTypes;
+  public override readonly facesTextsFilename: TTetrahedronFacesTextsFilename =
+    'RubikTetrahedronFacesTexts.glb';
+
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
     TTetrahedronPiecesFilenamesWithFaces,
     TTetrahedronFaces

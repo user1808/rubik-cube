@@ -1,7 +1,10 @@
 import type { BufferGeometry, MeshBasicMaterial, Quaternion } from 'three';
 import { Vector3 } from 'three';
 import { RubikCubePieceFace } from './rubik-cube-piece-face';
-import type { TCubeFaceColor } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type {
+  TCubeFaceColor,
+  TCubeFaceMaterial,
+} from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
 type TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames extends string> = {
   geometry: BufferGeometry;
@@ -16,7 +19,7 @@ type TRubikCubePieceVisibleFaceConstructorParams<TCubeFacesNames extends string>
  * Represents a visible face of a Rubik's Cube piece.
  */
 export class RubikCubePieceVisibleFace<TCubeFacesNames extends string> extends RubikCubePieceFace {
-  public readonly color: TCubeFaceColor;
+  private color: TCubeFaceColor;
 
   private readonly normal: Vector3;
   private readonly cubeFacesNormalVectors: Record<TCubeFacesNames, Vector3>;
@@ -30,6 +33,16 @@ export class RubikCubePieceVisibleFace<TCubeFacesNames extends string> extends R
     this.normal = new Vector3().fromBufferAttribute(this.geometry.attributes.normal, 0).normalize();
     this.roundNormal();
     this.setCubeFace();
+  }
+
+  public updateColor(cubeFaceMaterial: TCubeFaceMaterial): void {
+    this.material = cubeFaceMaterial.material;
+    this.color = cubeFaceMaterial.color;
+    this.setCubeFace();
+  }
+
+  public getColor(): TCubeFaceColor {
+    return this.color;
   }
 
   public getNormal(): Vector3 {

@@ -19,7 +19,7 @@ export class RubikCubePiecesBuilder<
   TCubePiecesFilenames extends
     ExtractStringKeys<TCubePiecesFilenamesWithFaces> = ExtractStringKeys<TCubePiecesFilenamesWithFaces>,
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
-> implements IRubikCubePiecesBuilder<TCubeFacesNames>
+> implements IRubikCubePiecesBuilder<TCubeFacesNames, TCubeEdgeFacesNames>
 {
   constructor(
     private readonly gltfLoader: IRubikCubeGLTFLoader<
@@ -27,7 +27,7 @@ export class RubikCubePiecesBuilder<
       TCubePiecesFilenames,
       TCubeFacesTextsFilename
     >,
-    private readonly materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
+    public readonly materials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>,
     private readonly pieceBuilder: IRubikCubePieceBuilder<
       TCubePiecesFilenamesWithFaces,
       TCubeFacesNames,

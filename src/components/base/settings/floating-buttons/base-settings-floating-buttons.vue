@@ -5,10 +5,15 @@
     </BaseTransitionOpacity>
     <BaseTransitionOpacity mode="out-in">
       <BaseSettingsFloatingButtonsControlsCameraOrCube
-        v-if="interactionMode === 'Camera Or Cube'"
+        v-if="getInteractionMode === 'Camera Or Cube' && !getIsColorCubeModeOn"
       />
-      <BaseSettingsFloatingButtonsControlsCamera v-else-if="interactionMode === 'Cube Only'" />
-      <BaseSettingsFloatingButtonsControlsCube v-else-if="interactionMode === 'Camera Only'" />
+      <BaseSettingsFloatingButtonsControlsCamera
+        v-else-if="getInteractionMode === 'Cube Only' && !getIsColorCubeModeOn"
+      />
+      <BaseSettingsFloatingButtonsControlsCube
+        v-else-if="getInteractionMode === 'Camera Only' && !getIsColorCubeModeOn"
+      />
+      <BaseSettingsFloatingButtonsColorCube v-else-if="getIsColorCubeModeOn" />
     </BaseTransitionOpacity>
   </div>
 </template>
@@ -19,7 +24,8 @@ import { storeToRefs } from 'pinia';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
 import { useInteractionModeStore } from '@/stores/use-interaction-mode-store';
 import FacesHelperToggle from './faces-helpers/faces-helper-toggle.vue';
-import { useFacesHelperStateStore } from '@/stores/use-faces-helper-state-store';
+import { useFacesHelperStore } from '@/stores/use-faces-helper-store';
+import { useColorCubeModeStore } from '@/stores/use-color-cube-mode-store';
 
 const BaseSettingsFloatingButtonsControlsCameraOrCube = defineAsyncComponent(
   () => import('./controls/base-settings-floating-buttons-controls-camera-or-cube.vue'),
@@ -30,10 +36,16 @@ const BaseSettingsFloatingButtonsControlsCamera = defineAsyncComponent(
 const BaseSettingsFloatingButtonsControlsCube = defineAsyncComponent(
   () => import('./controls/base-settings-floating-buttons-controls-cube.vue'),
 );
+const BaseSettingsFloatingButtonsColorCube = defineAsyncComponent(
+  () => import('./color-cube/base-settings-floating-buttons-color-cube.vue'),
+);
 
 const interactionModeStore = useInteractionModeStore();
-const { interactionMode } = storeToRefs(interactionModeStore);
+const { getInteractionMode } = storeToRefs(interactionModeStore);
 
-const facesHelperStateStore = useFacesHelperStateStore();
-const { getIsShowFacesHelperToggleVisible } = storeToRefs(facesHelperStateStore);
+const facesHelperStore = useFacesHelperStore();
+const { getIsShowFacesHelperToggleVisible } = storeToRefs(facesHelperStore);
+
+const colorCubeModeStateStore = useColorCubeModeStore();
+const { getIsColorCubeModeOn } = storeToRefs(colorCubeModeStateStore);
 </script>

@@ -53,13 +53,13 @@ import { useStringHelpers } from '@/composables/useStringHelpers';
 import { useRotateCubeEventBus } from '@/event-buses/use-rotate-cube-event-bus';
 
 const selectedCubeStore = useSelectedCubeStore();
+const { getCurrentCubeProperties } = storeToRefs(selectedCubeStore);
 
-const { getCurrentCube } = storeToRefs(selectedCubeStore);
 const faces = computed<Array<string>>(() => {
-  return (getCurrentCube.value?.faces as Array<string>) ?? [];
+  return [...(getCurrentCubeProperties.value?.facesNames ?? [])];
 });
 const rotationTypes = computed<Array<string>>(() => {
-  return (getCurrentCube.value?.rotationTypes as Array<string>) ?? [];
+  return [...(getCurrentCubeProperties.value?.rotationTypesNames ?? [])];
 });
 
 const { formatCamelCase } = useStringHelpers();
@@ -69,12 +69,12 @@ const rotateCubeEventBus = useEventBus(useRotateCubeEventBus);
 const face = ref<string>();
 const type = ref<string>();
 
-const isFaceAllowed = computed(() => {
-  return face.value && getCurrentCube.value?.faces.includes(face.value);
+const isFaceAllowed = computed<boolean>(() => {
+  return !!face.value && faces.value.includes(face.value);
 });
 
-const isTypeAllowed = computed(() => {
-  return type.value && getCurrentCube.value?.rotationTypes.includes(type.value);
+const isTypeAllowed = computed<boolean>(() => {
+  return !!type.value && rotationTypes.value.includes(type.value);
 });
 
 const handleRotateCube = () => {

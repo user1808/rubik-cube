@@ -25,12 +25,11 @@ export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<
   THexahedronShellFilenames,
   THexahedron5x5FacesTextsFilename
 > {
-  public override get commonName(): THexahedron5x5CommonName {
-    return '5x5 Cube';
-  }
-  public override get facesTextsFilename(): THexahedron5x5FacesTextsFilename {
-    return 'RubikHexahedron5x5FacesTexts.glb';
-  }
+  public override readonly commonName: THexahedron5x5CommonName = '5x5 Cube';
+  public override readonly cameraMinDistance: number = 2.5 * Math.sqrt(3);
+  public override readonly facesTextsFilename: THexahedron5x5FacesTextsFilename =
+    'RubikHexahedron5x5FacesTexts.glb';
+
   public override createRubikCubePiecesData(): IRubikCubePiecesData<
     THexahedronPiecesFilenamesWithFaces,
     THexahedronFaces

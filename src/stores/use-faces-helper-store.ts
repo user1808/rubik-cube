@@ -1,3 +1,5 @@
+import { useFacesHelperEventBus } from '@/event-buses/use-faces-helper-event-bus';
+import { useEventBus } from '@vueuse/core';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
@@ -20,10 +22,9 @@ const useFacesHelperPrivateState = defineStore(
   },
 );
 
-export const useFacesHelperStateStore = defineStore('faces-helper-state', () => {
-  const changeFlag = ref<boolean>(false);
-
+export const useFacesHelperStore = defineStore('faces-helper', () => {
   const privateState = useFacesHelperPrivateState();
+  const facesHelperEventBus = useEventBus(useFacesHelperEventBus);
 
   const getIsShowFacesHelperToggleVisible = computed<boolean>(() => {
     return privateState.isShowFacesHelperToggleVisible;
@@ -32,24 +33,24 @@ export const useFacesHelperStateStore = defineStore('faces-helper-state', () => 
     return privateState.isFacesHelperVisible;
   });
 
-  const toggleIsShowFacesHelperToggleVisible = () => {
-    privateState.isShowFacesHelperToggleVisible = !privateState.isShowFacesHelperToggleVisible;
-    if (!privateState.isShowFacesHelperToggleVisible) {
-      privateState.isFacesHelperVisible = false;
-      changeFlag.value = !changeFlag.value;
+  const setIsShowFacesHelperToggleVisible = (newValue: boolean): void => {
+    privateState.isShowFacesHelperToggleVisible = newValue;
+    if (newValue === false) {
+      setIsFacesHelperVisible(false);
+    }
+  };
+  const setIsFacesHelperVisible = (newValue: boolean): void => {
+    const previousValue = privateState.isFacesHelperVisible;
+    privateState.isFacesHelperVisible = newValue;
+    if (previousValue !== newValue) {
+      facesHelperEventBus.emit('update-faces-helper-visibility');
     }
   };
 
-  const toggleIsFacesHelperVisible = () => {
-    privateState.isFacesHelperVisible = !privateState.isFacesHelperVisible;
-    changeFlag.value = !changeFlag.value;
-  };
-
   return {
-    changeFlag,
     getIsShowFacesHelperToggleVisible,
     getIsFacesHelperVisible,
-    toggleIsShowFacesHelperToggleVisible,
-    toggleIsFacesHelperVisible,
+    setIsShowFacesHelperToggleVisible,
+    setIsFacesHelperVisible,
   };
 });

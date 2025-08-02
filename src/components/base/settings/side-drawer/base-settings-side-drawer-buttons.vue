@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-y-4">
     <BaseTransitionOpacity v-for="(section, idx) in sections" :key="idx">
-      <div v-if="!isSideDrawerOpen">
+      <div v-if="isSideDrawerButtonsVisible">
         <PopoverButton
           class="flex w-full items-center gap-x-2 rounded-lg bg-gray-800 p-2 transition-colors hover:bg-gray-700 focus-visible:outline-none"
           @click="$emit('selectSection', section)"
@@ -29,9 +29,13 @@ import { useOrbitControlsDataStore } from '@/stores/use-orbit-controls-data-stor
 import { storeToRefs } from 'pinia';
 import { PopoverButton } from '@headlessui/vue';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
+import { useColorCubeModeStore } from '@/stores/use-color-cube-mode-store';
 
 const orbitControlsDataStore = useOrbitControlsDataStore();
 const { getDistanceState } = storeToRefs(orbitControlsDataStore);
+
+const colorCubeModeStateStore = useColorCubeModeStore();
+const { getIsColorCubeModeOn } = storeToRefs(colorCubeModeStateStore);
 
 type BaseSettingsSideDrawerButtonsProps = {
   isSideDrawerOpen: boolean;
@@ -45,11 +49,15 @@ type BaseSettingsSideDrawerButtonsEmits = {
 };
 defineEmits<BaseSettingsSideDrawerButtonsEmits>();
 
-const isSectionTitleHidden = computed(() => {
+const isSideDrawerButtonsVisible = computed<boolean>(() => {
+  return !props.isSideDrawerOpen && !getIsColorCubeModeOn.value;
+});
+
+const isSectionTitleHidden = computed<boolean>(() => {
   return getDistanceState.value === 'close' || !!props.hideTitle;
 });
 
-const onSectionTitleEnter = (el: Element, done: () => void) => {
+const onSectionTitleEnter = (el: Element, done: () => void): void => {
   if (el.clientWidth === 0) {
     done();
     return;
@@ -60,7 +68,7 @@ const onSectionTitleEnter = (el: Element, done: () => void) => {
     .fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.1, onComplete: done });
 };
 
-const onSectionTitleLeave = (el: Element, done: () => void) => {
+const onSectionTitleLeave = (el: Element, done: () => void): void => {
   gsap
     .timeline()
     .to(el, { opacity: 0, duration: 0.1 })

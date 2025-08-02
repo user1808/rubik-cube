@@ -7,7 +7,7 @@
       :prevent-default="true"
       :handle="handle"
       :storage-key="POSITION_STORAGE_KEY"
-      storage-type="session"
+      storage-type="local"
       @end="onDragEnd"
       @mousemove.stop
       @mousedown.stop
@@ -87,9 +87,9 @@
 import { onUnmounted, ref, useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
 import { UseDraggable, vElementVisibility, vResizeObserver } from '@vueuse/components';
-import { useEventBus, useSessionStorage, useWindowSize } from '@vueuse/core';
+import { useEventBus, useLocalStorage, useWindowSize } from '@vueuse/core';
 import { useStyleHelpers } from '@/composables/useStyleHelpers';
-import { useSettingsWindowDataStore } from '@/stores/use-settings-window-data-store';
+import { useSettingsWindowStore } from '@/stores/use-settings-window-store';
 import type { BaseSettingsSection } from '../base-settings-section.type';
 import type { ElementSize, ResizeObserverEntry } from '@vueuse/core';
 import BasePrimeIcon from '../../icon/base-prime-icon.vue';
@@ -109,18 +109,18 @@ const props = defineProps<BaseSettingsDraggableWindowProps>();
 const MIN_WIDTH = 475;
 const HANDLE_HEIGHT = 72;
 const SECTION_HEIGHT = 72;
-const MARGIN_HEIGHT = 16;
+const MARGIN_HEIGHT = 54;
 const MIN_HEIGHT = HANDLE_HEIGHT + props.sections.length * SECTION_HEIGHT + MARGIN_HEIGHT;
 const POSITION_STORAGE_KEY = 'settings-window-position';
 
 const { applyStyles } = useStyleHelpers();
 
-const settingsWindowDataStore = useSettingsWindowDataStore();
-const { getWindowSize, getBordersVisibility } = storeToRefs(settingsWindowDataStore);
-const { setWindowSize, setBorderVisibility } = settingsWindowDataStore;
+const settingsWindowStore = useSettingsWindowStore();
+const { getWindowSize, getBordersVisibility } = storeToRefs(settingsWindowStore);
+const { setWindowSize, setBorderVisibility } = settingsWindowStore;
 
 const { width: browserWidth, height: browserHeight } = useWindowSize();
-const windowPosition = useSessionStorage(
+const windowPosition = useLocalStorage(
   POSITION_STORAGE_KEY,
   { x: 10, y: 10 },
   { initOnMounted: true },
@@ -204,7 +204,14 @@ const resetWindow = () => {
 
 const draggableWindowEventBus = useEventBus(useDraggableWindowEventBus);
 const unsubscribeResetWindowSize = draggableWindowEventBus.on((event) => {
-  if (event === 'reset-window-size') resetWindow();
+  switch (event) {
+    case 'reset-window-size':
+      resetWindow();
+      return;
+    default:
+      event satisfies never;
+      return;
+  }
 });
 
 onUnmounted(() => unsubscribeResetWindowSize());

@@ -1,8 +1,11 @@
+import type { TCubeCommonNames } from '../../types/cube-common-name';
 import type { IRubikCube } from '../structure';
 
 export interface IRubikCubeBuilder<
   TCubePiecesFilenamesWithFaces extends Record<TCubePiecesFilenames, TCubePiecesFaces>,
+  TCubeCommonName extends TCubeCommonNames,
   TCubeFacesNames extends string,
+  TCubeEdgeFacesNames extends string,
   TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
   TCubeShellFilenames extends string,
@@ -11,6 +14,13 @@ export interface IRubikCubeBuilder<
   TCubePiecesFaces extends string = TCubePiecesFilenamesWithFaces[TCubePiecesFilenames],
 > {
   buildCube(): Promise<
-    IRubikCube<TCubeFacesNames, TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>
+    IRubikCube<
+      TCubeCommonName,
+      TCubeFacesNames,
+      TCubeEdgeFacesNames,
+      TCubeRotationGroups,
+      TCubeRotationTypes,
+      TCubeShellFilenames
+    >
   >;
 }

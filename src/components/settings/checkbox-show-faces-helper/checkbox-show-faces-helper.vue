@@ -3,7 +3,9 @@
     <h1 class="select-none text-xl tracking-tight text-white">Faces Helper</h1>
     <div
       class="flex max-w-fit cursor-pointer items-center gap-x-4 px-1 py-2"
-      @click.prevent="toggleShowFacesHelperToggleVisible"
+      @click.prevent="
+        facesHelperStore.setIsShowFacesHelperToggleVisible(!getIsShowFacesHelperToggleVisible)
+      "
     >
       <Checkbox binary :model-value="getIsShowFacesHelperToggleVisible" />
       <span class="select-none text-pretty text-sm leading-4 text-gray-400">
@@ -15,13 +17,9 @@
 
 <script setup lang="ts">
 import Checkbox from 'primevue/checkbox';
-import { useFacesHelperStateStore } from '@/stores/use-faces-helper-state-store';
+import { useFacesHelperStore } from '@/stores/use-faces-helper-store';
 import { storeToRefs } from 'pinia';
 
-const facesHelperStateStore = useFacesHelperStateStore();
-const { getIsShowFacesHelperToggleVisible } = storeToRefs(facesHelperStateStore);
-
-const toggleShowFacesHelperToggleVisible = () => {
-  facesHelperStateStore.toggleIsShowFacesHelperToggleVisible();
-};
+const facesHelperStore = useFacesHelperStore();
+const { getIsShowFacesHelperToggleVisible } = storeToRefs(facesHelperStore);
 </script>

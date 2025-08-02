@@ -6,8 +6,11 @@ import { MouseTouchTracker, ScreenSize, ScreenSizeTracker } from './common';
 import { CustomPersepctiveCamera, CustomRenderer, CustomOrbitControls } from './common/custom';
 import { DebugModeCoordinator } from './rubik-cube/classes/debug/debug-mode-coordinator';
 import { DebugAxes, DebugStats, DebugCubeUI } from './rubik-cube/classes/debug/subscribers';
+import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
 
 export class RubikCubeApp {
+  private readonly selectedCubeStore = useSelectedCubeStore();
+
   private readonly scene: Scene = new Scene();
 
   private readonly screenSize: ScreenSize = new ScreenSize();
@@ -61,6 +64,7 @@ export class RubikCubeApp {
     );
     this.cube.addToScene();
     this.debugModeCoordinator.getSubscriber('DebugCubeUI').setCube(this.cube, this.cubeFactory);
+    this.selectedCubeStore.setCurrentCubeProperties(this.cube.properties);
   }
 
   private prepareCamera(): void {

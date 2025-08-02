@@ -7,4 +7,6 @@ export interface IRubikCubeShell<
   TCubeShellFilenames extends string,
 > extends Group {
   readonly pieces: TShellPieces<TCubeRotationGroups, TCubeRotationTypes, TCubeShellFilenames>;
+
+  dispose(): void;
 }

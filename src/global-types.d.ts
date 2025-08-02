@@ -31,7 +31,7 @@ declare global {
 
   type UnionToTuple<T, LastInT = LastInUnion<T>> = [T] extends [never]
     ? []
-    : [LastInT, ...UnionToTuple<Exclude<T, LastInT>>];
+    : [...UnionToTuple<Exclude<T, LastInT>>, LastInT];
 
   type IsTuple<T> = [T] extends [never]
     ? false

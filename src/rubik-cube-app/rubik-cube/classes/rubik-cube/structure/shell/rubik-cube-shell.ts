@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { Group, Mesh } from 'three';
 import type { IRubikCubeShell } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import type { TShellPieces } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 
@@ -19,5 +19,14 @@ export class RubikCubeShell<
   ) {
     super();
     if (pieces.length > 0) this.add(...pieces);
+  }
+
+  public dispose(): void {
+    this.children.forEach((child) => {
+      if (child instanceof Mesh) {
+        child.geometry.dispose();
+        child.material.dispose();
+      }
+    });
   }
 }
