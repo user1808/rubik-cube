@@ -19,6 +19,7 @@ import { useEventBus, type Fn } from '@vueuse/core';
 import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import type { IRubikCubeProperties } from '@/rubik-cube-app/rubik-cube/interfaces/structure/cube/rubik-cube';
 import type { IRubikCubeColorRaycaster } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-color-raycaster';
+import { useFacesLogicalValuesStore } from '@/stores/use-faces-logical-values-store';
 
 export class RubikCube<
     TCubeCommonName extends TCubeCommonNames,
@@ -39,6 +40,7 @@ export class RubikCube<
       TCubeShellFilenames
     >
 {
+  private readonly facesLogicalValuesStore = useFacesLogicalValuesStore();
   private readonly rotateCubeEventBus = useEventBus(useRotateCubeEventBus);
   private rotateCubeEventBusUnsubscribe: Fn;
   private _rotationRaycaster: Nullable<IRubikCubeRotationRaycaster> = null;
@@ -83,6 +85,11 @@ export class RubikCube<
     this.rotateCubeEventBusUnsubscribe = this.rotateCubeEventBus.on(({ face, type }) => {
       this.rotate(face as TCubeRotationGroups, type as TCubeRotationTypes);
     });
+
+    this.facesLogicalValuesStore.setFacesLogicalValues(
+      this.properties.commonName,
+      this.faces.logical,
+    );
   }
 
   public setRotationRaycaster(raycaster: IRubikCubeRotationRaycaster) {
@@ -134,6 +141,10 @@ export class RubikCube<
         return faces;
       },
       {} as TCubeFaces<TCubeFacesNames>['logical'],
+    );
+    this.facesLogicalValuesStore.setFacesLogicalValues(
+      this.properties.commonName,
+      this.faces.logical,
     );
   }
 }
