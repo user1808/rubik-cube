@@ -1,1 +1,1 @@
-export type THexahedron3x3CommonName = '3x3 Cube';
+export type THexahedron3x3CommonName = '3x3x3 Cube';

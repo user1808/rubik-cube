@@ -39,10 +39,6 @@
         class="absolute inset-y-0 left-0 z-50 h-screen w-screen max-w-sm sm:max-w-md md:max-w-lg"
         v-if="selectedSection && open && !minimized"
         static
-        @mousemove.stop
-        @mousedown.stop
-        @touchmove.stop
-        @touchstart.stop
       >
         <div class="flex h-full flex-col">
           <div class="flex items-center justify-between gap-x-2 bg-gray-800 p-4 pr-0 text-white">
@@ -75,8 +71,8 @@
               </div>
             </slot>
           </div>
-          <div class="flex grow">
-            <div class="grow bg-gray-800">
+          <div class="flex min-h-0 grow">
+            <div class="min-h-0 grow overflow-y-auto bg-gray-800 pb-6">
               <slot name="content" />
             </div>
             <BaseSettingsSections v-model:selected-section="selectedSection" :sections="sections" />

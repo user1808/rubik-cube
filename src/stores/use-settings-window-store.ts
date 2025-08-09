@@ -10,6 +10,8 @@ const { width: browserWidth, height: browserHeight } = useWindowSize();
 const useSettingsWindowPrivateState = defineStore(
   'settings-window-private',
   () => {
+    const POSITION_STORAGE_KEY = 'settings-window-position';
+
     const width = ref<number>(Math.floor((9 / 20) * browserWidth.value));
     const height = ref<number>(Math.floor((4 / 5) * browserHeight.value));
 
@@ -21,6 +23,7 @@ const useSettingsWindowPrivateState = defineStore(
     });
 
     return {
+      POSITION_STORAGE_KEY,
       width,
       height,
       bordersVisibility,
@@ -63,6 +66,7 @@ export const useSettingsWindowStore = defineStore('settings-window', () => {
   );
 
   return {
+    POSITION_STORAGE_KEY: privateState.POSITION_STORAGE_KEY,
     getWindowSize,
     setWindowSize,
     getBordersVisibility,

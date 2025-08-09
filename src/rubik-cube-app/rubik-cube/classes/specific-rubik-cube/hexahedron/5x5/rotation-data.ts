@@ -20,8 +20,8 @@ export class RubikHexahedron5x5RotationData extends AbstractRubikHexahedronRotat
     LeftSlice: new Vector3(-1, 0, 0),
     UpSlice: new Vector3(0, 1, 0),
     DownSlice: new Vector3(0, -1, 0),
-    SliceX: new Vector3(1, 0, 0),
-    SliceY: new Vector3(0, 1, 0),
+    SliceX: new Vector3(-1, 0, 0),
+    SliceY: new Vector3(0, -1, 0),
     SliceZ: new Vector3(0, 0, 1),
   };
   public override readonly rotationPiecesChangesPatterns: Record<
@@ -86,34 +86,26 @@ export class RubikHexahedron5x5RotationData extends AbstractRubikHexahedronRotat
       SliceY: [4, 6, 8, 10, 15, 3, 14, 2, 13, 1, 12, 0, 5, 7, 9, 11],
       SliceZ: [4, 6, 8, 10, 15, 3, 14, 2, 13, 1, 12, 0, 5, 7, 9, 11],
     },
-    Double: {
-      Front: [
-        24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-      ],
-      Back: [
-        24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-      ],
-      Right: [
-        24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-      ],
-      Left: [
-        24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-      ],
-      Up: [
-        24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-      ],
-      Down: [
-        24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-      ],
-      FrontSlice: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      BackSlice: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      RightSlice: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      LeftSlice: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      UpSlice: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      DownSlice: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      SliceX: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      SliceY: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      SliceZ: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-    },
+  };
+  public override readonly rotationGroupsNotation: Record<THexahedron5x5RotationGroups, string> = {
+    Front: 'F',
+    Back: 'B',
+    Right: 'R',
+    Left: 'L',
+    Up: 'U',
+    Down: 'D',
+    FrontSlice: 'f',
+    BackSlice: 'b',
+    RightSlice: 'r',
+    LeftSlice: 'l',
+    UpSlice: 'u',
+    DownSlice: 'd',
+    SliceX: 'M',
+    SliceY: 'E',
+    SliceZ: 'S',
+  };
+  public override readonly rotationTypesNotation: Record<THexahedronRotationTypes, string> = {
+    Clockwise: '',
+    CounterClockwise: "'",
   };
 }

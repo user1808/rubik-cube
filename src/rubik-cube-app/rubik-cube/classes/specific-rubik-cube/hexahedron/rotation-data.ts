@@ -1,6 +1,5 @@
 import type { Vector3 } from 'three';
 import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
-import type { TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import { Radians } from '@/utils/radians';
 
@@ -12,22 +11,18 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
     THexahedronRotationTypes,
     Record<THexahedronRotationGroups, Array<number>>
   >;
+  public abstract readonly rotationGroupsNotation: Record<THexahedronRotationGroups, string>;
+  public abstract readonly rotationTypesNotation: Record<THexahedronRotationTypes, string>;
 
-  public readonly rotationTypesData: Record<THexahedronRotationTypes, TRotationTypeData> = {
-    Clockwise: {
-      angle: -Radians['90deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 1,
-    },
-    CounterClockwise: {
-      angle: Radians['90deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 1,
-    },
-    Double: {
-      angle: Radians['180deg'],
-      durationInSeconds: 0.75,
-      stepsCount: 2,
-    },
+  public readonly rotationAngles: Record<THexahedronRotationTypes, number> = {
+    Clockwise: -Radians['90deg'],
+    CounterClockwise: Radians['90deg'],
+  };
+  public readonly contraryRotationTypes: Record<
+    THexahedronRotationTypes,
+    THexahedronRotationTypes
+  > = {
+    Clockwise: 'CounterClockwise',
+    CounterClockwise: 'Clockwise',
   };
 }

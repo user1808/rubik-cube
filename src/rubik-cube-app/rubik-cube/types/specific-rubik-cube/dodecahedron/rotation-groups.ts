@@ -1,3 +1,5 @@
-import type { TDodecahedronFaces } from './cube-faces';
+import { DodecahedronFaces } from './cube-faces';
 
-export type TDodecahedronRotationGroups = TDodecahedronFaces;
+export const DodecahedronRotationGroups = [...DodecahedronFaces] as const;
+
+export type TDodecahedronRotationGroups = (typeof DodecahedronRotationGroups)[number];

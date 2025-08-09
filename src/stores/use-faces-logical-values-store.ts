@@ -8,10 +8,10 @@ const useFacesLogicalValuesPrivateState = defineStore('faces-logical-values-priv
   const facesLogicalValues = ref<
     Record<TCubeCommonNames, Nullable<Record<string, Array<Nullable<TCubeFaceColor>>>>>
   >({
-    '2x2 Cube': null,
-    '3x3 Cube': null,
-    '4x4 Cube': null,
-    '5x5 Cube': null,
+    '2x2x2 Cube': null,
+    '3x3x3 Cube': null,
+    '4x4x4 Cube': null,
+    '5x5x5 Cube': null,
     Megaminx: null,
     Pyraminx: null,
   });
@@ -48,14 +48,17 @@ export const useFacesLogicalValuesStore = defineStore('faces-logical-values', ()
 
     if (!currentFacesLogicalValues) return false;
 
+    const uniqueFaceValues = new Set<TCubeFaceColor>();
     for (const faceValues of Object.values(currentFacesLogicalValues)) {
       if (!faceValues || faceValues.length === 0) return false;
 
-      if (faceValues.some((value) => value === null)) return false;
-
       const firstValue = faceValues[0];
+      if (firstValue === null) return false;
       if (!faceValues.every((value) => value === firstValue)) return false;
+      uniqueFaceValues.add(firstValue);
     }
+
+    if (uniqueFaceValues.size !== Object.keys(currentFacesLogicalValues).length) return false;
 
     return true;
   });

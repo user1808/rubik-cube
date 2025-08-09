@@ -9,6 +9,7 @@ import type {
   TCubeFaces,
   TCubePieces,
   TRotationGroups,
+  TRotationSource,
 } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
   IRubikCubeRotationImplementation,
@@ -20,6 +21,7 @@ import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-co
 import type { IRubikCubeProperties } from '@/rubik-cube-app/rubik-cube/interfaces/structure/cube/rubik-cube';
 import type { IRubikCubeColorRaycaster } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-color-raycaster';
 import { useFacesLogicalValuesStore } from '@/stores/use-faces-logical-values-store';
+import { useRotationFlagsStore } from '@/stores/use-rotation-flags-store';
 
 export class RubikCube<
     TCubeCommonName extends TCubeCommonNames,
@@ -41,10 +43,10 @@ export class RubikCube<
     >
 {
   private readonly facesLogicalValuesStore = useFacesLogicalValuesStore();
+  private readonly rotationFlagsStore = useRotationFlagsStore();
   private readonly rotateCubeEventBus = useEventBus(useRotateCubeEventBus);
-  private rotateCubeEventBusUnsubscribe: Fn;
+  private rotateCubeEventBusUnsubscribe: Nullable<Fn> = null;
   private _rotationRaycaster: Nullable<IRubikCubeRotationRaycaster> = null;
-  private _rotationPending = false;
 
   private _colorRaycaster: Nullable<IRubikCubeColorRaycaster> = null;
 
@@ -55,6 +57,7 @@ export class RubikCube<
       TCubeCommonName,
       TCubeFacesNames,
       TCubeEdgeFacesNames,
+      TCubeRotationGroups,
       TCubeRotationTypes
     >,
     public readonly scene: Scene,
@@ -82,10 +85,6 @@ export class RubikCube<
     this.add(shell);
     this.add(facesTexts);
 
-    this.rotateCubeEventBusUnsubscribe = this.rotateCubeEventBus.on(({ face, type }) => {
-      this.rotate(face as TCubeRotationGroups, type as TCubeRotationTypes);
-    });
-
     this.facesLogicalValuesStore.setFacesLogicalValues(
       this.properties.commonName,
       this.faces.logical,
@@ -103,17 +102,29 @@ export class RubikCube<
   public async rotate(
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
+    source: TRotationSource,
   ): Promise<void> {
-    if (this._rotationPending || !this.isOnScene) return;
-    this._rotationPending = true;
+    if (this.rotationFlagsStore.getIsRotationPending || !this.isOnScene) return;
+    if (source !== 'history' && this.rotationFlagsStore.getIsHistoryRotationPending) return;
+    this.rotationFlagsStore.setIsRotationPending(true);
 
-    await this.rotationImplementation.rotateRubikCubeGroup(this, rotationGroup, rotationType);
+    await this.rotationImplementation.rotateRubikCubeGroup(
+      this,
+      rotationGroup,
+      rotationType,
+      source,
+    );
     this.updateLogicalFaces();
 
-    this._rotationPending = false;
+    this.rotationFlagsStore.setIsRotationPending(false);
   }
 
   public addToScene(): void {
+    if (!this.rotateCubeEventBusUnsubscribe) {
+      this.rotateCubeEventBusUnsubscribe = this.rotateCubeEventBus.on(({ face, type, source }) => {
+        this.rotate(face as TCubeRotationGroups, type as TCubeRotationTypes, source);
+      });
+    }
     this.facesTexts.prepare();
     this.scene.add(this);
     this._rotationRaycaster?.start();
@@ -129,7 +140,10 @@ export class RubikCube<
     this._rotationRaycaster?.stop();
     this._colorRaycaster?.stop();
     this.isOnScene = false;
-    this.rotateCubeEventBusUnsubscribe();
+    if (this.rotateCubeEventBusUnsubscribe) {
+      this.rotateCubeEventBusUnsubscribe();
+      this.rotateCubeEventBusUnsubscribe = null;
+    }
   }
 
   public updateLogicalFaces(): void {

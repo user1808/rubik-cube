@@ -1,5 +1,10 @@
-import type { THexahedronFaces } from '../cube-faces';
+import { HexahedronFaces } from '../cube-faces';
 
-type THexahedron3x3SliceGroups = 'SliceX' | 'SliceY' | 'SliceZ';
+const THexahedron3x3SliceGroups = ['SliceX', 'SliceY', 'SliceZ'] as const;
 
-export type THexahedron3x3RotationGroups = THexahedronFaces | THexahedron3x3SliceGroups;
+export const Hexahedron3x3RotationGroups = [
+  ...HexahedronFaces,
+  ...THexahedron3x3SliceGroups,
+] as const;
+
+export type THexahedron3x3RotationGroups = (typeof Hexahedron3x3RotationGroups)[number];

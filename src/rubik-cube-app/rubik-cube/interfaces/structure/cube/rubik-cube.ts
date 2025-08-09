@@ -6,6 +6,7 @@ import type {
   TCubeFaces,
   TCubePieces,
   TRotationGroups,
+  TRotationSource,
 } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { IRubikCubeFacesTexts } from '../helpers/rubik-cube-faces-texts';
 import type { IRubikCubeMaterials } from '../../data';
@@ -16,11 +17,12 @@ export interface IRubikCubeProperties<
   TCubeCommonName extends TCubeCommonNames = TCubeCommonNames,
   TCubeFacesNames extends string = string,
   TCubeEdgeFacesNames extends string = string,
+  TCubeRotationGroups extends string = string,
   TCubeRotationTypes extends string = string,
 > {
   readonly commonName: TCubeCommonName;
   readonly cameraMinDistance: number;
-  readonly facesNames: Readonly<Array<TCubeFacesNames>>;
+  readonly rotationGroups: Readonly<Array<TCubeRotationGroups>>;
   readonly rotationTypesNames: Readonly<Array<TCubeRotationTypes>>;
   readonly piecesMaterials: IRubikCubeMaterials<TCubeFacesNames, TCubeEdgeFacesNames>;
 }
@@ -37,6 +39,7 @@ export interface IRubikCube<
     TCubeCommonName,
     TCubeFacesNames,
     TCubeEdgeFacesNames,
+    TCubeRotationGroups,
     TCubeRotationTypes
   >;
 
@@ -53,7 +56,11 @@ export interface IRubikCube<
 
   setRotationRaycaster(raycaster: IRubikCubeRotationRaycaster): void;
   setColorRaycaster(raycaster: IRubikCubeColorRaycaster): void;
-  rotate(rotationGroup: TCubeRotationGroups, rotationType: TCubeRotationTypes): Promise<void>;
+  rotate(
+    rotationGroup: TCubeRotationGroups,
+    rotationType: TCubeRotationTypes,
+    source: TRotationSource,
+  ): Promise<void>;
 
   addToScene(): void;
   removeFromScene(): void;

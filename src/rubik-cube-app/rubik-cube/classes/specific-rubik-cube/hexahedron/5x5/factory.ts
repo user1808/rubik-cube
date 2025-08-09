@@ -10,6 +10,7 @@ import type {
   IRubikCubeRotationGroupsData,
   IRubikCubeShellData,
 } from '@/rubik-cube-app/rubik-cube/interfaces/data';
+import { Hexahedron5x5RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/5x5/rotation-groups';
 import { RubikHexahedron5x5RotationData } from './rotation-data';
 import { RubikHexahedron5x5PiecesData } from './pieces-data';
 import { AbstractRubikHexahedronFactory } from '../factory';
@@ -25,8 +26,10 @@ export class RubikHexahedron5x5Factory extends AbstractRubikHexahedronFactory<
   THexahedronShellFilenames,
   THexahedron5x5FacesTextsFilename
 > {
-  public override readonly commonName: THexahedron5x5CommonName = '5x5 Cube';
+  public override readonly commonName: THexahedron5x5CommonName = '5x5x5 Cube';
   public override readonly cameraMinDistance: number = 2.5 * Math.sqrt(3);
+  public override readonly rotationGroups: Readonly<Array<THexahedron5x5RotationGroups>> =
+    Hexahedron5x5RotationGroups;
   public override readonly facesTextsFilename: THexahedron5x5FacesTextsFilename =
     'RubikHexahedron5x5FacesTexts.glb';
 

@@ -84,7 +84,7 @@ export abstract class AbstractRubikCubeFactory<
 
   public abstract readonly commonName: TCubeCommonName;
   public abstract readonly cameraMinDistance: number;
-  public abstract readonly facesNames: Readonly<Array<TCubeFacesNames>>;
+  public abstract readonly rotationGroups: Readonly<Array<TCubeRotationGroups>>;
   public abstract readonly rotationTypesNames: Readonly<Array<TCubeRotationTypes>>;
   public abstract readonly facesTextsFilename: TCubeFacesTextsFilename;
 
@@ -201,9 +201,10 @@ export abstract class AbstractRubikCubeFactory<
 
   public createRubikCubeColorRaycaster(
     mouseTouchTracker: MouseTouchTracker,
+    orbitControls: CustomOrbitControls,
   ): IRubikCubeColorRaycaster {
     if (!this.cube) throw new Error('Cube is not created yet');
-    return new RubikCubeColorRaycaster(this.cube, mouseTouchTracker);
+    return new RubikCubeColorRaycaster(this.cube, mouseTouchTracker, orbitControls);
   }
 
   public createRubikCubeBuilder(
@@ -230,7 +231,7 @@ export abstract class AbstractRubikCubeFactory<
       {
         commonName: this.commonName,
         cameraMinDistance: this.cameraMinDistance,
-        facesNames: this.facesNames,
+        rotationGroups: this.rotationGroups,
         rotationTypesNames: this.rotationTypesNames,
       },
       scene,
@@ -267,7 +268,9 @@ export abstract class AbstractRubikCubeFactory<
     this.cube.setRotationRaycaster(
       this.createRubikCubeRotationRaycaster(mouseTouchTracker, orbitControls),
     );
-    this.cube.setColorRaycaster(this.createRubikCubeColorRaycaster(mouseTouchTracker));
+    this.cube.setColorRaycaster(
+      this.createRubikCubeColorRaycaster(mouseTouchTracker, orbitControls),
+    );
     return this.cube;
   }
 }
