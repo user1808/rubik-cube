@@ -6,13 +6,9 @@
       class="fixed z-40 flex max-h-[85%] max-w-[75%] select-none resize overflow-hidden rounded-md bg-black/75 outline outline-1 outline-gray-700"
       :prevent-default="true"
       :handle="handle"
-      :storage-key="POSITION_STORAGE_KEY"
+      :storage-key="settingsWindowStore.POSITION_STORAGE_KEY"
       storage-type="local"
       @end="onDragEnd"
-      @mousemove.stop
-      @mousedown.stop
-      @touchmove.stop
-      @touchstart.stop
       v-resize-observer="onResize"
       v-element-visibility="onWindowVisibility"
     >
@@ -111,7 +107,6 @@ const HANDLE_HEIGHT = 72;
 const SECTION_HEIGHT = 72;
 const MARGIN_HEIGHT = 54;
 const MIN_HEIGHT = HANDLE_HEIGHT + props.sections.length * SECTION_HEIGHT + MARGIN_HEIGHT;
-const POSITION_STORAGE_KEY = 'settings-window-position';
 
 const { applyStyles } = useStyleHelpers();
 
@@ -121,7 +116,7 @@ const { setWindowSize, setBorderVisibility } = settingsWindowStore;
 
 const { width: browserWidth, height: browserHeight } = useWindowSize();
 const windowPosition = useLocalStorage(
-  POSITION_STORAGE_KEY,
+  settingsWindowStore.POSITION_STORAGE_KEY,
   { x: 10, y: 10 },
   { initOnMounted: true },
 );

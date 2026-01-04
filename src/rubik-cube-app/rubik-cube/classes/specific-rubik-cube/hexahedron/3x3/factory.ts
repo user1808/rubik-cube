@@ -1,6 +1,9 @@
 import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
 import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
-import type { THexahedron3x3RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/3x3/rotation-groups';
+import {
+  Hexahedron3x3RotationGroups,
+  type THexahedron3x3RotationGroups,
+} from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/3x3/rotation-groups';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
 import type {
@@ -25,8 +28,10 @@ export class RubikHexahedron3x3Factory extends AbstractRubikHexahedronFactory<
   THexahedronShellFilenames,
   THexahedron3x3FacesTextsFilename
 > {
-  public override readonly commonName: THexahedron3x3CommonName = '3x3 Cube';
+  public override readonly commonName: THexahedron3x3CommonName = '3x3x3 Cube';
   public override readonly cameraMinDistance: number = 1.5 * Math.sqrt(3);
+  public override readonly rotationGroups: Readonly<Array<THexahedron3x3RotationGroups>> =
+    Hexahedron3x3RotationGroups;
   public override readonly facesTextsFilename: THexahedron3x3FacesTextsFilename =
     'RubikHexahedron3x3FacesTexts.glb';
 

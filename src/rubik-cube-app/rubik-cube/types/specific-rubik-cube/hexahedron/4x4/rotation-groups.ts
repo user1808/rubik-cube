@@ -1,5 +1,17 @@
-import type { THexahedronFaces } from '../cube-faces';
+import { HexahedronFaces } from '../cube-faces';
 
-type THexahedron4x4SliceGroups = AddSuffix<THexahedronFaces, 'Slice'>;
+const Hexahedron4x4SliceGroups = [
+  'FrontSlice',
+  'BackSlice',
+  'RightSlice',
+  'LeftSlice',
+  'UpSlice',
+  'DownSlice',
+] as const;
 
-export type THexahedron4x4RotationGroups = THexahedronFaces | THexahedron4x4SliceGroups;
+export const Hexahedron4x4RotationGroups = [
+  ...HexahedronFaces,
+  ...Hexahedron4x4SliceGroups,
+] as const;
+
+export type THexahedron4x4RotationGroups = (typeof Hexahedron4x4RotationGroups)[number];

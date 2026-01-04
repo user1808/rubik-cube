@@ -18,9 +18,13 @@ import type { BaseSettingsSection } from './base/settings/base-settings-section.
 import BaseIcon2x2Cube from './base/icon/base-icon-2x2-cube.vue';
 import SettingsSelectCubeType from './settings/select-cube-type/settings-select-cube-type.vue';
 import SettingsCheckboxShowFacesHelper from './settings/checkbox-show-faces-helper/checkbox-show-faces-helper.vue';
+import SettingsCheckboxHideSectionsTitles from './settings/checkbox-hide-sections-titles/checkbox-hide-sections-titles.vue';
 import SettingsToggleFullscreen from './settings/toggle-fullscreen/settings-toggle-fullscreen.vue';
 import SettingsSelectInteractionMode from './settings/select-interaction-mode/settings-select-interaction-mode.vue';
 import SettingsSetCubeColors from './settings/set-cube-colors/settings-set-cube-colors.vue';
+import BaseIconMoves from './base/icon/base-icon-moves.vue';
+import SettingsMovesHistory from './settings/moves-history/settings-moves-history.vue';
+import SettingsSetRotationTime from './settings/set-rotation-time/settings-set-rotation-time.vue';
 
 const mobileSection: BaseSettingsSection = {
   title: 'Open Menu',
@@ -35,6 +39,7 @@ const settingsSections: Array<BaseSettingsSection> = [
     iconBind: { class: 'size-14 min-h-14 min-w-14' },
     content: [
       markRaw(SettingsSelectCubeType),
+      markRaw(SettingsSetRotationTime),
       markRaw(SettingsCheckboxShowFacesHelper),
       markRaw(SettingsSetCubeColors),
     ],
@@ -43,7 +48,17 @@ const settingsSections: Array<BaseSettingsSection> = [
     title: 'General Settings',
     icon: markRaw(BasePrimeIcon),
     iconBind: { icon: 'pi-cog', class: 'p-[6px]', size: 44 },
-    content: [markRaw(SettingsToggleFullscreen), markRaw(SettingsSelectInteractionMode)],
+    content: [
+      markRaw(SettingsCheckboxHideSectionsTitles),
+      markRaw(SettingsToggleFullscreen),
+      markRaw(SettingsSelectInteractionMode),
+    ],
+  },
+  {
+    title: 'Moves',
+    icon: markRaw(BaseIconMoves),
+    iconBind: { class: 'size-14 min-h-14 min-w-14' },
+    content: [markRaw(SettingsMovesHistory)],
   },
 ];
 

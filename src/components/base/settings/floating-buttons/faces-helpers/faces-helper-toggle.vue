@@ -13,13 +13,6 @@
         <span class="w-48">
           {{ getIsFacesHelperVisible ? 'Faces Helper On' : 'Faces Helper Off' }}
         </span>
-        <BaseKeyboardInputElement
-          class="absolute -right-1 -top-1 z-10 opacity-0 group-hover:opacity-100"
-          :class="{
-            '!text-black': getIsFacesHelperVisible,
-          }"
-          key-value="Space"
-        />
       </div>
     </template>
   </ToggleButton>
@@ -29,20 +22,7 @@
 import ToggleButton from 'primevue/togglebutton';
 import { useFacesHelperStore } from '@/stores/use-faces-helper-store';
 import { storeToRefs } from 'pinia';
-import BaseKeyboardInputElement from '@/components/base/base-keyboard-input-element.vue';
-import { onKeyDown, onKeyUp } from '@vueuse/core';
-import { ref } from 'vue';
 
 const facesHelperStore = useFacesHelperStore();
 const { getIsFacesHelperVisible } = storeToRefs(facesHelperStore);
-
-const isSpacePressed = ref<boolean>(false);
-onKeyDown('Space', () => {
-  if (isSpacePressed.value) return;
-  facesHelperStore.setIsFacesHelperVisible(!getIsFacesHelperVisible.value);
-  isSpacePressed.value = true;
-});
-onKeyUp('Space', () => {
-  isSpacePressed.value = false;
-});
 </script>

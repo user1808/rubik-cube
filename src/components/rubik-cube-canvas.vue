@@ -25,7 +25,10 @@ import type {
 import { RubikCubeApp } from '@/rubik-cube-app/rubik-cube-app';
 import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
 import { storeToRefs } from 'pinia';
-import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
+import {
+  CubeCommonNames,
+  type TCubeCommonNames,
+} from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import { ProgressSpinner } from 'primevue';
 import { useEventBus } from '@vueuse/core';
 import { useSelectCubeEventBus } from '@/event-buses/use-select-cube-event-bus';
@@ -40,19 +43,19 @@ type RubikFactories = {
 };
 
 const rubikFactories: RubikFactories = {
-  '2x2 Cube': () =>
+  '2x2x2 Cube': () =>
     import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/2x2/factory').then(
       (m) => new m.RubikHexahedron2x2Factory(),
     ),
-  '3x3 Cube': () =>
+  '3x3x3 Cube': () =>
     import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/3x3/factory').then(
       (m) => new m.RubikHexahedron3x3Factory(),
     ),
-  '4x4 Cube': () =>
+  '4x4x4 Cube': () =>
     import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/4x4/factory').then(
       (m) => new m.RubikHexahedron4x4Factory(),
     ),
-  '5x5 Cube': () =>
+  '5x5x5 Cube': () =>
     import('@/rubik-cube-app/rubik-cube/classes/specific-rubik-cube/hexahedron/5x5/factory').then(
       (m) => new m.RubikHexahedron5x5Factory(),
     ),
@@ -87,10 +90,12 @@ onMounted(async () => {
   }
   const app = new RubikCubeApp(canvas.value);
   rubikCubeApp.value = app;
-  const initialCubeName = getCurrentCubeProperties.value?.commonName ?? '3x3 Cube';
+  const initialCubeName = getCurrentCubeProperties.value?.commonName ?? '3x3x3 Cube';
   isCubeLoading.value = true;
 
-  const factory = await getFactory(initialCubeName);
+  const factory = await getFactory(
+    CubeCommonNames.includes(initialCubeName) ? initialCubeName : '3x3x3 Cube',
+  );
   await rubikCubeApp.value.start(factory);
 
   isCubeLoading.value = false;

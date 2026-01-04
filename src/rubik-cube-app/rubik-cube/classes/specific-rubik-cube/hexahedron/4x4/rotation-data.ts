@@ -53,19 +53,23 @@ export class RubikHexahedron4x4RotationData extends AbstractRubikHexahedronRotat
       UpSlice: [3, 5, 7, 11, 2, 10, 1, 9, 0, 4, 6, 8],
       DownSlice: [3, 5, 7, 11, 2, 10, 1, 9, 0, 4, 6, 8],
     },
-    Double: {
-      Front: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Back: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Right: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Left: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Up: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Down: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      FrontSlice: [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      BackSlice: [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      RightSlice: [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      LeftSlice: [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      UpSlice: [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-      DownSlice: [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-    },
+  };
+  public override readonly rotationGroupsNotation: Record<THexahedron4x4RotationGroups, string> = {
+    Front: 'F',
+    Back: 'B',
+    Right: 'R',
+    Left: 'L',
+    Up: 'U',
+    Down: 'D',
+    FrontSlice: 'f',
+    BackSlice: 'b',
+    RightSlice: 'r',
+    LeftSlice: 'l',
+    UpSlice: 'u',
+    DownSlice: 'd',
+  };
+  public override readonly rotationTypesNotation: Record<THexahedronRotationTypes, string> = {
+    Clockwise: '',
+    CounterClockwise: "'",
   };
 }

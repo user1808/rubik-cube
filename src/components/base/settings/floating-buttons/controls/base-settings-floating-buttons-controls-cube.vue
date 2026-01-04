@@ -13,19 +13,19 @@
         class="flex w-full flex-col gap-y-4 border-gray-700 px-4 py-3 sm:w-60 sm:border-r sm:py-2"
       >
         <Select :options="faces" placeholder="Select face" v-model="face">
-          <template #option="{ option }">
-            {{ formatCamelCase(option) }}
+          <template #option="{ option }: { option: string }">
+            <span class="capitalize">{{ formatCamelCase(option) }}</span>
           </template>
-          <template #value="{ value, placeholder }">
-            {{ value ? formatCamelCase(value) : placeholder }}
+          <template #value="{ value, placeholder }: { value: string; placeholder: string }">
+            <span class="capitalize">{{ value ? formatCamelCase(value) : placeholder }}</span>
           </template>
         </Select>
         <Select :options="rotationTypes" placeholder="Select type" v-model="type">
-          <template #option="{ option }">
-            {{ formatCamelCase(option) }}
+          <template #option="{ option }: { option: string }">
+            <span class="capitalize">{{ formatCamelCase(option) }}</span>
           </template>
-          <template #value="{ value, placeholder }">
-            {{ value ? formatCamelCase(value) : placeholder }}
+          <template #value="{ value, placeholder }: { value: string; placeholder: string }">
+            <span class="capitalize">{{ value ? formatCamelCase(value) : placeholder }}</span>
           </template>
         </Select>
       </div>
@@ -34,7 +34,9 @@
           class="group w-full text-xl sm:h-16 sm:w-28"
           label="Rotate"
           @click="handleRotateCube"
-          :disabled="!isFaceAllowed || !isTypeAllowed"
+          :disabled="
+            !isFaceAllowed || !isTypeAllowed || getIsRotationPending || getIsHistoryRotationPending
+          "
         />
       </div>
     </div>
@@ -51,12 +53,16 @@ import BaseIcon3x3Cube from '@/components/base/icon/base-icon-3x3-cube.vue';
 import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
 import { useStringHelpers } from '@/composables/useStringHelpers';
 import { useRotateCubeEventBus } from '@/event-buses/use-rotate-cube-event-bus';
+import { useRotationFlagsStore } from '@/stores/use-rotation-flags-store';
 
 const selectedCubeStore = useSelectedCubeStore();
 const { getCurrentCubeProperties } = storeToRefs(selectedCubeStore);
 
+const rotationFlagsStore = useRotationFlagsStore();
+const { getIsRotationPending, getIsHistoryRotationPending } = storeToRefs(rotationFlagsStore);
+
 const faces = computed<Array<string>>(() => {
-  return [...(getCurrentCubeProperties.value?.facesNames ?? [])];
+  return [...(getCurrentCubeProperties.value?.rotationGroups ?? [])];
 });
 const rotationTypes = computed<Array<string>>(() => {
   return [...(getCurrentCubeProperties.value?.rotationTypesNames ?? [])];
@@ -79,6 +85,6 @@ const isTypeAllowed = computed<boolean>(() => {
 
 const handleRotateCube = () => {
   if (!isFaceAllowed.value || !isTypeAllowed.value || !face.value || !type.value) return;
-  rotateCubeEventBus.emit({ face: face.value, type: type.value });
+  rotateCubeEventBus.emit({ face: face.value, type: type.value, source: 'interaction' });
 };
 </script>

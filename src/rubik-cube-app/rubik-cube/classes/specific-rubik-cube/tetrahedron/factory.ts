@@ -23,8 +23,8 @@ import type {
   TTetrahedronCommonName,
   TTetrahedronFacesTextsFilename,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron';
-import { TetrahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/cube-faces';
 import { TetrahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/rotation-types';
+import { TetrahedronRotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/tetrahedron/rotation-groups';
 
 export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
   TTetrahedronPiecesFilenamesWithFaces,
@@ -38,7 +38,8 @@ export class RubikTetrahedronFactory extends AbstractRubikCubeFactory<
 > {
   public override readonly commonName: TTetrahedronCommonName = 'Pyraminx';
   public override readonly cameraMinDistance: number = 1.2 * Math.sqrt(6);
-  public override readonly facesNames: Readonly<Array<TTetrahedronFaces>> = TetrahedronFaces;
+  public override readonly rotationGroups: Readonly<Array<TTetrahedronRotationGroups>> =
+    TetrahedronRotationGroups;
   public override readonly rotationTypesNames: Readonly<Array<TTetrahedronRotationTypes>> =
     TetrahedronRotationTypes;
   public override readonly facesTextsFilename: TTetrahedronFacesTextsFilename =

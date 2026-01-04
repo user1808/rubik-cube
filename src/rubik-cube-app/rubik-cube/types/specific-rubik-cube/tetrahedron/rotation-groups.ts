@@ -1,9 +1,17 @@
-import type { TTetrahedronFaces } from '.';
+import { TetrahedronFaces } from './cube-faces';
 
-type TTetrahedronCorners = 'RightCorner' | 'LeftCorner' | 'BackCorner' | 'UpCorner';
-type TTetrahedronMidLayers = 'RightMidLayer' | 'LeftMidLayer' | 'BackMidLayer' | 'UpMidLayer';
+const TetrahedronCorners = ['RightCorner', 'LeftCorner', 'BackCorner', 'UpCorner'] as const;
+const TetrahedronMidLayers = [
+  'RightMidLayer',
+  'LeftMidLayer',
+  'BackMidLayer',
+  'UpMidLayer',
+] as const;
 
-export type TTetrahedronRotationGroups =
-  | TTetrahedronFaces
-  | TTetrahedronCorners
-  | TTetrahedronMidLayers;
+export const TetrahedronRotationGroups = [
+  ...TetrahedronFaces,
+  ...TetrahedronCorners,
+  ...TetrahedronMidLayers,
+] as const;
+
+export type TTetrahedronRotationGroups = (typeof TetrahedronRotationGroups)[number];

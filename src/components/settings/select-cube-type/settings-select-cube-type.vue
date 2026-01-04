@@ -21,7 +21,7 @@
       circular
     >
       <template #item="{ data }: { data: TCubeCommonNames }">
-        <div class="flex h-full flex-col items-center justify-center py-2 xs:py-4">
+        <div class="flex h-full flex-col items-center justify-center py-2 text-center xs:py-4">
           <component :is="cubesIcons[data]" class="size-16 xs:size-20 sm:size-28" />
           <span class="select-none text-xl text-white xs:text-2xl">{{ data }}</span>
         </div>
@@ -31,6 +31,7 @@
       <span class="h-[46px]" v-if="temporaryCubeIndex === undefined" />
       <Button
         v-else-if="selectedCubeIndex !== temporaryCubeIndex"
+        :disabled="getIsRotationPending || getIsHistoryRotationPending"
         label="Select"
         @click="selectCube(temporaryCubeIndex)"
       />
@@ -63,20 +64,24 @@ import BaseIconMegaminxCube from '@/components/base/icon/base-icon-megaminx-cube
 import BaseIconPyraminxCube from '@/components/base/icon/base-icon-pyraminx-cube.vue';
 import { useEventBus } from '@vueuse/core';
 import { useSelectCubeEventBus } from '@/event-buses/use-select-cube-event-bus';
+import { useRotationFlagsStore } from '@/stores/use-rotation-flags-store';
 
 const selectedCubeStore = useSelectedCubeStore();
 const { getCurrentCubeProperties } = storeToRefs(selectedCubeStore);
 
+const rotationFlagsStore = useRotationFlagsStore();
+const { getIsRotationPending, getIsHistoryRotationPending } = storeToRefs(rotationFlagsStore);
+
 const temporaryCubeIndex = ref<number>();
 const selectedCubeIndex = computed<number>(() => {
-  return CubeCommonNames.indexOf(getCurrentCubeProperties.value?.commonName ?? '3x3 Cube');
+  return CubeCommonNames.indexOf(getCurrentCubeProperties.value?.commonName ?? '3x3x3 Cube');
 });
 
 const cubesIcons: Record<TCubeCommonNames, Component> = {
-  '2x2 Cube': BaseIcon2x2Cube,
-  '3x3 Cube': BaseIcon3x3Cube,
-  '4x4 Cube': BaseIcon4x4Cube,
-  '5x5 Cube': BaseIcon5x5Cube,
+  '2x2x2 Cube': BaseIcon2x2Cube,
+  '3x3x3 Cube': BaseIcon3x3Cube,
+  '4x4x4 Cube': BaseIcon4x4Cube,
+  '5x5x5 Cube': BaseIcon5x5Cube,
   Megaminx: BaseIconMegaminxCube,
   Pyraminx: BaseIconPyraminxCube,
 };

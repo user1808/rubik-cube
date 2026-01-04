@@ -1,13 +1,16 @@
-import { toRaw } from 'vue';
 import type { DefaultRubikCubeFactory } from '@/rubik-cube-app/rubik-cube/interfaces/rubik-cube-factory';
 import type { IDebugModeSubscriber } from '@/rubik-cube-app/rubik-cube/interfaces/debug';
 import type { IRubikCube } from '@/rubik-cube-app/rubik-cube/interfaces/structure';
 import { CustomDebugGUI } from '@/rubik-cube-app/common/custom';
+import { useEventBus } from '@vueuse/core';
+import { useRotateCubeEventBus } from '@/event-buses/use-rotate-cube-event-bus';
 
 export class DebugCubeUI implements IDebugModeSubscriber {
   private debugGUI: Nullable<CustomDebugGUI> = null;
   private cube: Nullable<IRubikCube> = null;
   private cubeFactory: Nullable<DefaultRubikCubeFactory> = null;
+
+  private readonly rotateCubeEventBus = useEventBus(useRotateCubeEventBus);
 
   private isDebugMode: boolean = false;
 
@@ -31,7 +34,7 @@ export class DebugCubeUI implements IDebugModeSubscriber {
 
     const cubeRotationGroups = Object.keys(this.cube.rotationGroups);
     const cubeRotationTypes = Object.keys(
-      this.cubeFactory.createRubikCubeRotationData().rotationTypesData,
+      this.cubeFactory.createRubikCubeRotationData().rotationAngles,
     );
     const debugParams = {
       face: cubeRotationGroups[0],
@@ -39,7 +42,11 @@ export class DebugCubeUI implements IDebugModeSubscriber {
     };
     const debugFunctions = {
       rotation: () => {
-        toRaw(this.cube)?.rotate(debugParams.face, debugParams.rotationType);
+        this.rotateCubeEventBus.emit({
+          face: debugParams.face,
+          type: debugParams.rotationType,
+          source: 'interaction',
+        });
       },
     };
     this.debugGUI = new CustomDebugGUI();

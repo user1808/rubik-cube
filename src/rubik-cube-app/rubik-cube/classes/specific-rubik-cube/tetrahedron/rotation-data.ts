@@ -1,7 +1,7 @@
 import { Vector3 } from 'three';
 import { Radians } from '@/utils/radians';
 import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
-import type { TPieceIdx, TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
+import type { TPieceIdx } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type {
   TTetrahedronRotationGroups,
   TTetrahedronRotationTypes,
@@ -10,19 +10,11 @@ import type {
 export class RubikTetrahedronRotationData
   implements IRubikCubeRotationData<TTetrahedronRotationGroups, TTetrahedronRotationTypes>
 {
-  private readonly _rotationTypesData: typeof this.rotationTypesData = {
-    Clockwise: {
-      angle: -2 * Radians['60deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 4,
-    },
-    CounterClockwise: {
-      angle: 2 * Radians['60deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 8,
-    },
+  public readonly rotationAngles: Record<TTetrahedronRotationTypes, number> = {
+    Clockwise: -2 * Radians['60deg'],
+    CounterClockwise: 2 * Radians['60deg'],
   };
-  private readonly _rotationGroupsNormalVectors: typeof this.rotationGroupsNormalVectors = {
+  public readonly rotationGroupsNormalVectors: Record<TTetrahedronRotationGroups, Vector3> = {
     Front: new Vector3(0.471, 0.333, 0.8165),
     Right: new Vector3(0.471, 0.333, -0.8165),
     Left: new Vector3(-0.943, 0.333, 0),
@@ -36,7 +28,10 @@ export class RubikTetrahedronRotationData
     BackMidLayer: new Vector3(-0.471, -0.333, -0.8165),
     UpMidLayer: new Vector3(0, 1, 0),
   };
-  private readonly _rotationPiecesChangesPatterns: typeof this.rotationPiecesChangesPatterns = {
+  public readonly rotationPiecesChangesPatterns: Record<
+    TTetrahedronRotationTypes,
+    Record<TTetrahedronRotationGroups, Array<TPieceIdx>>
+  > = {
     Clockwise: {
       Front: [6, 7, 8, 0, 1, 2, 3, 4, 5],
       Right: [6, 7, 8, 0, 1, 2, 3, 4, 5],
@@ -66,17 +61,29 @@ export class RubikTetrahedronRotationData
       UpMidLayer: [1, 2, 0, 3],
     },
   };
-
-  public get rotationTypesData(): Record<TTetrahedronRotationTypes, TRotationTypeData> {
-    return this._rotationTypesData;
-  }
-  public get rotationGroupsNormalVectors(): Record<TTetrahedronRotationGroups, Vector3> {
-    return this._rotationGroupsNormalVectors;
-  }
-  public get rotationPiecesChangesPatterns(): Record<
+  public readonly rotationGroupsNotation: Record<TTetrahedronRotationGroups, string> = {
+    Front: 'F',
+    Right: 'R',
+    Left: 'L',
+    Down: 'D',
+    RightCorner: 'r',
+    LeftCorner: 'l',
+    BackCorner: 'b',
+    UpCorner: 'u',
+    RightMidLayer: 'RM',
+    LeftMidLayer: 'LM',
+    BackMidLayer: 'BM',
+    UpMidLayer: 'UM',
+  };
+  public readonly rotationTypesNotation: Record<TTetrahedronRotationTypes, string> = {
+    Clockwise: '',
+    CounterClockwise: "'",
+  };
+  public readonly contraryRotationTypes: Record<
     TTetrahedronRotationTypes,
-    Record<TTetrahedronRotationGroups, Array<TPieceIdx>>
-  > {
-    return this._rotationPiecesChangesPatterns;
-  }
+    TTetrahedronRotationTypes
+  > = {
+    Clockwise: 'CounterClockwise',
+    CounterClockwise: 'Clockwise',
+  };
 }

@@ -27,6 +27,7 @@ import type {
 } from './builders';
 import type { IRubikCubeFacesTextsBuilder } from './builders/rubik-cube-faces-texts-builder';
 import type { IRubikCubeColorRaycaster } from './rubik-cube-color-raycaster';
+import type { CustomOrbitControls } from '@/rubik-cube-app/common/custom';
 
 export type DefaultRubikCubeFactory<TCubeCommonName extends TCubeCommonNames = TCubeCommonNames> =
   IRubikCubeFactory<Record<string, string>, TCubeCommonName>;
@@ -46,7 +47,7 @@ export interface IRubikCubeFactory<
 > {
   readonly commonName: TCubeCommonName;
   readonly cameraMinDistance: number;
-  readonly facesNames: Readonly<Array<TCubeFacesNames>>;
+  readonly rotationGroups: Readonly<Array<TCubeRotationGroups>>;
   readonly rotationTypesNames: Readonly<Array<TCubeRotationTypes>>;
   readonly facesTextsFilename: TCubeFacesTextsFilename;
 
@@ -110,7 +111,10 @@ export interface IRubikCubeFactory<
     orbitControls: OrbitControls,
   ): IRubikCubeRotationRaycaster;
 
-  createRubikCubeColorRaycaster(mouseTouchTracker: MouseTouchTracker): IRubikCubeColorRaycaster;
+  createRubikCubeColorRaycaster(
+    mouseTouchTracker: MouseTouchTracker,
+    orbitControls: CustomOrbitControls,
+  ): IRubikCubeColorRaycaster;
 
   createRubikCubeBuilder(
     scene: Scene,

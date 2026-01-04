@@ -30,6 +30,10 @@ import { storeToRefs } from 'pinia';
 import { PopoverButton } from '@headlessui/vue';
 import BaseTransitionOpacity from '../../transition/base-transition-opacity.vue';
 import { useColorCubeModeStore } from '@/stores/use-color-cube-mode-store';
+import { useSettingsStore } from '@/stores/use-settings-store';
+
+const settingsStore = useSettingsStore();
+const { getIsSettingsSideDrawerSectionsTitlesAlwaysHidden } = storeToRefs(settingsStore);
 
 const orbitControlsDataStore = useOrbitControlsDataStore();
 const { getDistanceState } = storeToRefs(orbitControlsDataStore);
@@ -54,7 +58,11 @@ const isSideDrawerButtonsVisible = computed<boolean>(() => {
 });
 
 const isSectionTitleHidden = computed<boolean>(() => {
-  return getDistanceState.value === 'close' || !!props.hideTitle;
+  return (
+    getDistanceState.value === 'close' ||
+    !!props.hideTitle ||
+    getIsSettingsSideDrawerSectionsTitlesAlwaysHidden.value
+  );
 });
 
 const onSectionTitleEnter = (el: Element, done: () => void): void => {

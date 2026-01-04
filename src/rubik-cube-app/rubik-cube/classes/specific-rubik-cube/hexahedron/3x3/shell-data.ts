@@ -15,22 +15,22 @@ export class RubikHexahedron3x3ShellData extends AbstractRubikHexahedronShellDat
   > = {
     Front: [
       ['X', 'Down'],
-      ['X', 'SliceY', true],
+      ['X', 'SliceY'],
       ['X', 'Up', true],
     ],
     Back: [
       ['X', 'Down', true],
-      ['X', 'SliceY'],
+      ['X', 'SliceY', true],
       ['X', 'Up'],
     ],
     Right: [
       ['Z', 'Down', true],
-      ['Z', 'SliceY'],
+      ['Z', 'SliceY', true],
       ['Z', 'Up'],
     ],
     Left: [
       ['Z', 'Down'],
-      ['Z', 'SliceY', true],
+      ['Z', 'SliceY'],
       ['Z', 'Up', true],
     ],
     Up: [
@@ -50,12 +50,12 @@ export class RubikHexahedron3x3ShellData extends AbstractRubikHexahedronShellDat
   > = {
     Front: [
       ['Y', 'Left', true],
-      ['Y', 'SliceX'],
+      ['Y', 'SliceX', true],
       ['Y', 'Right'],
     ],
     Back: [
       ['Y', 'Right', true],
-      ['Y', 'SliceX', true],
+      ['Y', 'SliceX'],
       ['Y', 'Left'],
     ],
     Right: [
@@ -70,12 +70,12 @@ export class RubikHexahedron3x3ShellData extends AbstractRubikHexahedronShellDat
     ],
     Up: [
       ['Z', 'Left'],
-      ['Z', 'SliceX', true],
+      ['Z', 'SliceX'],
       ['Z', 'Right', true],
     ],
     Down: [
       ['Z', 'Left', true],
-      ['Z', 'SliceX'],
+      ['Z', 'SliceX', true],
       ['Z', 'Right'],
     ],
   };

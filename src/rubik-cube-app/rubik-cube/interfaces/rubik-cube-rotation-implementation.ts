@@ -1,4 +1,5 @@
 import type { TCubeCommonNames } from '../types/cube-common-name';
+import type { TRotationSource } from '../types/rubik-cube';
 import type { IRubikCube } from './structure';
 
 export interface IRubikCubeRotationImplementation<
@@ -20,5 +21,6 @@ export interface IRubikCubeRotationImplementation<
     >,
     rotationGroup: TCubeRotationGroups,
     rotationType: TCubeRotationTypes,
+    source: TRotationSource,
   ): Promise<void>;
 }

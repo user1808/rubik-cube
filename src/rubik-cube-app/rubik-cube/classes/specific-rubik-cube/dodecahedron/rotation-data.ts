@@ -3,33 +3,16 @@ import type {
   TDodecahedronRotationGroups,
   TDodecahedronRotationTypes,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/dodecahedron';
-import type { TRotationTypeData } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
 import type { IRubikCubeRotationData } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import { Radians } from '@/utils/radians';
 export class RubikDodecahedronRotationData
   implements IRubikCubeRotationData<TDodecahedronRotationGroups, TDodecahedronRotationTypes>
 {
-  public readonly rotationTypesData: Record<TDodecahedronRotationTypes, TRotationTypeData> = {
-    Clockwise: {
-      angle: -Radians['72deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 5,
-    },
-    CounterClockwise: {
-      angle: Radians['72deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 5,
-    },
-    DoubleClockwise: {
-      angle: -2 * Radians['72deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 10,
-    },
-    DoubleCounterClockwise: {
-      angle: 2 * Radians['72deg'],
-      durationInSeconds: 0.5,
-      stepsCount: 10,
-    },
+  public readonly rotationAngles: Record<TDodecahedronRotationTypes, number> = {
+    Clockwise: -Radians['72deg'],
+    CounterClockwise: Radians['72deg'],
+    DoubleClockwise: -2 * Radians['72deg'],
+    DoubleCounterClockwise: 2 * Radians['72deg'],
   };
   public readonly rotationGroupsNormalVectors: Record<TDodecahedronRotationGroups, Vector3> = {
     Up: new Vector3(0, 1, 0),
@@ -105,5 +88,34 @@ export class RubikDodecahedronRotationData
       UpRight: [6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 10],
       DownLeft: [6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 10],
     },
+  };
+  public readonly rotationGroupsNotation: Record<TDodecahedronRotationGroups, string> = {
+    Up: 'U',
+    Down: 'D',
+    Right: 'R',
+    BackLeft: 'BL',
+    Front: 'F',
+    Back: 'B',
+    Left: 'L',
+    BackRight: 'BR',
+    UpLeft: 'UL',
+    DownRight: 'DR',
+    UpRight: 'UR',
+    DownLeft: 'DL',
+  };
+  public readonly rotationTypesNotation: Record<TDodecahedronRotationTypes, string> = {
+    Clockwise: '',
+    CounterClockwise: "'",
+    DoubleClockwise: '2',
+    DoubleCounterClockwise: '2',
+  };
+  public readonly contraryRotationTypes: Record<
+    TDodecahedronRotationTypes,
+    TDodecahedronRotationTypes
+  > = {
+    Clockwise: 'CounterClockwise',
+    CounterClockwise: 'Clockwise',
+    DoubleClockwise: 'DoubleCounterClockwise',
+    DoubleCounterClockwise: 'DoubleClockwise',
   };
 }

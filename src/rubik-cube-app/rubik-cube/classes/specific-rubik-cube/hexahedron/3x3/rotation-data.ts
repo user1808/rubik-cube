@@ -14,8 +14,8 @@ export class RubikHexahedron3x3RotationData extends AbstractRubikHexahedronRotat
     Left: new Vector3(-1, 0, 0),
     Up: new Vector3(0, 1, 0),
     Down: new Vector3(0, -1, 0),
-    SliceX: new Vector3(1, 0, 0),
-    SliceY: new Vector3(0, 1, 0),
+    SliceX: new Vector3(-1, 0, 0),
+    SliceY: new Vector3(0, -1, 0),
     SliceZ: new Vector3(0, 0, 1),
   };
 
@@ -45,16 +45,20 @@ export class RubikHexahedron3x3RotationData extends AbstractRubikHexahedronRotat
       SliceY: [2, 4, 7, 1, 6, 0, 3, 5],
       SliceZ: [2, 4, 7, 1, 6, 0, 3, 5],
     },
-    Double: {
-      Front: [8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Back: [8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Right: [8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Left: [8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Up: [8, 7, 6, 5, 4, 3, 2, 1, 0],
-      Down: [8, 7, 6, 5, 4, 3, 2, 1, 0],
-      SliceX: [7, 6, 5, 4, 3, 2, 1, 0],
-      SliceY: [7, 6, 5, 4, 3, 2, 1, 0],
-      SliceZ: [7, 6, 5, 4, 3, 2, 1, 0],
-    },
+  };
+  public override readonly rotationGroupsNotation: Record<THexahedron3x3RotationGroups, string> = {
+    Front: 'F',
+    Back: 'B',
+    Right: 'R',
+    Left: 'L',
+    Up: 'U',
+    Down: 'D',
+    SliceX: 'M',
+    SliceY: 'E',
+    SliceZ: 'S',
+  };
+  public override readonly rotationTypesNotation: Record<THexahedronRotationTypes, string> = {
+    Clockwise: '',
+    CounterClockwise: "'",
   };
 }

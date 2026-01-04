@@ -1,6 +1,6 @@
 import type { THexahedronFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
 import type { THexahedronPiecesFilenamesWithFaces } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/pieces-faces';
-import type { THexahedron2x2RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/rotation-groups';
+import { Hexahedron2x2RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/rotation-groups';
 import type { THexahedronRotationTypes } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import type {
   IRubikCubeFacesData,
@@ -18,6 +18,7 @@ import { RubikHexahedron2x2FacesData } from './faces-data';
 import type { THexahedronShellFilenames } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/shell-filenames';
 import type { THexahedron2x2CommonName } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/common-name';
 import type { THexahedron2x2FacesTextsFilename } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/faces-texts-filename';
+import type { THexahedron2x2RotationGroups } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/2x2/rotation-groups';
 
 export class RubikHexahedron2x2Factory extends AbstractRubikHexahedronFactory<
   THexahedron2x2CommonName,
@@ -25,8 +26,10 @@ export class RubikHexahedron2x2Factory extends AbstractRubikHexahedronFactory<
   THexahedronShellFilenames,
   THexahedron2x2FacesTextsFilename
 > {
-  public override readonly commonName: THexahedron2x2CommonName = '2x2 Cube';
+  public override readonly commonName: THexahedron2x2CommonName = '2x2x2 Cube';
   public override readonly cameraMinDistance: number = Math.sqrt(3);
+  public override readonly rotationGroups: Readonly<Array<THexahedron2x2RotationGroups>> =
+    Hexahedron2x2RotationGroups;
   public override readonly facesTextsFilename: THexahedron2x2FacesTextsFilename =
     'RubikHexahedron2x2FacesTexts.glb';
 

@@ -35,13 +35,17 @@ export class RubikHexahedron2x2RotationData extends AbstractRubikHexahedronRotat
       Up: [1, 3, 0, 2],
       Down: [1, 3, 0, 2],
     },
-    Double: {
-      Front: [3, 2, 1, 0],
-      Back: [3, 2, 1, 0],
-      Right: [3, 2, 1, 0],
-      Left: [3, 2, 1, 0],
-      Up: [3, 2, 1, 0],
-      Down: [3, 2, 1, 0],
-    },
+  };
+  public override readonly rotationGroupsNotation: Record<THexahedron2x2RotationGroups, string> = {
+    Front: 'F',
+    Back: 'B',
+    Right: 'R',
+    Left: 'L',
+    Up: 'U',
+    Down: 'D',
+  };
+  public override readonly rotationTypesNotation: Record<THexahedronRotationTypes, string> = {
+    Clockwise: '',
+    CounterClockwise: "'",
   };
 }

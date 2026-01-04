@@ -17,9 +17,16 @@ type RubikCubeBuilderProperties<
   TCubeCommonName extends TCubeCommonNames,
   TCubeFacesNames extends string,
   TCubeEdgeFacesNames extends string,
+  TCubeRotationGroups extends string,
   TCubeRotationTypes extends string,
 > = Omit<
-  IRubikCubeProperties<TCubeCommonName, TCubeFacesNames, TCubeEdgeFacesNames, TCubeRotationTypes>,
+  IRubikCubeProperties<
+    TCubeCommonName,
+    TCubeFacesNames,
+    TCubeEdgeFacesNames,
+    TCubeRotationGroups,
+    TCubeRotationTypes
+  >,
   'piecesMaterials'
 >;
 
@@ -51,6 +58,7 @@ export class RubikCubeBuilder<
       TCubeCommonName,
       TCubeFacesNames,
       TCubeEdgeFacesNames,
+      TCubeRotationGroups,
       TCubeRotationTypes
     >,
     private readonly scene: Scene,

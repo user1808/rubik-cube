@@ -1,3 +1,5 @@
-import type { THexahedronFaces } from '../cube-faces';
+import { HexahedronFaces } from '../cube-faces';
 
-export type THexahedron2x2RotationGroups = THexahedronFaces;
+export const Hexahedron2x2RotationGroups = [...HexahedronFaces] as const;
+
+export type THexahedron2x2RotationGroups = (typeof Hexahedron2x2RotationGroups)[number];

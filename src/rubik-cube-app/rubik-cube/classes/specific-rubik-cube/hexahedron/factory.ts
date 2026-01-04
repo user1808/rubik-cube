@@ -5,7 +5,6 @@ import {
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/rotation-types';
 import type { IRubikCubeMaterials } from '@/rubik-cube-app/rubik-cube/interfaces/data';
 import {
-  HexahedronFaces,
   type THexahedronEdgeFaces,
   type THexahedronFaces,
 } from '@/rubik-cube-app/rubik-cube/types/specific-rubik-cube/hexahedron/cube-faces';
@@ -28,7 +27,6 @@ export abstract class AbstractRubikHexahedronFactory<
   THexahedronShellFilename,
   THexahedronFacesTextsFilename
 > {
-  public override readonly facesNames: Readonly<Array<THexahedronFaces>> = HexahedronFaces;
   public override readonly rotationTypesNames: Readonly<Array<THexahedronRotationTypes>> =
     HexahedronRotationTypes;
 
