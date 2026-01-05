@@ -35,7 +35,6 @@ export const useIsCubeSolvable = () => {
     () => getCurrentCubeProperties.value?.commonName,
     (cubeName) => {
       if (cubeName) {
-        console.log('aktualizacja cache dla kostki', cubeName);
         isCubeSolvableCache.value[cubeName] = isCubeSolvableAlghorithms[cubeName]();
       }
     },
@@ -47,7 +46,6 @@ export const useIsCubeSolvable = () => {
     () => {
       const cubeName = getCurrentCubeProperties.value?.commonName;
       if (getIsColorCubeModeOn.value && cubeName) {
-        console.log('aktualizacja cache dla kostki', cubeName);
         isCubeSolvableCache.value[cubeName] = isCubeSolvableAlghorithms[cubeName]();
       }
     },
