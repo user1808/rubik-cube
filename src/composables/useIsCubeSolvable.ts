@@ -1,5 +1,6 @@
 import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import { is2x2x2CubeSolvable } from '@/composables/algorithms/solvability/is-2x2x2-cube-solvable';
+import { is3x3x3CubeSolvable } from '@/composables/algorithms/solvability/is-3x3x3-cube-solvable';
 import { useFacesLogicalValuesStore } from '@/stores/use-faces-logical-values-store';
 import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
 import { storeToRefs } from 'pinia';
@@ -16,7 +17,7 @@ export const useIsCubeSolvable = () => {
 
   const isCubeSolvableAlghorithms: Record<TCubeCommonNames, () => boolean> = {
     '2x2x2 Cube': is2x2x2CubeSolvable,
-    '3x3x3 Cube': () => false,
+    '3x3x3 Cube': is3x3x3CubeSolvable,
     '4x4x4 Cube': () => true,
     '5x5x5 Cube': () => true,
     Megaminx: () => true,
