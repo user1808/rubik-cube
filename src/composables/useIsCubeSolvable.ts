@@ -16,7 +16,7 @@ export const useIsCubeSolvable = () => {
     (logicalValues: Record<string, Array<Nullable<TCubeFaceColor>>>) => boolean
   > = {
     '2x2x2 Cube': () => true,
-    '3x3x3 Cube': () => true,
+    '3x3x3 Cube': () => false,
     '4x4x4 Cube': () => true,
     '5x5x5 Cube': () => true,
     Megaminx: () => true,
