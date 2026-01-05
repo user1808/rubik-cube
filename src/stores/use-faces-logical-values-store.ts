@@ -1,8 +1,7 @@
 import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
 import type { TCubeFaceColor } from '@/rubik-cube-app/rubik-cube/types/rubik-cube';
-import { defineStore, storeToRefs } from 'pinia';
+import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { useSelectedCubeStore } from './use-selected-cube-store';
 
 const useFacesLogicalValuesPrivateState = defineStore('faces-logical-values-private', () => {
   const facesLogicalValues = ref<
@@ -23,8 +22,6 @@ const useFacesLogicalValuesPrivateState = defineStore('faces-logical-values-priv
 
 export const useFacesLogicalValuesStore = defineStore('faces-logical-values', () => {
   const privateState = useFacesLogicalValuesPrivateState();
-  const selectedCubeStore = useSelectedCubeStore();
-  const { getCurrentCubeProperties } = storeToRefs(selectedCubeStore);
 
   const getFacesLogicalValues = computed<
     Record<TCubeCommonNames, Nullable<Record<string, Array<Nullable<TCubeFaceColor>>>>>
