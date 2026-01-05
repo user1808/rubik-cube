@@ -1,0 +1,68 @@
+import type { TCubeCommonNames } from '@/rubik-cube-app/rubik-cube/types/cube-common-name';
+import { is2x2x2CubeSolvable } from '@/composables/algorithms/solvability/is-2x2x2-cube-solvable';
+import { is3x3x3CubeSolvable } from '@/composables/algorithms/solvability/is-3x3x3-cube-solvable';
+import { is4x4x4CubeSolvable } from '@/composables/algorithms/solvability/is-4x4x4-cube-solvable';
+import { is5x5x5CubeSolvable } from '@/composables/algorithms/solvability/is-5x5x5-cube-solvable';
+import { isMegaminxSolvable } from '@/composables/algorithms/solvability/is-megaminx-solvable';
+import { isPyraminxSolvable } from '@/composables/algorithms/solvability/is-pyraminx-solvable';
+import { useFacesLogicalValuesStore } from '@/stores/use-faces-logical-values-store';
+import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
+import { storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
+import { useColorCubeModeStore } from '@/stores/use-color-cube-mode-store';
+
+export const useIsCubeSolvable = () => {
+  const selectedCubeStore = useSelectedCubeStore();
+  const { getCurrentCubeProperties } = storeToRefs(selectedCubeStore);
+  const colorCubeModeStateStore = useColorCubeModeStore();
+  const { getIsColorCubeModeOn } = storeToRefs(colorCubeModeStateStore);
+  const facesLogicalValuesStore = useFacesLogicalValuesStore();
+  const { getFacesLogicalValues } = storeToRefs(facesLogicalValuesStore);
+
+  const isCubeSolvableAlghorithms: Record<TCubeCommonNames, () => boolean> = {
+    '2x2x2 Cube': is2x2x2CubeSolvable,
+    '3x3x3 Cube': is3x3x3CubeSolvable,
+    '4x4x4 Cube': is4x4x4CubeSolvable,
+    '5x5x5 Cube': is5x5x5CubeSolvable,
+    Megaminx: isMegaminxSolvable,
+    Pyraminx: isPyraminxSolvable,
+  };
+  const isCubeSolvableCache = ref<Record<TCubeCommonNames, boolean>>({
+    '2x2x2 Cube': true,
+    '3x3x3 Cube': true,
+    '4x4x4 Cube': true,
+    '5x5x5 Cube': true,
+    Megaminx: true,
+    Pyraminx: true,
+  });
+
+  watch(
+    () => getCurrentCubeProperties.value?.commonName,
+    (cubeName) => {
+      if (cubeName) {
+        isCubeSolvableCache.value[cubeName] = isCubeSolvableAlghorithms[cubeName]();
+      }
+    },
+  );
+
+  watch(
+    [getIsColorCubeModeOn, getFacesLogicalValues],
+    () => {
+      const cubeName = getCurrentCubeProperties.value?.commonName;
+      if (getIsColorCubeModeOn.value && cubeName) {
+        isCubeSolvableCache.value[cubeName] = isCubeSolvableAlghorithms[cubeName]();
+      }
+    },
+    { deep: true },
+  );
+
+  const isCubeSolvable = computed<boolean>(() => {
+    const cubeName = getCurrentCubeProperties.value?.commonName;
+    if (!cubeName) return false;
+    return isCubeSolvableCache.value[cubeName];
+  });
+
+  return {
+    isCubeSolvable,
+  };
+};
