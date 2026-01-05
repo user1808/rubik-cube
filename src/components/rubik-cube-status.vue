@@ -8,10 +8,8 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia';
 import BasePrimeIcon from './base/icon/base-prime-icon.vue';
-import { useFacesLogicalValuesStore } from '@/stores/use-faces-logical-values-store';
+import { useIsCubeSolved } from '@/composables/useIsCubeSolved';
 
-const facesLogicalValuesStore = useFacesLogicalValuesStore();
-const { isCubeSolved } = storeToRefs(facesLogicalValuesStore);
+const { isCubeSolved } = useIsCubeSolved();
 </script>

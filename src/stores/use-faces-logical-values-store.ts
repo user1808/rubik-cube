@@ -39,33 +39,8 @@ export const useFacesLogicalValuesStore = defineStore('faces-logical-values', ()
     privateState.facesLogicalValues[cubeCommonName] = facesLogicalValues;
   };
 
-  const isCubeSolved = computed<boolean>(() => {
-    const currentCubeName = getCurrentCubeProperties.value?.commonName;
-
-    if (!currentCubeName) return false;
-
-    const currentFacesLogicalValues = getFacesLogicalValues.value[currentCubeName];
-
-    if (!currentFacesLogicalValues) return false;
-
-    const uniqueFaceValues = new Set<TCubeFaceColor>();
-    for (const faceValues of Object.values(currentFacesLogicalValues)) {
-      if (!faceValues || faceValues.length === 0) return false;
-
-      const firstValue = faceValues[0];
-      if (firstValue === null) return false;
-      if (!faceValues.every((value) => value === firstValue)) return false;
-      uniqueFaceValues.add(firstValue);
-    }
-
-    if (uniqueFaceValues.size !== Object.keys(currentFacesLogicalValues).length) return false;
-
-    return true;
-  });
-
   return {
     getFacesLogicalValues,
     setFacesLogicalValues,
-    isCubeSolved,
   };
 });
