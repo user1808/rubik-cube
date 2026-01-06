@@ -31,7 +31,7 @@ const CORNER_MAPPING_3X3: Array<{
     pieceIdx: 6,
     faces: [
       { face: 'Up', position: 6 },
-      { face: 'Left', position: 6 },
+      { face: 'Left', position: 2 },
       { face: 'Front', position: 0 },
     ],
   },
@@ -49,7 +49,7 @@ const CORNER_MAPPING_3X3: Array<{
     pieceIdx: 17,
     faces: [
       { face: 'Down', position: 6 },
-      { face: 'Left', position: 3 },
+      { face: 'Left', position: 6 },
       { face: 'Back', position: 8 },
     ],
   },
@@ -101,7 +101,7 @@ const EDGE_MAPPING_3X3: Array<{
     pieceIdx: 3,
     faces: [
       { face: 'Up', position: 3 },
-      { face: 'Left', position: 3 },
+      { face: 'Left', position: 1 },
     ],
   },
   // Piece 5: Up-Right
@@ -124,7 +124,7 @@ const EDGE_MAPPING_3X3: Array<{
   {
     pieceIdx: 9,
     faces: [
-      { face: 'Left', position: 1 },
+      { face: 'Left', position: 3 },
       { face: 'Back', position: 5 },
     ],
   },
@@ -140,7 +140,7 @@ const EDGE_MAPPING_3X3: Array<{
   {
     pieceIdx: 14,
     faces: [
-      { face: 'Left', position: 7 },
+      { face: 'Left', position: 5 },
       { face: 'Front', position: 3 },
     ],
   },
@@ -165,7 +165,7 @@ const EDGE_MAPPING_3X3: Array<{
     pieceIdx: 20,
     faces: [
       { face: 'Down', position: 3 },
-      { face: 'Left', position: 5 },
+      { face: 'Left', position: 7 },
     ],
   },
   // Piece 22: Down-Right
