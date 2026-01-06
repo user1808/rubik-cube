@@ -39,7 +39,6 @@ export const useIsCubeSolvable = () => {
         isCubeSolvableCache.value[cubeName] = isCubeSolvableAlghorithms[cubeName]();
       }
     },
-    { immediate: true },
   );
 
   watch(
