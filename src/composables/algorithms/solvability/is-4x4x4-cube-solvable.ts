@@ -197,8 +197,8 @@ const EDGE_MAPPING_4X4: Array<{
   {
     pieceIdx: 36,
     faces: [
-      { face: 'Left', position: 6 },
-      { face: 'Front', position: 5 },
+      { face: 'Left', position: 11 },
+      { face: 'Front', position: 8 },
     ],
   },
   // Piece 27: Right-Front (outer)
@@ -213,72 +213,8 @@ const EDGE_MAPPING_4X4: Array<{
   {
     pieceIdx: 39,
     faces: [
-      { face: 'Right', position: 5 },
-      { face: 'Front', position: 6 },
-    ],
-  },
-  // Piece 28: Left-Back (middle, outer)
-  {
-    pieceIdx: 28,
-    faces: [
-      { face: 'Left', position: 8 },
-      { face: 'Back', position: 11 },
-    ],
-  },
-  // Piece 32: Left-Back (middle, inner)
-  {
-    pieceIdx: 32,
-    faces: [
-      { face: 'Left', position: 9 },
-      { face: 'Back', position: 10 },
-    ],
-  },
-  // Piece 31: Right-Back (middle, outer)
-  {
-    pieceIdx: 31,
-    faces: [
-      { face: 'Right', position: 11 },
-      { face: 'Back', position: 8 },
-    ],
-  },
-  // Piece 35: Right-Back (middle, inner)
-  {
-    pieceIdx: 35,
-    faces: [
-      { face: 'Right', position: 10 },
-      { face: 'Back', position: 9 },
-    ],
-  },
-  // Piece 36: Left-Front (middle, outer)
-  {
-    pieceIdx: 36,
-    faces: [
-      { face: 'Left', position: 11 },
-      { face: 'Front', position: 8 },
-    ],
-  },
-  // Piece 34: Left-Front (middle, inner)
-  {
-    pieceIdx: 34,
-    faces: [
-      { face: 'Left', position: 10 },
-      { face: 'Front', position: 9 },
-    ],
-  },
-  // Piece 39: Right-Front (middle, outer)
-  {
-    pieceIdx: 39,
-    faces: [
       { face: 'Right', position: 8 },
       { face: 'Front', position: 11 },
-    ],
-  },
-  // Piece 33: Right-Front (middle, inner)
-  {
-    pieceIdx: 33,
-    faces: [
-      { face: 'Right', position: 9 },
-      { face: 'Front', position: 10 },
     ],
   },
   // Piece 41: Down-Back (outer)
@@ -286,7 +222,7 @@ const EDGE_MAPPING_4X4: Array<{
     pieceIdx: 41,
     faces: [
       { face: 'Down', position: 13 },
-      { face: 'Back', position: 13 },
+      { face: 'Back', position: 14 },
     ],
   },
   // Piece 42: Down-Back (inner)
@@ -294,14 +230,14 @@ const EDGE_MAPPING_4X4: Array<{
     pieceIdx: 42,
     faces: [
       { face: 'Down', position: 14 },
-      { face: 'Back', position: 14 },
+      { face: 'Back', position: 13 },
     ],
   },
   // Piece 44: Down-Left (outer)
   {
     pieceIdx: 44,
     faces: [
-      { face: 'Down', position: 4 },
+      { face: 'Down', position: 8 },
       { face: 'Left', position: 13 },
     ],
   },
@@ -309,7 +245,7 @@ const EDGE_MAPPING_4X4: Array<{
   {
     pieceIdx: 48,
     faces: [
-      { face: 'Down', position: 8 },
+      { face: 'Down', position: 4 },
       { face: 'Left', position: 14 },
     ],
   },
@@ -317,7 +253,7 @@ const EDGE_MAPPING_4X4: Array<{
   {
     pieceIdx: 51,
     faces: [
-      { face: 'Down', position: 11 },
+      { face: 'Down', position: 7 },
       { face: 'Right', position: 13 },
     ],
   },
@@ -325,7 +261,7 @@ const EDGE_MAPPING_4X4: Array<{
   {
     pieceIdx: 47,
     faces: [
-      { face: 'Down', position: 7 },
+      { face: 'Down', position: 11 },
       { face: 'Right', position: 14 },
     ],
   },
