@@ -1,4 +1,5 @@
 import type { TTetrahedronCommonName } from './common-name';
+import { TetrahedronFaces } from './cube-faces';
 import type { TTetrahedronFaces, TTetrahedronEdgeFaces } from './cube-faces';
 import type { TTetrahedronFacesTextsFilename } from './faces-texts-filename';
 import type {
@@ -22,3 +23,5 @@ export type {
   TTetrahedronShellDirections,
   TTetrahedronShellFilenames,
 };
+
+export { TetrahedronFaces };
