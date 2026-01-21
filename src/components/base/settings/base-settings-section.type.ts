@@ -7,4 +7,5 @@ export type BaseSettingsSection = {
   icon?: typeof BasePrimeIcon | typeof BaseIcon2x2Cube;
   iconBind?: Partial<InstanceType<typeof BasePrimeIcon>['$props'] & { class?: string }>;
   content?: Array<Component>;
+  class?: string;
 };

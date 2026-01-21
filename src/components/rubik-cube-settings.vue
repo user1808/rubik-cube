@@ -4,7 +4,10 @@
     :settings-sections="settingsSections"
     v-model:selected-section="selectedSection"
   >
-    <div class="mx-auto max-w-56 flex-col xs:max-w-72 sm:max-w-80 md:max-w-sm">
+    <div
+      class="mx-auto max-w-56 flex-col xs:max-w-72 sm:max-w-80 md:max-w-sm"
+      :class="selectedSection.class"
+    >
       <component v-for="(part, idx) in selectedSection.content" :key="idx" :is="part" />
     </div>
   </BaseSettings>
@@ -59,6 +62,7 @@ const settingsSections: Array<BaseSettingsSection> = [
     icon: markRaw(BaseIconMoves),
     iconBind: { class: 'size-14 min-h-14 min-w-14' },
     content: [markRaw(SettingsMovesSection)],
+    class: 'h-full',
   },
 ];
 
