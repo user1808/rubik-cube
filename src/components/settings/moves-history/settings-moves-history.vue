@@ -1,27 +1,22 @@
 <template>
-  <div class="relative flex max-h-full w-full flex-col px-4 pb-4">
-    <h1 class="select-none text-nowrap py-4 text-xl tracking-tight text-white">
-      Moves History For {{ currentCubeName ?? 'No cube selected' }}
-    </h1>
-    <div
-      ref="listRef"
-      class="relative flex max-h-full flex-col divide-y divide-gray-600 overflow-y-auto rounded-lg bg-gray-700"
-    >
-      <SettingsMovesHistoryPoint
-        v-for="(move, index) in cubeMovesHistory"
-        :key="index"
-        ref="pointRefs"
-        :move="move"
-        :index="index - START_ARRAY_OFFSET"
-        :target-move="getTargetMove"
-        :height="POINT_HEIGHT_PX"
-        @click="onMoveClick"
-      />
-      <span
-        :style="indicatorStyle"
-        class="pointer-events-none absolute right-2 size-3 rounded-full border border-white bg-white shadow transition-all ease-linear"
-      />
-    </div>
+  <div
+    ref="listRef"
+    class="relative flex max-h-full flex-col divide-y divide-gray-600 overflow-y-auto rounded-lg bg-gray-700"
+  >
+    <SettingsMovesHistoryPoint
+      v-for="(move, index) in cubeMovesHistory"
+      :key="index"
+      ref="pointRefs"
+      :move="move"
+      :index="index - START_ARRAY_OFFSET"
+      :target-move="getTargetMove"
+      :height="POINT_HEIGHT_PX"
+      @click="onMoveClick"
+    />
+    <span
+      :style="indicatorStyle"
+      class="pointer-events-none absolute right-2 size-3 rounded-full border border-white bg-white shadow transition-all ease-linear"
+    />
   </div>
 </template>
 

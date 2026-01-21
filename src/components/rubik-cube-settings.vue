@@ -23,7 +23,7 @@ import SettingsToggleFullscreen from './settings/toggle-fullscreen/settings-togg
 import SettingsSelectInteractionMode from './settings/select-interaction-mode/settings-select-interaction-mode.vue';
 import SettingsSetCubeColors from './settings/set-cube-colors/settings-set-cube-colors.vue';
 import BaseIconMoves from './base/icon/base-icon-moves.vue';
-import SettingsMovesHistory from './settings/moves-history/settings-moves-history.vue';
+import SettingsMovesSection from './settings/moves-section/settings-moves-section.vue';
 import SettingsSetRotationTime from './settings/set-rotation-time/settings-set-rotation-time.vue';
 
 const mobileSection: BaseSettingsSection = {
@@ -58,7 +58,7 @@ const settingsSections: Array<BaseSettingsSection> = [
     title: 'Moves',
     icon: markRaw(BaseIconMoves),
     iconBind: { class: 'size-14 min-h-14 min-w-14' },
-    content: [markRaw(SettingsMovesHistory)],
+    content: [markRaw(SettingsMovesSection)],
   },
 ];
 
