@@ -199,6 +199,7 @@ let precomputedDataCache: TPrecomputedData | null = null;
 export function solve2x2x2Cube(
   logicalValuesInput: TFaceLogicalValuesInput,
 ): Array<TCubeMovesHistoryLog> {
+  console.log('solve2x2x2Cube', logicalValuesInput);
   const logicalValues = normalizeLogicalValues(logicalValuesInput);
   if (!logicalValues) return [];
 
