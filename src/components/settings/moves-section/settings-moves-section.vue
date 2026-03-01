@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, type Component } from 'vue';
+import { computed, markRaw, ref, type Component } from 'vue';
 import { useSelectedCubeStore } from '@/stores/use-selected-cube-store';
 import { storeToRefs } from 'pinia';
 import SelectButton from 'primevue/selectbutton';
@@ -45,12 +45,12 @@ const movesSectionOptions = computed<MovesSectionOption[]>(() => [
   {
     optionLabel: 'Moves History',
     label: `Moves History For ${currentCubeName.value ?? '---'}`,
-    component: SettingsMovesHistory,
+    component: markRaw(SettingsMovesHistory),
   },
   {
     optionLabel: 'Solve Cube',
     label: `Solve ${currentCubeName.value ?? '---'}`,
-    component: SettingsMovesToSolve,
+    component: markRaw(SettingsMovesToSolve),
   },
 ]);
 const selectedMovesSectionOption = ref<MovesSectionOption>(movesSectionOptions.value[0]);
