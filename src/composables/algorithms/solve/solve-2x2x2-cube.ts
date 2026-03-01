@@ -58,8 +58,8 @@ const CORNER_MAPPING_2X2: Array<{
     pieceIdx: 1, // URB
     faces: [
       { face: 'Up', position: 1 },
-      { face: 'Right', position: 1 },
       { face: 'Back', position: 0 },
+      { face: 'Right', position: 1 },
     ],
     coord: { x: 1, y: 1, z: -1 },
   },
@@ -67,8 +67,8 @@ const CORNER_MAPPING_2X2: Array<{
     pieceIdx: 2, // ULF
     faces: [
       { face: 'Up', position: 2 },
-      { face: 'Left', position: 1 },
       { face: 'Front', position: 0 },
+      { face: 'Left', position: 1 },
     ],
     coord: { x: -1, y: 1, z: 1 },
   },
@@ -85,8 +85,8 @@ const CORNER_MAPPING_2X2: Array<{
     pieceIdx: 4, // DLB
     faces: [
       { face: 'Down', position: 2 },
-      { face: 'Left', position: 2 },
       { face: 'Back', position: 3 },
+      { face: 'Left', position: 2 },
     ],
     coord: { x: -1, y: -1, z: -1 },
   },
@@ -112,26 +112,12 @@ const CORNER_MAPPING_2X2: Array<{
     pieceIdx: 7, // DRF
     faces: [
       { face: 'Down', position: 1 },
-      { face: 'Right', position: 2 },
       { face: 'Front', position: 3 },
+      { face: 'Right', position: 2 },
     ],
     coord: { x: 1, y: -1, z: 1 },
   },
 ];
-
-const MOVE_CYCLES: Record<THexahedronFaces, [number, number, number, number]> = {
-  Front: [2, 3, 6, 7],
-  Back: [1, 0, 5, 4],
-  Right: [3, 1, 7, 5],
-  Left: [0, 2, 4, 6],
-  Up: [0, 1, 2, 3],
-  Down: [6, 7, 4, 5],
-};
-
-const CYCLE_PATTERNS: Record<TRotationType, [number, number, number, number]> = {
-  Clockwise: [2, 0, 3, 1],
-  CounterClockwise: [1, 3, 0, 2],
-};
 
 const OPPOSITE_ROTATION: Record<TRotationType, TRotationType> = {
   Clockwise: 'CounterClockwise',
@@ -184,6 +170,7 @@ type TPrecomputedData = {
   nextOri: Uint16Array[];
   permDistance: Int8Array;
   oriDistance: Int8Array;
+  permMoveSourceByMoveIdx: Array<Uint8Array>;
 };
 
 let precomputedDataCache: TPrecomputedData | null = null;
@@ -199,11 +186,14 @@ let precomputedDataCache: TPrecomputedData | null = null;
 export function solve2x2x2Cube(
   logicalValuesInput: TFaceLogicalValuesInput,
 ): Array<TCubeMovesHistoryLog> {
-  console.log('solve2x2x2Cube', logicalValuesInput);
   const logicalValues = normalizeLogicalValues(logicalValuesInput);
+  console.log(`logicla values ${JSON.stringify(JSON.parse(JSON.stringify(logicalValues)))}`);
   if (!logicalValues) return [];
 
   const candidateAssignments = buildCandidateFaceColorAssignments(logicalValues);
+  console.log(
+    `candidate assignments ${JSON.stringify(JSON.parse(JSON.stringify(candidateAssignments)))}`,
+  );
   if (candidateAssignments.length === 0) return [];
 
   const precomputed = getPrecomputedData();
@@ -219,12 +209,17 @@ export function solve2x2x2Cube(
 
     const moves = solveWithIdaStar(permutationCoord, orientationCoord, precomputed);
     if (!moves) continue;
+    if (!doesMovesSequenceSolve(logicalValues, assignment, moves)) continue;
 
     if (!bestSolutionMoves || moves.length < bestSolutionMoves.length) {
       bestSolutionMoves = moves;
       if (bestSolutionMoves.length === 0) break;
     }
   }
+
+  console.log(
+    `best solution moves ${JSON.stringify(JSON.parse(JSON.stringify(bestSolutionMoves)))}`,
+  );
 
   if (!bestSolutionMoves) return [];
   return bestSolutionMoves.map((moveIdx) => toMoveHistoryLog(MOVES[moveIdx]));
@@ -233,7 +228,8 @@ export function solve2x2x2Cube(
 function getPrecomputedData(): TPrecomputedData {
   if (precomputedDataCache) return precomputedDataCache;
 
-  const nextPerm = buildPermutationTransitionTable();
+  const permMoveSourceByMoveIdx = buildPermutationMoveSourceByMoveIdx();
+  const nextPerm = buildPermutationTransitionTable(permMoveSourceByMoveIdx);
   const nextOri = buildOrientationTransitionTable();
   const permDistance = buildDistanceTable(PERMUTATION_STATE_COUNT, nextPerm, 0);
   const oriDistance = buildDistanceTable(ORIENTATION_STATE_COUNT, nextOri, 0);
@@ -243,6 +239,7 @@ function getPrecomputedData(): TPrecomputedData {
     nextOri,
     permDistance,
     oriDistance,
+    permMoveSourceByMoveIdx,
   };
   return precomputedDataCache;
 }
@@ -413,7 +410,7 @@ function parseCubieState(
       TCubeFaceColor,
     ];
 
-    const orientation = getCornerOrientation(observedColors, standardColors);
+    const orientation = getCornerOrientation(observedColors, standardColors[0]);
     if (orientation === null) return null;
 
     perm[cornerPosition.pieceIdx] = pieceIdx;
@@ -429,26 +426,28 @@ function parseCubieState(
 
 function getCornerOrientation(
   cornerColors: [TCubeFaceColor, TCubeFaceColor, TCubeFaceColor],
-  standardColors: [TCubeFaceColor, TCubeFaceColor, TCubeFaceColor],
+  upOrDownColor: TCubeFaceColor,
 ): number | null {
-  for (let rotation = 0; rotation < 3; rotation++) {
-    const rotated = [
-      cornerColors[rotation % 3],
-      cornerColors[(rotation + 1) % 3],
-      cornerColors[(rotation + 2) % 3],
-    ];
-    if (
-      rotated[0] === standardColors[0] &&
-      rotated[1] === standardColors[1] &&
-      rotated[2] === standardColors[2]
-    ) {
-      return rotation;
-    }
-  }
-  return null;
+  const orientation = cornerColors.indexOf(upOrDownColor);
+  if (orientation < 0) return null;
+  return orientation;
 }
 
-function buildPermutationTransitionTable(): Uint16Array[] {
+function buildPermutationMoveSourceByMoveIdx(): Array<Uint8Array> {
+  const solvedState: TCubieState = {
+    perm: [0, 1, 2, 3, 4, 5, 6, 7],
+    ori: [0, 0, 0, 0, 0, 0, 0, 0],
+  };
+
+  return MOVES.map((move) => {
+    const movedState = applyMoveToCubieStateByGeometry(solvedState, move);
+    return Uint8Array.from(movedState.perm);
+  });
+}
+
+function buildPermutationTransitionTable(
+  permMoveSourceByMoveIdx: Array<Uint8Array>,
+): Uint16Array[] {
   const transitions: Uint16Array[] = Array.from(
     { length: PERMUTATION_STATE_COUNT },
     () => new Uint16Array(MOVES.length),
@@ -457,7 +456,7 @@ function buildPermutationTransitionTable(): Uint16Array[] {
   for (let permCoord = 0; permCoord < PERMUTATION_STATE_COUNT; permCoord++) {
     const perm = decodePermutation(permCoord);
     for (let moveIdx = 0; moveIdx < MOVES.length; moveIdx++) {
-      const movedPerm = applyMoveToPermutation(perm, MOVES[moveIdx]);
+      const movedPerm = applyMoveToPermutation(perm, permMoveSourceByMoveIdx[moveIdx]);
       transitions[permCoord][moveIdx] = encodePermutation(movedPerm);
     }
   }
@@ -590,14 +589,27 @@ function isImmediateInverse(lastMoveIdx: number, nextMoveIdx: number): boolean {
   return lastMove.faceIndex === nextMove.faceIndex && lastMove.direction + nextMove.direction === 0;
 }
 
-function applyMoveToPermutation(perm: number[], move: TMove): number[] {
+function applyMoveToPermutation(perm: number[], sourcePositions: Uint8Array): number[] {
   const next = [...perm];
-  const positions = MOVE_CYCLES[move.rotationGroup];
-  const pattern = CYCLE_PATTERNS[move.rotationType];
-  for (let i = 0; i < 4; i++) {
-    next[positions[i]] = perm[positions[pattern[i]]];
+  for (let position = 0; position < 8; position++) {
+    next[position] = perm[sourcePositions[position]];
   }
   return next;
+}
+
+function doesMovesSequenceSolve(
+  logicalValues: TFaceLogicalValues,
+  assignment: TFaceColorAssignment,
+  moves: number[],
+): boolean {
+  let currentValues = logicalValues;
+
+  for (const moveIdx of moves) {
+    currentValues = applyMoveToLogicalValues(currentValues, MOVES[moveIdx]);
+  }
+  return FACE_ORDER.every((face) =>
+    currentValues[face].every((color) => color === assignment[face]),
+  );
 }
 
 function applyMoveToCubieStateByGeometry(state: TCubieState, move: TMove): TCubieState {
