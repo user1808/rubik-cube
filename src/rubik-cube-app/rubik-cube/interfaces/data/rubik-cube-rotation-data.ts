@@ -10,6 +10,10 @@ export interface IRubikCubeRotationData<
     TCubeRotationTypes,
     Record<TCubeRotationGroups, Array<number>>
   >;
+  readonly rotationGroupsFaceChangesPatterns: Record<
+    TCubeRotationTypes,
+    Record<TCubeRotationGroups, Array<[TCubeRotationGroups, Array<number>]>>
+  >;
   readonly rotationGroupsNotation: Record<TCubeRotationGroups, string>;
   readonly rotationTypesNotation: Record<TCubeRotationTypes, string>;
   readonly contraryRotationTypes: Record<TCubeRotationTypes, TCubeRotationTypes>;

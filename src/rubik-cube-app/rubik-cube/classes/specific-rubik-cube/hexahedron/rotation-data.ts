@@ -11,6 +11,10 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
     THexahedronRotationTypes,
     Record<THexahedronRotationGroups, Array<number>>
   >;
+  public abstract readonly rotationGroupsFaceChangesPatterns: Record<
+    THexahedronRotationTypes,
+    Record<THexahedronRotationGroups, Array<[THexahedronRotationGroups, Array<number>]>>
+  >;
   public abstract readonly rotationGroupsNotation: Record<THexahedronRotationGroups, string>;
   public abstract readonly rotationTypesNotation: Record<THexahedronRotationTypes, string>;
 
