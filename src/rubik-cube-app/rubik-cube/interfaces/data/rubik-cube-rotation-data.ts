@@ -12,7 +12,10 @@ export interface IRubikCubeRotationData<
   >;
   readonly rotationGroupsFaceChangesPatterns: Record<
     TCubeRotationTypes,
-    Record<TCubeRotationGroups, Array<[TCubeRotationGroups, Array<number>]>>
+    Record<
+      TCubeRotationGroups,
+      { ring: Array<[TCubeRotationGroups, Array<number>]>; face: Array<number> }
+    >
   >;
   readonly rotationGroupsNotation: Record<TCubeRotationGroups, string>;
   readonly rotationTypesNotation: Record<TCubeRotationTypes, string>;

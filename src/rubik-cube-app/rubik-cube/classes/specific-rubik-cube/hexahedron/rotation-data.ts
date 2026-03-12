@@ -13,7 +13,10 @@ export abstract class AbstractRubikHexahedronRotationData<THexahedronRotationGro
   >;
   public abstract readonly rotationGroupsFaceChangesPatterns: Record<
     THexahedronRotationTypes,
-    Record<THexahedronRotationGroups, Array<[THexahedronRotationGroups, Array<number>]>>
+    Record<
+      THexahedronRotationGroups,
+      { ring: Array<[THexahedronRotationGroups, Array<number>]>; face: Array<number> }
+    >
   >;
   public abstract readonly rotationGroupsNotation: Record<THexahedronRotationGroups, string>;
   public abstract readonly rotationTypesNotation: Record<THexahedronRotationTypes, string>;

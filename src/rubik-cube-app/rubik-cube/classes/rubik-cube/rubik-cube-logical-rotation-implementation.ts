@@ -14,8 +14,8 @@ export class RubikCubeLogicalRotationImplementation<
     rotationType: TCubeRotationTypes,
     logicalValues: TFaceLogicalValues<TCubeRotationGroups>,
   ): TFaceLogicalValues<TCubeRotationGroups> {
-    const face = this.rotationData.rotationPiecesChangesPatterns[rotationType][rotationGroup];
-    const ring = this.rotationData.rotationGroupsFaceChangesPatterns[rotationType][rotationGroup];
+    const { ring, face } =
+      this.rotationData.rotationGroupsFaceChangesPatterns[rotationType][rotationGroup];
 
     const acc1: Array<number> = [
       ...ring[0][1]
